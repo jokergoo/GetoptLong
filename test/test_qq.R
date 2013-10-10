@@ -45,9 +45,11 @@ expect_that(find_code("@\\[\\[CODE\\]\\]", "@{a}, @[b], @<c>, @(d), #{e}, `f`, @
 
 a = letters[1:3]
 b = 1:3
-expect_that(qq("`text = character(length(a))
+expect_that(qq("`
+text = character(length(a))
 for(i in seq_along(a)) {
 	text[i] = qq('<tr><td>@{a[i]}</td><td>@{b[i]}</td></tr>\n')
 }
-text`", code.pattern = "`CODE`"),
+text
+`", code.pattern = "`CODE`"),
             equals("<tr><td>a</td><td>1</td></tr>\n<tr><td>b</td><td>2</td></tr>\n<tr><td>c</td><td>3</td></tr>\n"))

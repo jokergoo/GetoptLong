@@ -1,4 +1,3 @@
-library(rjson)
 
 # == title
 # Wrapper of the Perl module ``Getopt::Long`` in R
@@ -8,12 +7,14 @@ library(rjson)
 #           is the setting for option names and the second column is the description
 #           of options. It is can also be a vector having even number of elements and it
 #           will be converted to the two-column matrix
+# -help     whether to add help option
+# -version  whether to add version option
 # -envir    user's enrivonment where `GetoptLong` will look for default values and export variables
 # -export   whether export options as variables into user's enrivonment
 # -argv_str command-line arguments, only for testing purpose
 #
 # == details
-#
+# please see vignette.
 GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(), export = FALSE, argv_str = NULL) {
 	
 	# check first argument
@@ -33,6 +34,7 @@ GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(),
 		}
 	}
 	
+	# add help and version options in `spec`
 	if(help) {
 		spec = rbind(spec, c("help", "Print help message and exit"))
 	}
@@ -48,11 +50,13 @@ GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(),
 		ARGV_string = argv_str
 	}
 	
-	first_name = extract_first_name(spec[, 1])
+	# first name in each options
+	long_name = extract_first_name(spec[, 1])
 	
+	# if export to user's environment, `long_name` should be valid R variable names
 	if(!export) {
 		# test whether first name in option name is a valid R variable name
-		test_long_name = grepl("^[a-zA-Z_\\.][a-zA-Z0-9_\\.]+$", first_name) 
+		test_long_name = grepl("^[a-zA-Z_\\.][a-zA-Z0-9_\\.]+$", long_name) 
 		
 		if(!all(test_long_name)) {
 			cat("First name in option names can only be valid R variable names which only use numbers, letters,\n'.' and '_' (It should match /^[a-zA-Z_\\.][a-zA-Z0-9_\\.]+$/).")
@@ -69,22 +73,25 @@ GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(),
 	json_file = "tmp.json"
 	perl_script = generate_perl_script(spec, json_file)
 	
+	# supress warnings
 	ow = options("warn")[[1]]
 	options(warn = -1)
 	msg = system(qq("perl @{perl_script} @{ARGV_string}"), intern = FALSE)
 	options(warn = ow)
 	
+	# if there is error with execute perl program in which msg is non-zero
 	if(msg) {
 		print_help_msg(spec)
-		file.remove(json_file)
-		file.remove(perl_script)
+		#file.remove(json_file)
+		#file.remove(perl_script)
 		return(NULL)
 	}
 
 	opt = fromJSON(file = json_file)
-	file.remove(json_file)
-	file.remove(perl_script)
+	#file.remove(json_file)
+	#file.remove(perl_script)
 	
+	# if detect user has specified --help or --version
 	if(!is.null(opt$help) && opt$help) {
 		print_help_msg(spec)
 		return(NULL)
@@ -95,25 +102,29 @@ GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(),
 		return(NULL)
 	}
 	
-	opt = opt[!names(opt) %in% c("help", "version")]
+	# remove `help` and `version` if they exist
+	opt = opt[! names(opt) %in% c("help", "version")]
+	
+	# check mandatory options
+	is_mandatory = detect_mandatory(spec[, 1])
+	for(i in seq_len(nrow(spec))) {
+		if(is_mandatory[i] && is.null(opt[[ long_name[i] ]])) {
+			cat(qq("@{long_name[i]} is mandatory, please specify it.\n"))
+			print_help_msg(spec)
+			return(NULL)
+		}
+	}
 	
 	if(!export) {
 		return(opt)
 	}
 	
-	# check mandatory options
-	is_mandatory = detect_mandatory(spec[, 1])
-	long_name = extract_first_name(spec[, 1])
 	for(i in seq_len(nrow(spec))) {
-		if(is_mandatory[i] && is.null(opt[[ first_name[i] ]])) {
-			cat(qq("--@{first_name[i]} is mandatory, please specify it.\n"))
-			return(NULL)
-		}
-		
-		if(is_mandatory[i] && exists(first_name[i], envir = envir)) {
-			tmp = get(first_name[i], envir = envir)
+		if(is_mandatory[i] && exists(long_name[i], envir = envir)) {
+			tmp = get(long_name[i], envir = envir)
 			if(mode(tmp) %in% c("numeric", "character")) {
-				cat(qq("--@{first_name[i]} is mandatory, but detect in envoking environment you have already \ndefined `@{first_name[i]}`. Please remove definition of `@{long_name[i]}` in your source code.\n"))
+				cat(qq("@{long_name[i]} is mandatory, but detect in envoking environment you have already \ndefined `@{first_name[i]}`. Please remove definition of `@{long_name[i]}` in your source code.\n"))
+				print_help_msg(spec)
 				return(NULL)
 			}	
 		}
@@ -132,14 +143,15 @@ generate_perl_script = function(spec, json_file) {
 	
 	long_name = extract_first_name(spec[, 1])
 
-	var_type = detect_var_type(spec[, 1])
-	opt_type = detect_opt_type(spec[, 1])
+	var_type = detect_var_type(spec[, 1])  # which is scalar, array and hash
+	opt_type = detect_opt_type(spec[, 1])  # which is integer, numeric, character, ...
 	
-	perl_code = ""
+	# construct perl code
+	perl_code = NULL
 	perl_code = c(perl_code, qq("#!/usr/bin/perl"))
 	perl_code = c(perl_code, qq(""))
 	perl_code = c(perl_code, qq("use strict;"))
-	if(is.null(options("GetoptLong.Config"))) {
+	if(is.null(options("GetoptLong.Config")[[1]])) {
 		perl_code = c(perl_code, qq("use Getopt::Long;"))
 	} else {
 		perl_code = c(perl_code, qq("use Getopt::Long qw(:config @{paste(options('GetoptLong.Config')[[1]], collapse = ' ')});"))
@@ -149,33 +161,24 @@ generate_perl_script = function(spec, json_file) {
 	perl_code = c(perl_code, qq("use Data::Dumper;"))
 	perl_code = c(perl_code, qq(""))
 	
-	# check whether defined or not defined matters
+	# declare variables according to variable types
 	for (i in seq_len(nrow(spec))) {
 	
-		if(var_type[i] == "array") {
+		perl_code = c(perl_code, qq("my @{perl_sigil(var_type[i])}opt_@{i};    # var_type = @{var_type[i]}, opt_type = @{opt_type[i]}"))
 		
-			perl_code = c(perl_code, qq("my @opt_@{i};    # var_type = array, opt_type = @{opt_type[i]}"))
-			
-		} else if(var_type[i] == "hash") {
-			
-			perl_code = c(perl_code, qq("my %opt_@{i};    # var_type = hash, opt_type = @{opt_type[i]}"))
-			
-		} else {
-		
-			perl_code = c(perl_code, qq("my $opt_@{i};    # var_type = scalar, opt_type = @{opt_type[i]}"))
-			
-		}
 	}
 	
 	perl_code = c(perl_code, qq(""))
-	perl_code = c(perl_code, qq("GetOptions("))
+	perl_code = c(perl_code, qq("eval { GetOptions("))
 	
 	for (i in seq_len(nrow(spec))) {
 		perl_code = perl_code = c(perl_code, qq("    '@{spec[i, 1]}' => \\@{perl_sigil(var_type[i])}opt_@{i},"))
 	}
 	
-	perl_code = c(perl_code, qq(") or die (\"Error in command line argument.\\n\");"))
-
+	perl_code = c(perl_code, qq(") or die 'Errors when parsing command-line arguments.'; };"))
+	
+	perl_code = c(perl_code, "")
+	perl_code = c(perl_code, "if($@) { exit(123); }")
 	
 	perl_code = c(perl_code, qq(""))
 	
@@ -184,23 +187,33 @@ generate_perl_script = function(spec, json_file) {
 		if(opt_type[i] %in% c("integer", "numeric")) {
 			
 			if(var_type[i] == "scalar") {
+			
 				perl_code = c(perl_code, qq("if(defined(@{perl_sigil(var_type[i])}opt_@{i})) {"))
 				perl_code = c(perl_code, qq("    $opt_@{i} += 0;"))
+				perl_code = c(perl_code, "}")
+				
 			} else if(var_type[i] == "array") {
+				
+				# if array is defined
 				perl_code = c(perl_code, qq("if(@opt_@{i}) {"))
 				perl_code = c(perl_code, qq("    foreach (@opt_@{i}) { $_ += 0; }"))
+				perl_code = c(perl_code, "}")
+				
 			} else if(var_type[i] == "hash") {
+				
+				# if hash is defined
 				perl_code = c(perl_code, qq("if(%opt_@{i}) {"))
 				perl_code = c(perl_code, qq("    foreach (keys %opt_@{i}) { $opt_@{i}{$_} += 0; }"))
+				perl_code = c(perl_code, "}")
+				
 			}
-			perl_code = c(perl_code, "}")
+			
 		}
 	}
 	perl_code = c(perl_code, qq(""))
 	
 	perl_code = c(perl_code, qq("my $all_opt = {"))
 	
-
 	for (i in seq_len(nrow(spec))) {
 	
 		if(opt_type[i] == "logical") {
@@ -212,7 +225,8 @@ generate_perl_script = function(spec, json_file) {
 			perl_code = c(perl_code, qq("    '@{long_name[i]}' => $opt_@{i},"))
 
 		} else {
-		
+			
+			# in scalar content, empty list will be 0
 			perl_code = c(perl_code, qq("    '@{long_name[i]}' => scalar(@{perl_sigil(var_type[i])}opt_@{i}) ? \\@{perl_sigil(var_type[i])}opt_@{i} : undef,"))
 
 		}
@@ -221,10 +235,11 @@ generate_perl_script = function(spec, json_file) {
 	perl_code = c(perl_code, qq("};"))
 	perl_code = c(perl_code, qq(""))
 
-	perl_code = c(perl_code, qq("open JSON, '>@{json_file}' or die 'Cannot create temp file: @{json_file}';"))
+	perl_code = c(perl_code, qq("open JSON, '>@{json_file}' or die 'Cannot create temp file: @{json_file}\\n';"))
 	perl_code = c(perl_code, qq("print JSON to_json($all_opt, {pretty => 1});"))
 	perl_code = c(perl_code, qq("close JSON;"))
-	perl_code = c(perl_code, qq("print Dumper $all_opt;"))
+	#perl_code = c(perl_code, qq("print Dumper $all_opt;"))
+	
 	writeLines(perl_code, perl_script)
 	return(perl_script)
 }
@@ -274,6 +289,8 @@ print_single_option = function(opt, desc) {
 	cat(" ")
 	if(var_type == "scalar" && opt_type == "extended_integer") {
 		cat("extended_integer")
+	} else if(var_type == "scalar" && opt_type == "logical") {
+		cat("")
 	} else if(var_type == "scalar") {
 		cat(opt_type)
 	} else if(var_type == "array") {

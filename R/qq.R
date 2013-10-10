@@ -6,7 +6,7 @@
 # -env          environment where to find those variables. By default it is the environment
 #               where `qq` is envoked. It can also be a list in which list element names are
 #               the variable names going to be interpolated.
-# -code.pattern pattern of marks for the variables. By default it is ``@\\{CODE\\}`` which means
+# -code.pattern pattern of marks for the variables. By default it is ``@\\\\{CODE\\\\}`` which means
 #               you can write your variable as ``@{variable}``.
 #
 # == details
@@ -36,7 +36,6 @@ qq = function(text, env = parent.frame(), code.pattern = NULL) {
         stop("Now only support text with length of 1.\n")
     }
 	
-	# import variables in replacement
     if(!is.null(env)) {
 		if(is.environment(env)) {
 			e = env
@@ -123,12 +122,12 @@ find_code = function(m, text) {
 # == title
 # Print a string which has been intepolated with variables
 #
-# = param
+# == param
 # -text         text string in which variables are marked with certain rules
 # -env          environment where to find those variables
 # -code.pattern pattern of marks for the variables
 #
-# = details
+# == details
 # This function is a shortcut of
 #
 #     cat(qq(text, env, code.pattern))
