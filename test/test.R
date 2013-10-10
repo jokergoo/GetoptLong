@@ -1,11 +1,23 @@
 source("../R/qq.R")
-source("../R/script.R")
+source("../R/GetoptLong.R")
 
+
+options("GetoptLong.startingMsg" = "
+Usage:
+  Rscript xx.R --tag
+Description of this script
+
+")
+
+options("GetoptLong.endingMsg" = "
+Report bugs to xxx@xx.xx
+")
+
+VERSION = "0.0.1"
 
 spec = matrix(c(
-	"tag=i", "desc"
+	"tag=i", "this is a description of tag which is long long and very long and extremly long..."
 	), ncol = 2, byrow = TRUE)
-print_help_msg(spec)
 GetoptLong(spec, argv_str = "--tag 1")
 GetoptLong(spec, argv_str = "--tag 1 --tag 2")
 GetoptLong(spec, argv_str = "--tag 0.1")

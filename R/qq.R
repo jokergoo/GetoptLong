@@ -1,104 +1,103 @@
 # == title
-# Simple template for text interpolation
+# Simple variable interpolation in texts
 #
 # == param
-# -text         template text
-# -replacemmet  a list containing variable name and values. If it is not specified,
-#    variables in parent frame will be used.
-# -code.pattern patterns of the code markings. Default is @{CODE}, which means
-#    CODE part will be replaced with its real value
+# -text         text string in which variables are marked with certain rules
+# -env          environment where to find those variables. By default it is the environment
+#               where `qq` is envoked. It can also be a list in which list element names are
+#               the variable names going to be interpolated.
+# -code.pattern pattern of marks for the variables. By default it is ``@\\{CODE\\}`` which means
+#               you can write your variable as ``@{variable}``.
 #
 # == details
-# I like text interpolation in Perl. But in R, if you want to connect plain text and variables,
-# you need to use `paste` or functions in `stringr`. However, if there are so many variables or 
-# or many quotes in the string you want to construct, it would be a little terrible.
+# I like variable interpolation in Perl. But in R, if you want to concatenate plain text and variables,
+# you need to use functions such as `base::paste`. However, if there are so many variables, quotes, braces 
+# in the string you want to construct, it would kill you.
 #   
-# So, this function allows you to construct strings as Perl style.
+# This function allows you to construct strings as in Perl style. Variables are
+# marked in the text with certain rule. `qq` will look up these variables in user's
+# environment and replace the variable marks with their real values.
 #
-# Name for this function means double quote.
-qq = function(text, replacement = parent.frame(), code.pattern = NULL) {
- 
-    if (is.null(code.pattern)) {
-        code.pattern = "\\@\\{CODE\\}"
-    }
+# For more explaination of this function, please refer to vignette, "text interpolation" section.
+#
+# == value
+# A single text
+qq = function(text, env = parent.frame(), code.pattern = NULL) {
+	
+	if(is.null(code.pattern)) {
+		if(is.null(options("code.pattern")[[1]])) {
+			code.pattern = "@\\{CODE\\}"
+		} else {
+			code.pattern = options("code.pattern")
+		}
+	}
+	
     if(length(text) != 1) {
-        stop("length of the text should be 1.")
+        stop("Now only support text with length of 1.\n")
     }
 	
-	ending_new_line = grepl("\\n$", text)
- 
-    lines = strsplit(text, "\n")[[1]]
-    if(length(lines) == 0) {
-        lines = ""
-    }
-    newlines = character(length(lines))
- 
-    # import variables in replacement
-    # bug: need to new an environment and assign the value in this envrionment
-    # and specify the environment in 'eval'
-    
-	if(!is.null(replacement)) {
-		if(is.environment(replacement)) {
-			e = replacement
+	# import variables in replacement
+    if(!is.null(env)) {
+		if(is.environment(env)) {
+			e = env
 		} else {
-			e = new.env()
-			for(varname in names(replacement)) {
-				assign(varname, replacement[[varname]], envir = e)   
-			}
+			e = as.environment(env)
 		}
     } else {
         e = .GlobalEnv
     }
 	
-    for (i in 1:length(lines)) {
+    for (i in 1:length(text)) {
  
         # check wether there are code replacements
-        code = find_code(code.pattern, lines[i])
-        code.template = code[[1]]
-        code.variable = code[[2]]
+        fc = find_code(code.pattern, text[i])
+        template = fc[[1]]
+        code = fc[[2]]
  
-        if(length(code.template)) {
- 
-            # if there is code replacement
+        if(length(template)) {   # if there is code replacement
+           
             # replace the code with its value
-            code.result = lapply(code.variable, function(code) eval(parse(text = code), envir = e))  # anony function is the first level parent
- 
+            return_value = lapply(code, function(c) eval(parse(text = c), envir = e))  # anony function is the first level parent
+			
+			is_return_value_vector = sapply(return_value, function(r) is.vector(r) & !is.list(r))
+			if(! all(is_return_value_vector)) {
+				stop("All your codes should only return simple vectors.\n")
+			}
+			
             # length of the return value
-            v.lines = sapply(code.result, function(x) length(x))
+            # need to test it since not all code returns a scalar
+            return_value_length = sapply(return_value, function(x) length(x))
  
-            if(max(v.lines) > 1) {
-                current.line = rep(lines[i], max(v.lines))
-                for(ai in 1:max(v.lines)) {
-                    for(iv in 1:length(code.template)) {
-                        current.line[ai] = gsub(code.template[iv],
-                        code.result[[iv]][(ai-1) %% length(code.result[[iv]]) + 1],
-                        current.line[ai], fixed = TRUE)
+            if(max(return_value_length) > 1) {
+            # if some piece of codes return a vector
+            # recycle to `max(return_value_length)`
+                current = rep(text[i], max(return_value_length))
+                
+                for(ai in 1:max(return_value_length)) {
+                    for(iv in 1:length(template)) {
+                        current[ai] = gsub(template[iv],
+                                           return_value[[iv]][(ai-1) %% length(return_value[[iv]]) + 1],
+                                           current[ai], fixed = TRUE)
                     }
                 }
-                newlines[i] = paste(current.line, collapse = "\n")
-            }
-            else if(max(v.lines == 1)) {
-                current.line = lines[i]
-                for(iv in 1:length(code.template)) {
-                    current.line = gsub(code.template[iv], code.result[[iv]],
-                                   current.line, fixed = TRUE)
+                
+                text[i] = paste(current, collapse = "")
+                
+            } else if(max(return_value_length == 1)) {   # all variable returns a scalar
+            
+                current = text[i]
+                
+                for(iv in 1:length(template)) {
+                    current = gsub(template[iv], return_value[[iv]], current, fixed = TRUE)
                 }
-                newlines[i] = current.line
+                
+                text[i] = current
+                
             }
-            else {
-                newlines[i] = ""
-            }
-        }
-        else {
-            newlines[i] = lines[i]
         }
     }
  
-    nt = paste(newlines, collapse="\n")
-	if(ending_new_line) {
-		nt = paste0(nt, "\n")
-	}
-	return(nt)
+	return(text)
 }
  
 find_code = function(m, text) {
@@ -109,21 +108,32 @@ find_code = function(m, text) {
  
     m2 = gsub("CODE", ".+?", m)
  
-    reg = gregexpr(m2, text, perl = TRUE)[[1]]
+    reg = gregexpr(m2, text)[[1]]
     v1 = character(0)
     if(reg[1] > -1) {
-        v1 = sapply(1:length(reg), function(i)substr(text, as.numeric(reg)[i], as.numeric(reg)[i]+ attr(reg, "match.length")[i] - 1))
+        v1 = sapply(1:length(reg), function(i) substr(text, as.numeric(reg)[i], as.numeric(reg)[i]+ attr(reg, "match.length")[i] - 1))
     }
     edge = strsplit(m, "CODE")[[1]]
     v2 = gsub(paste("^", edge[1], "|", edge[2], "$", sep=""), "", v1)
-    return(list(template=v1, variable=v2))
+    
+    return(list(template=v1, code=v2))
 }
 
 
-qqcat = function(...) {
-	cat(qq(...))
-}
-
-qqeval = function(...) {
-	eval(parse(text = qq(...)))
+# == title
+# Print a string which has been intepolated with variables
+#
+# = param
+# -text         text string in which variables are marked with certain rules
+# -env          environment where to find those variables
+# -code.pattern pattern of marks for the variables
+#
+# = details
+# This function is a shortcut of
+#
+#     cat(qq(text, env, code.pattern))
+#
+# Please refer to `qq` to find more details.
+qqcat = function(text, env = parent.frame(), code.pattern = NULL) {
+	cat(qq(text, env, code.pattern))
 }

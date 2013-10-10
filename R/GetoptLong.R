@@ -1,8 +1,20 @@
 library(rjson)
 
+# == title
+# Wrapper of the Perl module ``Getopt::Long`` in R
+#
 # == param
-# -spec specification of arguments, prefer a two-column matrix
-GetoptLong = function(spec, envir = parent.frame(), argv_str = NULL) {
+# -spec     specification of options. A two-column matrix in which the first column
+#           is the setting for option names and the second column is the description
+#           of options. It is can also be a vector having even number of elements and it
+#           will be converted to the two-column matrix
+# -envir    user's enrivonment where `GetoptLong` will look for default values and export variables
+# -export   whether export options as variables into user's enrivonment
+# -argv_str command-line arguments, only for testing purpose
+#
+# == details
+#
+GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(), export = FALSE, argv_str = NULL) {
 	
 	# check first argument
 	if(is.matrix(spec)) {
@@ -21,6 +33,13 @@ GetoptLong = function(spec, envir = parent.frame(), argv_str = NULL) {
 		}
 	}
 	
+	if(help) {
+		spec = rbind(spec, c("help", "Print help message and exit"))
+	}
+	if(version) {
+		spec = rbind(spec, c("version", "Print version number and exit"))
+	}
+	
 	# get arguments string
 	if(is.null(argv_str)) {
 		ARGV = commandArgs(TRUE)
@@ -29,23 +48,26 @@ GetoptLong = function(spec, envir = parent.frame(), argv_str = NULL) {
 		ARGV_string = argv_str
 	}
 	
-	# test whether first name in option name is a valid R variable name
 	first_name = extract_first_name(spec[, 1])
-	test_long_name = grepl("^[a-zA-Z_\\.][a-zA-Z0-9_\\.]+$", first_name) 
 	
-	if(!all(test_long_name)) {
-		cat("First name in option names can only be valid R variable names which only use numbers, letters,\n'.' and '_' (It should match /^[a-zA-Z_\\.][a-zA-Z0-9_\\.]+$/).")
-		cat(qq(" Following option name@{ifelse(sum(test_long_name)==1, ' is', 's are')}\nnot valid:\n\n"))
-		for(k in seq_along(test_long_name)) {
-			if(!test_long_name[k]) cat(qq("  @{spec[k, 1]}\n"))
+	if(!export) {
+		# test whether first name in option name is a valid R variable name
+		test_long_name = grepl("^[a-zA-Z_\\.][a-zA-Z0-9_\\.]+$", first_name) 
+		
+		if(!all(test_long_name)) {
+			cat("First name in option names can only be valid R variable names which only use numbers, letters,\n'.' and '_' (It should match /^[a-zA-Z_\\.][a-zA-Z0-9_\\.]+$/).")
+			cat(qq(" Following option name@{ifelse(sum(test_long_name)==1, ' is', 's are')}\nnot valid:\n\n"))
+			for(k in seq_along(test_long_name)) {
+				if(!test_long_name[k]) cat(qq("  @{spec[k, 1]}\n"))
+			}
+			cat("\n")
+			return(NULL)
 		}
-		cat("\n")
-		return(NULL)
 	}
 	
 	#json_file = tempfile(tmpdir = ".", fileext = ".json")
 	json_file = "tmp.json"
-	perl_script = generate_perl_script(spec, json_file, envir = envir)
+	perl_script = generate_perl_script(spec, json_file)
 	
 	ow = options("warn")[[1]]
 	options(warn = -1)
@@ -63,10 +85,25 @@ GetoptLong = function(spec, envir = parent.frame(), argv_str = NULL) {
 	file.remove(json_file)
 	file.remove(perl_script)
 	
+	if(!is.null(opt$help) && opt$help) {
+		print_help_msg(spec)
+		return(NULL)
+	}
+	
+	if(!is.null(opt$version) && opt$version) {
+		print_version_msg(envir)
+		return(NULL)
+	}
+	
+	opt = opt[!names(opt) %in% c("help", "version")]
+	
+	if(!export) {
+		return(opt)
+	}
 	
 	# check mandatory options
 	is_mandatory = detect_mandatory(spec[, 1])
-	
+	long_name = extract_first_name(spec[, 1])
 	for(i in seq_len(nrow(spec))) {
 		if(is_mandatory[i] && is.null(opt[[ first_name[i] ]])) {
 			cat(qq("--@{first_name[i]} is mandatory, please specify it.\n"))
@@ -83,29 +120,18 @@ GetoptLong = function(spec, envir = parent.frame(), argv_str = NULL) {
 	}
 	
 	# export to envir
-	#export(opt, envir = envir)
+	export_parent_env(opt, envir = envir)
 	
-	return(opt)
+	return(invisible(opt))
 }
 
 
-generate_perl_script = function(spec, json_file, envir) {
+generate_perl_script = function(spec, json_file) {
 	#perl_script = tempfile(tmpdir = ".", fileext = ".pl")
 	perl_script = "tmp.pl"
 	
 	long_name = extract_first_name(spec[, 1])
 
-	# whether variable has been defined in parent environment
-	name_defined = sapply(long_name, function(x) {
-		if(exists(x, envir = envir)) {
-			tmp = get(x, envir = envir)
-			if(mode(tmp) %in% c("numeric", "character")) {
-				return(TRUE)
-			}	
-		}
-		return(FALSE)
-	}, USE.NAMES = FALSE)
-	
 	var_type = detect_var_type(spec[, 1])
 	opt_type = detect_opt_type(spec[, 1])
 	
@@ -113,7 +139,12 @@ generate_perl_script = function(spec, json_file, envir) {
 	perl_code = c(perl_code, qq("#!/usr/bin/perl"))
 	perl_code = c(perl_code, qq(""))
 	perl_code = c(perl_code, qq("use strict;"))
-	perl_code = c(perl_code, qq("use Getopt::Long;"))
+	if(is.null(options("GetoptLong.Config"))) {
+		perl_code = c(perl_code, qq("use Getopt::Long;"))
+	} else {
+		perl_code = c(perl_code, qq("use Getopt::Long qw(:config @{paste(options('GetoptLong.Config')[[1]], collapse = ' ')});"))
+	}
+	
 	perl_code = c(perl_code, qq("use JSON;"))
 	perl_code = c(perl_code, qq("use Data::Dumper;"))
 	perl_code = c(perl_code, qq(""))
@@ -211,8 +242,17 @@ perl_sigil = function(type) {
 }
 
 print_help_msg = function(spec) {
+	
+	if(!is.null(options("GetoptLong.startingMsg")[[1]])) {
+		cat(options("GetoptLong.startingMsg")[[1]])
+	}
+	
 	for(i in seq_len(nrow(spec))) {
 		print_single_option(spec[i, 1], spec[i, 2])
+	}
+	
+	if(!is.null(options("GetoptLong.endingMsg")[[1]])) {
+		cat(options("GetoptLong.endingMsg")[[1]])
 	}
 }
 
@@ -245,6 +285,11 @@ print_single_option = function(opt, desc) {
 	cat("\n")
 	
 	cat_format_line(desc, prefix = "    ")
+
+}
+
+print_version_msg = function(envir) {
+	cat(get("VERSION", envir = envir))
 	cat("\n")
 }
 
@@ -260,10 +305,12 @@ cat_format_line = function(text, prefix = "", max.width = 70) {
 			cat(words[i])
 			i_width = nchar(prefix) + nchar(words[i])
 		} else {
-			cat(qq("@{words[i]}\n"))
+			cat(ifelse(i == 1, "", " "))
+			cat(qq("@{words[i]}"))
 			i_width = i_width + nchar(prefix)
 		}
 	}
+	cat("\n\n")
 }
 
 detect_var_type = function(opt) {
@@ -288,17 +335,17 @@ detect_opt_type = function(opt) {
 	opt = gsub("\\{.*\\}$", "", opt)
 	
 	sapply(opt, function(x) {
-		if (grepl("[=:]s$", opt)) {
+		if (grepl("[=:]s$", x)) {
 			return("character")
-		} else if (grepl("[=:]i$", opt)) {
+		} else if (grepl("[=:]i$", x)) {
 			return("integer")
-		} else if (grepl("[=:]o$", opt)) {
+		} else if (grepl("[=:]o$", x)) {
 			return("extended_integer")
-		} else if (grepl("[=:]f$", opt)) {
+		} else if (grepl("[=:]f$", x)) {
 			return("numeric")
-		} else if (grepl("!$", opt)) {
+		} else if (grepl("!$", x)) {
 			return("logical")
-		} else if (grepl("\\+$", opt)) {
+		} else if (grepl("\\+$", x)) {
 			return("integer")
 		} else {
 			return("logical")
@@ -323,7 +370,7 @@ extract_first_name = function(opt) {
 	return(first_name)
 }
 
-export = function(opt, envir = parent.frame()) {
+export_parent_env = function(opt, envir = parent.frame()) {
 	parent_opt_name = ls(envir = envir)
 	parent_opt_name = parent_opt_name[ sapply(parent_opt_name, function(x) {
 									tmp = get(x, envir = envir)
