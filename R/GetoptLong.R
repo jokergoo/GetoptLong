@@ -69,8 +69,8 @@ GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(),
 		}
 	}
 	
-	#json_file = tempfile(tmpdir = ".", fileext = ".json")
-	json_file = "tmp.json"
+	json_file = tempfile(tmpdir = ".", fileext = ".json")
+	#json_file = "tmp.json"
 	perl_script = generate_perl_script(spec, json_file)
 	
 	# supress warnings
@@ -82,14 +82,14 @@ GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(),
 	# if there is error with execute perl program in which msg is non-zero
 	if(msg) {
 		print_help_msg(spec)
-		#file.remove(json_file)
-		#file.remove(perl_script)
+		file.remove(json_file)
+		file.remove(perl_script)
 		return(NULL)
 	}
 
 	opt = fromJSON(file = json_file)
-	#file.remove(json_file)
-	#file.remove(perl_script)
+	file.remove(json_file)
+	file.remove(perl_script)
 	
 	# if detect user has specified --help or --version
 	if(!is.null(opt$help) && opt$help) {
@@ -138,8 +138,8 @@ GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(),
 
 
 generate_perl_script = function(spec, json_file) {
-	#perl_script = tempfile(tmpdir = ".", fileext = ".pl")
-	perl_script = "tmp.pl"
+	perl_script = tempfile(tmpdir = ".", fileext = ".pl")
+	#perl_script = "tmp.pl"
 	
 	long_name = extract_first_name(spec[, 1])
 
