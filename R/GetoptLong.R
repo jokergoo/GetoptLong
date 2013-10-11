@@ -39,7 +39,7 @@ GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(),
 		spec = rbind(spec, c("help", "Print help message and exit"))
 	}
 	if(version) {
-		spec = rbind(spec, c("version", "Print version number and exit"))
+		spec = rbind(spec, c("version", "Print version information and exit"))
 	}
 	
 	# get arguments string
@@ -65,7 +65,12 @@ GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(),
 				if(!test_long_name[k]) cat(qq("  @{spec[k, 1]}\n"))
 			}
 			cat("\n")
-			return(NULL)
+			
+			if(is.null(argv_str)) {
+				q(save = "no")
+			} else {
+				return(NULL)
+			}
 		}
 	}
 	
@@ -82,9 +87,18 @@ GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(),
 	# if there is error with execute perl program in which msg is non-zero
 	if(msg) {
 		print_help_msg(spec)
+		
+		ow = options("warn")[[1]]
+		options(warn = -1)
 		file.remove(json_file)
 		file.remove(perl_script)
-		return(NULL)
+		options(warn = ow)
+		
+		if(is.null(argv_str)) {
+			q(save = "no")
+		} else {
+			return(NULL)
+		}
 	}
 
 	opt = fromJSON(file = json_file)
@@ -94,12 +108,22 @@ GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(),
 	# if detect user has specified --help or --version
 	if(!is.null(opt$help) && opt$help) {
 		print_help_msg(spec)
-		return(NULL)
+		
+		if(is.null(argv_str)) {
+			q(save = "no")
+		} else {
+			return(NULL)
+		}
 	}
 	
 	if(!is.null(opt$version) && opt$version) {
 		print_version_msg(envir)
-		return(NULL)
+		
+		if(is.null(argv_str)) {
+			q(save = "no")
+		} else {
+			return(NULL)
+		}
 	}
 	
 	# remove `help` and `version` if they exist
@@ -111,7 +135,12 @@ GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(),
 		if(is_mandatory[i] && is.null(opt[[ long_name[i] ]])) {
 			cat(qq("@{long_name[i]} is mandatory, please specify it.\n"))
 			print_help_msg(spec)
-			return(NULL)
+			
+			if(is.null(argv_str)) {
+				q(save = "no")
+			} else {
+				return(NULL)
+			}
 		}
 	}
 	
@@ -125,7 +154,12 @@ GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(),
 			if(mode(tmp) %in% c("numeric", "character")) {
 				cat(qq("@{long_name[i]} is mandatory, but detect in envoking environment you have already \ndefined `@{first_name[i]}`. Please remove definition of `@{long_name[i]}` in your source code.\n"))
 				print_help_msg(spec)
-				return(NULL)
+				
+				if(is.null(argv_str)) {
+					q(save = "no")
+				} else {
+					return(NULL)
+				}
 			}	
 		}
 	}
@@ -133,7 +167,7 @@ GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(),
 	# export to envir
 	export_parent_env(opt, envir = envir)
 	
-	return(invisible(opt))
+	return(opt)
 }
 
 
@@ -149,6 +183,9 @@ generate_perl_script = function(spec, json_file) {
 	# construct perl code
 	perl_code = NULL
 	perl_code = c(perl_code, qq("#!/usr/bin/perl"))
+	perl_code = c(perl_code, qq(""))
+	perl_lib = qq("@{system.file('extdata', 'GetoptLong')}/perl_lib")
+	perl_code = c(perl_code, qq("BEGIN { push (@INC, '@{perl_lib}'); }"))
 	perl_code = c(perl_code, qq(""))
 	perl_code = c(perl_code, qq("use strict;"))
 	if(is.null(options("GetoptLong.Config")[[1]])) {
@@ -306,7 +343,11 @@ print_single_option = function(opt, desc) {
 }
 
 print_version_msg = function(envir) {
-	cat(get("VERSION", envir = envir))
+	if(exists("VERSION", envir = envir)) {
+		cat(get("VERSION", envir = envir))
+	} else {
+		cat("No version information is found in source code.\n")
+	}
 	cat("\n")
 }
 

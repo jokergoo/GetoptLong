@@ -1,0 +1,121 @@
+% \VignetteIndexEntry{Parsing command-line arguments by Getopt::Long}
+% \VignetteDepends{GetoptLong}
+% \VignetteKeywords{variable interpolation}
+% \VignettePackage{GetoptLong}
+
+\documentclass{article}
+
+\title{Parsing command-line arguments by {\tt Getopt::Long}}
+
+\author{Zuguang Gu {\tt <z.gu@dkfz.de>}}
+\usepackage[margin=1in, a4paper]{geometry}
+
+\usepackage{Sweave}
+\usepackage{hyperref}
+\begin{document}
+
+\maketitle 
+
+There are already several R packages to parse command-line arguments such as {\tt getopt}
+or {\it Python}-style {\tt optparse}. Here {\tt GetoptLong} is another command-line argument
+parser which wraps the powerful {\it Perl} module \href{http://search.cpan.org/perldoc?Getopt%3A%3ALong}{{\tt Getopt::Long}}.
+
+Note: a large part of this vignette is copied or modified from {\tt Getopt::Long} doc page on CPAN. And I cannot guarantee all
+my understanding on {\tt Getopt::Long} is right. So the original website of \href{http://search.cpan.org/perldoc?Getopt%3A%3ALong}{{\tt Getopt::Long}}
+is always your best reference.
+
+\section{Workflow of the wrapping}
+
+\begin{figure}[h!]
+\centering
+\includegraphics{workflow.eps}
+\caption{Workflow of wrapping}
+\label{fig:workflow}
+\end{figure}
+
+\section{First example}
+Using {\tt GetoptLong} is simple especially for {\it Perl} users because the specification is quite similar as in {\it Perl}.
+
+<<eval = FALSE, echo = TRUE>>==
+library(GetoptLong)
+
+cutoff = 0.05
+GetoptLong(matrix(c(
+    "number=i", "Number of items, integer, mandatory option",
+    "cutoff:f", "cutoff to filter results, optional, default (0.05)",
+    "verbose",  "print messages"
+)))
+@
+
+Or more simply:
+
+<<eval = FALSE, echo = TRUE>>==
+library(GetoptLong)
+
+cutoff = 0.05
+GetoptLong(c(
+    "number=i", "Number of items, integer, mandatory option",
+    "cutoff:f", "cutoff",
+    "verbose",  "print messages"
+))
+@
+
+The first argument in {\tt GetoptLong} is either a two-column matrix or a simple vector. If it is a simple vector, it should have
+even number of elements and will be transformed into the two-column matrix by rows internally. In the matrix, the first column is the specification
+of option names and the second column is the description of corresponding options.
+
+Save the code as {\tt test.R} and we can execute the R script through:
+
+<<eval = TRUE, echo = FALSE, include = TRUE>>==
+cat("Rscript test.R --number 4 --cutoff 0.01 --verbose
+Rscript test.R -n 4 -c 0.01 -v
+Rscript test.R -n 4 --verbose")
+@
+
+In above example, {\tt number} is a mandatory option and should only be integer mode. {\tt cutoff}
+is optional and already has a default value. {\tt verbose} is a logical option. If parsing is
+successful, two variables with name {\tt number} and {\tt verbose} will be imported in the working
+environment with specified values, and value for {\tt cutoff} will be updated if it is specified in
+command-line argument.
+
+\section{Customize your options}
+Each specifiers in options consists of two parts: the name specification and the argument specification:
+
+<<eval = FALSE, echo = FALSE, include = TRUE>>==
+cat("length|size|l=s@")
+@
+
+Here {\tt length|size|l} is list of alternative names seperated by {\tt |}. The remaining part is argument
+specification which defines the mode and amount of arguments. The argument specification is optional.
+
+Specify any one of alternative options name is OK and it also doesn't matter whether using one or two slash in
+front of the option name. Sometimes you even don't need to specify complete option names, you only need to make
+sure the partial name match is unique. But if the partial match is not uniqe, it will only match to the first
+matched option.
+
+\begin{itemize}
+	\item{no argument specification}: taking no argument.
+	\item{{\tt !}}: taking no argument, you can set this value to FALSE by prefixing it with "no" or "no-". E.g. "{\tt foo!} allows {\tt --foo} as well as {\tt --nofoo} and {\tt --no-foo}
+	\item{{\tt =type[desttype][repeat]}}
+		options are mandatory. If they are not specified in command-line, there is an error.
+		\begin{itemize}
+			\item{{\tt s}}: strings
+			\item{{\tt i}}: integers
+			\item{{\tt f}}: real numbers
+			\item{{\tt o}}: extended integer, an octal string (a zero, optionally followed by '0', '1', .. '7'), or a hexadecimal string (0x followed by '0' .. '9', 'a' .. 'f', case insensitive), or a binary string (0b followed by a series of '0' and '1').
+		\end{itemize}
+		
+		{\tt desttype} determines whether the argument for the option is a scalar, an array or a hash. {\tt @} refers to array, {\tt %} refers to hash and nothing refers to scalar.
+		
+		{\tt repeat} determines number of arguments corresponding to an option. {\tt \{2\}} means exactly 2 arguments. {\tt \{2,\}} means at least 2 arguments. {\tt \{,4\}} means at most 4 arguments. {\tt \{2, 5\}} means minimal 2 and maximal 5 arguments.
+	\item{{\tt :type[desttype]}}
+		options are optional, they should always have default values.
+\end{itemize}
+
+\section{Set default value and import options as variables}
+
+\section{Help and ersion options}
+
+\section{Configuring {\tt Getopt::Long}}
+
+\end{document}

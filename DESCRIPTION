@@ -5,7 +5,8 @@ Version: 0.0.1
 Date: 2013-10-01
 Author: Zuguang Gu
 Maintainer: Zuguang Gu <z.gu@dkfz.de>
-Depends: R (>= 2.10.0), rjson
+Depends: R (>= 2.10.0)
+Imports: rjson
 Description: ...
 LazyLoad: yes
 URL: https://github.com/jokergoo/GetoptLong
