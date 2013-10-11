@@ -17,11 +17,15 @@ check_perl = function(module = NULL, inc = NULL) {
 	if(is.null(module)) {
 		cmd = "perl -v"
 	} else if(!is.null(module) && is.null(inc)) {
-		cmd = qq("perl -M@{module} -e 'use @{module}'")
+		cmd = qq("perl -M@{module} -e \"use @{module}\"")
 	} else if(!is.null(module) && !is.null(inc)) {
-		cmd = qq("perl '-I@{inc}' -M@{module} -e 'use @{module}'")
+		cmd = qq("perl \"-I@{inc}\" -M@{module} -e \"use @{module}\"")
 	}
 	
-	exit_code = system(cmd, ignore.stdout = TRUE, ignore.stderr = TRUE)
+	if(Sys.info()["sysname"] == "Windows") {
+		exit_code = system(cmd, ignore.stdout = TRUE, ignore.stderr = TRUE, show.output.on.console = FALSE)
+	} else {
+		exit_code = system(cmd, ignore.stdout = TRUE, ignore.stderr = TRUE)
+	}
 	return(ifelse(exit_code, FALSE, TRUE))
 }

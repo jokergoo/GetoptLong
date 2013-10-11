@@ -28,7 +28,7 @@ is always your best reference.
 
 \begin{figure}[h!]
 \centering
-\includegraphics{workflow.eps}
+\includegraphics{workflow.pdf}
 \caption{Workflow of wrapping}
 \label{fig:workflow}
 \end{figure}
@@ -98,24 +98,97 @@ matched option.
 	\item{{\tt !}}: taking no argument, you can set this value to FALSE by prefixing it with "no" or "no-". E.g. "{\tt foo!} allows {\tt --foo} as well as {\tt --nofoo} and {\tt --no-foo}
 	\item{{\tt =type[desttype][repeat]}}
 		options are mandatory. If they are not specified in command-line, there is an error.
-		\begin{itemize}
-			\item{{\tt s}}: strings
-			\item{{\tt i}}: integers
-			\item{{\tt f}}: real numbers
-			\item{{\tt o}}: extended integer, an octal string (a zero, optionally followed by '0', '1', .. '7'), or a hexadecimal string (0x followed by '0' .. '9', 'a' .. 'f', case insensitive), or a binary string (0b followed by a series of '0' and '1').
-		\end{itemize}
-		
-		{\tt desttype} determines whether the argument for the option is a scalar, an array or a hash. {\tt @} refers to array, {\tt %} refers to hash and nothing refers to scalar.
-		
-		{\tt repeat} determines number of arguments corresponding to an option. {\tt \{2\}} means exactly 2 arguments. {\tt \{2,\}} means at least 2 arguments. {\tt \{,4\}} means at most 4 arguments. {\tt \{2, 5\}} means minimal 2 and maximal 5 arguments.
 	\item{{\tt :type[desttype]}}
 		options are optional, they should always have default values.
 \end{itemize}
 
+Available {\tt type} options are:
+\begin{itemize}
+	\item{{\tt s}}: strings
+	\item{{\tt i}}: integers
+	\item{{\tt f}}: real numbers
+	\item{{\tt o}}: extended integer, an octal string (a zero, optionally followed by '0', '1', .. '7'), or a hexadecimal string (0x followed by '0' .. '9', 'a' .. 'f', case insensitive), or a binary string (0b followed by a series of '0' and '1').
+\end{itemize}
+
+Available {\tt desttype} settings are:
+\begin{itemize}
+	\item{{\tt @}}: array
+	\item{{\tt \%}}: hash
+	\item{nothing}: scalar
+\end{itemize}
+
+Available {\tt repeat} settings are:
+\begin{itemize}
+	\item{{\tt \{2\}}}: exactly 2 arguments
+	\item{{\tt \{2,\}}}: at least 2 arguments
+	\item{{\tt \{,4\}}}: at most 4 arguments
+	\item{{\tt \{2,5\}}}: minimal 2 and maximal 5 arguments
+\end{itemize}
+
+Detailed example for each option specification:
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{c|c|c}
+\hline
+{\tt tag=i} & {\tt --tag 1} & {\tt 1} \\
+            & {\tt --tag 1 --tag 2} & {\tt 2} \\
+			& {\tt --tag 0.1} & error \\
+			& {\tt --tag a} & error \\
+			& {\tt --tag} & error \\
+			& no argument & error \\
+\hline
+{\tt tag=s} & {\tt --tag 1} & {\tt "1"} \\
+			& {\tt --tag 0.1} & {\tt "0.1"} \\
+			& {\tt --tag a} & {\tt "a"} \\
+			& {\tt --tag} & error \\
+\hline
+{\tt tag=f} & {\tt --tag 1} & {\tt 1} \\
+			& {\tt --tag 0.1} & {\tt 0.1} \\
+			& {\tt --tag a} & error \\
+			& {\tt --tag} & error \\
+\hline
+{\tt tag=o} & {\tt --tag 1} & {\tt 1} \\
+			& {\tt --tag 0b001001} & {\tt 9} \\
+			& {\tt --tag 0721} & {\tt 465} \\
+			& {\tt --tag 0xaf2} & {\tt 2802} \\
+			& {\tt --tag 0.1} & error \\
+			& {\tt --tag a} & error \\
+
+\end{tabular}
+\caption{Detailed example of options specification}
+\label{table:spec}
+\end{table}
+
 \section{Set default value and import options as variables}
+
+Since options will be imported into user's environment, any definition of these options
+in front of {\tt GetoptLong} will be treated as default values.
 
 \section{Help and ersion options}
 
+{\tt help} and {\tt version} are two universal options. By default, these two options
+will be inferred from user's source code. 
+
+{\tt GetoptLong} only provide descriptions of all specified options. Users can set
+{\tt options('GetoptLong.startingMsg')} and {\tt options('GetoptLong.endingMsg')} to
+add informaiton for a complete help message:
+
+<<eval = FALSE, echo = TRUE>>=
+options('GetoptLong.startingMsg' = '
+Usage: Rscript test.R [options]
+An example to show how to use the packages
+')
+
+options('GetoptLong.endingMsg' = '
+Please contact author@gmail.com for comments
+')
+
+GetoptLong(...)
+@
+
 \section{Configuring {\tt Getopt::Long}}
+
+Configuration of {\tt Getopt::Long} can be set by {\tt options('GetoptLong.Config')}.
 
 \end{document}
