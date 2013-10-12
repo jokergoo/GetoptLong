@@ -26,17 +26,17 @@ value = 4
 name = "name"
 str = paste("region = (", region[1], ", ", region[2], "), value = ", value, 
             ", name = '", name, "'", sep = "")
-cat(str, "\n")
+cat(str)
 @
 
 As you can see, it is hard to read and very easy to make mistakes.
 
-In {\it Perl}, we always use variable interpolation to construct complicated texts in 
-which variables are started with special marks, and variables will be replaces with
-there real values. In this package, we aim to implement variable interpolation in {\it R}.
-The idea is rather simple: use special marks to identify variables in a string and then
-replace with their values. The function is {\tt qq} which is named from same name
-subroutine in {\it Perl} (It stands for double quote). Using variable interpolation, above
+In {\it Perl}, we always use variable interpolation to construct complicated strings in 
+which variables are started with special marks (sigil), and variables will be replaced with
+their real values. In this package, we aim to implement variable interpolation in {\it R}.
+The idea is rather simple: use special marks to identify variables and then
+replace with their values. The function is {\tt qq} which is named from the
+subroutine with the same name in {\it Perl} (It stands for double quote). Using variable interpolation, above
 example can be written as:
 
 <<eval = TRUE, include = TRUE, echo = TRUE>>==
@@ -46,7 +46,7 @@ str = qq("region = (@{region[1]}, @{region[2]}), value = @{value}, name = '@{nam
 cat(str)
 @
 
-Or use the short cut function {\tt qqcat}:
+Or use the shortcut function {\tt qqcat}:
 
 <<eval = TRUE, include = TRUE, echo = TRUE>>==
 library(GetoptLong)
@@ -55,11 +55,13 @@ qqcat("region = (@{region[1]}, @{region[2]}), value = @{value}, name = '@{name}'
 @
 
 \section{Code patterns}
-As you can see in above exmaple, {\tt @\{\}} is used to mark variables. Later these marks
-will be replaced with their real values.
+In above exmaple, {\tt @\{\}} is used to mark variables. Later variables will be extracted from these marks
+and replaced with their real values.
 
-The marking code pattern can be any kind. But you should make sure it is easy to tell the difference
-from other part of string. You can set your code pattern as an argument in {\tt qq}:
+The marking code pattern can be any type. But you should make sure it is easy to tell the difference
+from other part in the string. You can set your code pattern as an argument in {\tt qq}. The default pattern
+is {\tt @\textbackslash\textbackslash\{CODE\textbackslash\textbackslash\}} because  we only permit {\tt CODE}
+to return simple vectors and {\tt @} is a sigil representing array in {\it Perl}.
 
 <<eval = TRUE, include = TRUE, echo = TRUE>>==
 x = 1
@@ -72,9 +74,9 @@ Or set in {\tt options} as a global setting:
 options(code.pattern = "#\\{CODE\\}")
 @
 
-As you can guess, in {\tt \#\textbackslash\textbackslash\{CODE\textbackslash\textbackslash\}}, {\tt CODE} will be replaced with {\tt .*?} to construct a regular
+As you can guess, in {\tt @\textbackslash\textbackslash\{CODE\textbackslash\textbackslash\}}, {\tt CODE} will be replaced with {\tt .*?} to construct a regular
 expression to match variables in the string. So if your {\tt code.pattern} contains special characters,
-make sure to escape them. Some candidate {\tt code.pattern}s are:
+make sure to escape them. Some candidate {\tt code.pattern} are:
 
 <<eval = FALSE, echo = TRUE>>=
 code.pattern = "@\\{CODE\\}"    # default style
@@ -89,14 +91,16 @@ code.pattern = "\\$\\(CODE\\)"
 code.pattern = "#\\{CODE\\}"
 code.pattern = "#\\[CODE\\]"
 code.pattern = "#\\(CODE\\)"
-code.pattern = "\\[%CODE%\\]"  # Template (Perl module) style :)
+code.pattern = "\\[%CODE%\\]"  # Template Toolkit (Perl module) style :)
 @
 
-Since we just replace {\tt CODE} to {\tt .*?}, the function will only match to the first right brace. So,
-for example, you are using {\tt @\textbackslash\textbackslash[CODE\textbackslash\textbackslash]} and your string is {\tt "@[a[1]]"}, it will not successfully
-extract the right variable name which is only {\tt a[1}. In such condition, you should use other styles
-that do not contain {\tt []}. Finally, a more safe code pattern style that you do not need to worry about
-braces stuff:
+Since we just replace {\tt CODE} to {\tt .*?}, the function will only match to the first right parentheses/brackets.
+(In {\it Perl}, I always use recursive regular expression to extrace such pairing parentheses. But in {\it R}, it seems difficult.)
+So, for example, you are using {\tt @\textbackslash\textbackslash[CODE\textbackslash\textbackslash]} and your string is {\tt "@[a[1]]"}, it will fail to
+extract the correct variable name while only returns {\tt a[1}. In such condition, you should use other styles
+that do not contain {\tt []}.
+
+Finally, I suggest a more safe code pattern style that you do not need to worry about parentheses stuff:
 
 <<eval = FALSE, echo = TRUE>>==
 code.pattern = "`CODE`"
@@ -113,10 +117,12 @@ y = 2
 qqcat("x = @{x}, y = @{y}", env = list(x = "a", y = "b"))
 @
 
+If varaibles are passed through list, {\tt qq} only looks up in the specified list.
+
 \section{What if variables return non-vector values}
 
-{\tt qq} only allows variables to return vectors. The whole string will be interpolated repeatedly according to longest vectors.
-Note {\tt qq} only returns a interpolated string which has length of 1.
+{\tt qq} only allows variables to return vectors. The whole string will be interpolated repeatedly according to longest vectors,
+and finally concatenated into a single long string.
 
 <<eval = TRUE, include = TRUE, echo = TRUE>>==
 x = 1:6
@@ -128,7 +134,7 @@ z = c("A", "B", "C", "D", "E")
 qqcat("@{x}, @{y}, @{z}\n")
 @
 
-This feature is especially useful if you want to generate a HTML table:
+This feature is especially useful if you want to generate a report such as formatted in a HTML table:
 
 <<eval = TRUE, include = TRUE, echo = TRUE>>==
 name = letters[1:4]
@@ -138,8 +144,12 @@ qqcat("<tr><td>@{name}</td><td>@{value}</td><tr>\n")
 
 \section{You can also interpolate more complicated codes}
 
-Besides simpel variables, you can also put chunk of code in the text, but you need to explicitely specify the return value of the chunk.
-Following example is another way to contruct a HTML table in which eval rows and odd rows are assigned with different class names.
+Besides simple variables, you can also put chunk of codes in the string. 
+Since {\tt qq} takes value of the last variable as final return values, you need 
+to explicitly specify the return value of the chunk.
+
+Following example is another way to contruct a HTML table in which eval rows and 
+odd rows are assigned with different class names.
 
 <<eval = TRUE, include = TRUE, echo = TRUE>>==
 name = letters[1:4]
@@ -155,10 +165,13 @@ text
 cat(str)
 @
 
-In above example, the string also contains a {\tt qq} function, so please use differnt code patterns for them.
+In above example, the string also contains a {\tt qq} function, so please use different code patterns for them.
 
 \section{Simple template system}
-More advanced, you can make a simple template system. E.g., put following code in {\tt template.html}
+More advanced, you can make a simple template system. E.g., put following code in {\tt template.html}.
+In the template, {\it R} codes are marked by {\tt [\%} and {\tt \%]}. Again, if {\tt qq} is called inside the {\it R} codes in
+the template, you should use different code pattern instead of pattern in the template. That's why we use
+a complicated code pattern ({\tt \textbackslash\textbackslash[\%CODE\%]\textbackslash\textbackslash\}}) in the template.
 
 <<eval = TRUE, echo = FALSE, include = TRUE>>==
 html = "<html>
@@ -181,7 +194,10 @@ paste(text, collapse = '')  # make sure this chunk only returns vector with leng
 cat(html)
 @
 
-read {\tt template.html} and do the interpolation:
+It is important to collapse {\tt text} into one string, or else other part out of the template
+codes will be recycled.
+
+Read {\tt template.html} and do the interpolation:
 <<eval = FALSE, echo = TRUE>>==
 template = paste(readLines("template.html"), collapse = "\n")
 

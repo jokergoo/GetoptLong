@@ -1,6 +1,6 @@
 % \VignetteIndexEntry{Parsing command-line arguments by Getopt::Long}
 % \VignetteDepends{GetoptLong}
-% \VignetteKeywords{variable interpolation}
+% \VignetteKeywords{Parsing command-line arguments}
 % \VignettePackage{GetoptLong}
 
 \documentclass{article}
@@ -20,7 +20,7 @@ There are already several R packages to parse command-line arguments such as {\t
 or {\it Python}-style {\tt optparse}. Here {\tt GetoptLong} is another command-line argument
 parser which wraps the powerful {\it Perl} module \href{http://search.cpan.org/perldoc?Getopt%3A%3ALong}{{\tt Getopt::Long}}.
 
-Note: a large part of this vignette is copied or modified from {\tt Getopt::Long} doc page on CPAN. And I cannot guarantee all
+{\bf Note:} A large part of this vignette is copied or modified from {\tt Getopt::Long} doc page on CPAN. And I cannot guarantee all
 my understanding on {\tt Getopt::Long} is right. So the original website of \href{http://search.cpan.org/perldoc?Getopt%3A%3ALong}{{\tt Getopt::Long}}
 is always your best reference.
 
@@ -55,7 +55,7 @@ library(GetoptLong)
 cutoff = 0.05
 GetoptLong(c(
     "number=i", "Number of items, integer, mandatory option",
-    "cutoff:f", "cutoff",
+    "cutoff:f", "cutoff to filter results, optional, default (0.05)",
     "verbose",  "print messages"
 ))
 @
@@ -64,7 +64,7 @@ The first argument in {\tt GetoptLong} is either a two-column matrix or a simple
 even number of elements and will be transformed into the two-column matrix by rows internally. In the matrix, the first column is the specification
 of option names and the second column is the description of corresponding options.
 
-Save the code as {\tt test.R} and we can execute the R script through:
+Save the code as {\tt test.R} and we can execute the R script as:
 
 <<eval = TRUE, echo = FALSE, include = TRUE>>==
 cat("Rscript test.R --number 4 --cutoff 0.01 --verbose
@@ -74,28 +74,29 @@ Rscript test.R -n 4 --verbose")
 
 In above example, {\tt number} is a mandatory option and should only be integer mode. {\tt cutoff}
 is optional and already has a default value. {\tt verbose} is a logical option. If parsing is
-successful, two variables with name {\tt number} and {\tt verbose} will be imported in the working
+successful, two variables with name {\tt number} and {\tt verbose} will be imported into the working
 environment with specified values, and value for {\tt cutoff} will be updated if it is specified in
 command-line argument.
 
 \section{Customize your options}
-Each specifiers in options consists of two parts: the name specification and the argument specification:
+Each specifier in options consists of two parts: the name specification and the argument specification:
 
-<<eval = FALSE, echo = FALSE, include = TRUE>>==
+<<eval = TRUE, echo = FALSE, include = TRUE>>==
 cat("length|size|l=s@")
 @
 
-Here {\tt length|size|l} is list of alternative names seperated by {\tt |}. The remaining part is argument
+Here {\tt length|size|l} is a list of alternative names seperated by {\tt |}. The remaining part is argument
 specification which defines the mode and amount of arguments. The argument specification is optional.
 
-Specify any one of alternative options name is OK and it also doesn't matter whether using one or two slash in
+Specify any one of alternative option name is OK and it also doesn't matter whether using one or two slash in
 front of the option name. Sometimes you even don't need to specify complete option names, you only need to make
-sure the partial name match is unique. But if the partial match is not uniqe, it will only match to the first
-matched option.
+sure the partial name match is unique. If the partial match is not uniqe, it will throw an error.
+
+Options for argument specification are:
 
 \begin{itemize}
-	\item{no argument specification}: taking no argument.
-	\item{{\tt !}}: taking no argument, you can set this value to FALSE by prefixing it with "no" or "no-". E.g. "{\tt foo!} allows {\tt --foo} as well as {\tt --nofoo} and {\tt --no-foo}
+	\item{no argument specification}: taking no argument. Options are logical.
+	\item{{\tt !}}: taking no argument. Options are logical. You can set its oposite value by prefixing it with {\tt no} or {\tt no-}. E.g. {\tt foo!} allows {\tt --foo} as well as {\tt --nofoo} and {\tt --no-foo}.
 	\item{{\tt =type[desttype][repeat]}}
 		options are mandatory. If they are not specified in command-line, there is an error.
 	\item{{\tt :type[desttype]}}
@@ -112,69 +113,129 @@ Available {\tt type} options are:
 
 Available {\tt desttype} settings are:
 \begin{itemize}
-	\item{{\tt @}}: array
-	\item{{\tt \%}}: hash
-	\item{nothing}: scalar
+	\item{{\tt @}}: array, allow more than one arguments for an option.
+	\item{{\tt \%}}: hash, allow arguments like {\tt name=value}.
+	\item{nothing}: scalar, single argument for one option.
 \end{itemize}
 
-Available {\tt repeat} settings are:
+Available {\tt repeat} settings are formatted as {\tt \{\textbackslashd,\textbackslashd\}}. Note there is no blank character inside:
 \begin{itemize}
-	\item{{\tt \{2\}}}: exactly 2 arguments
-	\item{{\tt \{2,\}}}: at least 2 arguments
-	\item{{\tt \{,4\}}}: at most 4 arguments
-	\item{{\tt \{2,5\}}}: minimal 2 and maximal 5 arguments
+	\item{{\tt \{2\}}}: exactly 2 arguments for one option.
+	\item{{\tt \{2,\}}}: at least 2 arguments for one option.
+	\item{{\tt \{,4\}}}: at most 4 arguments for one option.
+	\item{{\tt \{2,5\}}}: minimal 2 and maximal 5 arguments for one option.
 \end{itemize}
 
-Detailed example for each option specification:
+Following tables are detailed examples for each type of option specification:
 
 \begin{table}[ht]
 \centering
-\begin{tabular}{c|c|c}
+\begin{tabular}{lll}
+\hline
+Options & Command-line arguments & Value of {\tt tag} \\
 \hline
 {\tt tag=i} & {\tt --tag 1} & {\tt 1} \\
             & {\tt --tag 1 --tag 2} & {\tt 2} \\
-			& {\tt --tag 0.1} & error \\
-			& {\tt --tag a} & error \\
-			& {\tt --tag} & error \\
-			& no argument & error \\
+			& {\tt --tag 0.1} & Value "0.1" invalid for option tag (number expected) \\
+			& {\tt --tag a} & Value "a" invalid for option tag (number expected) \\
+			& {\tt --tag} & Option tag requires an argument \\
+			& no argument & tag is mandatory, please specify it \\
 \hline
 {\tt tag=s} & {\tt --tag 1} & {\tt "1"} \\
 			& {\tt --tag 0.1} & {\tt "0.1"} \\
 			& {\tt --tag a} & {\tt "a"} \\
-			& {\tt --tag} & error \\
 \hline
 {\tt tag=f} & {\tt --tag 1} & {\tt 1} \\
 			& {\tt --tag 0.1} & {\tt 0.1} \\
-			& {\tt --tag a} & error \\
-			& {\tt --tag} & error \\
+			& {\tt --tag a} & Value "a" invalid for option tag (real number expected) \\
 \hline
 {\tt tag=o} & {\tt --tag 1} & {\tt 1} \\
 			& {\tt --tag 0b001001} & {\tt 9} \\
 			& {\tt --tag 0721} & {\tt 465} \\
 			& {\tt --tag 0xaf2} & {\tt 2802} \\
-			& {\tt --tag 0.1} & error \\
-			& {\tt --tag a} & error \\
-
+			& {\tt --tag 0.1} & Value "0.1" invalid for option tag (extended number expected) \\
+			& {\tt --tag a} & Value "a" invalid for option tag (extended number expected) \\
+\hline
+{\tt tag:i} & {\tt --tag 1} & {\tt 1} \\
+			& {\tt --tag 0.1} & {\tt 0} \\
+			& {\tt --tag a} & {\tt 0} \\
+			& {\tt --tag} & {\tt 0} \\
+			& no argument & {\tt NULL} \\
+\hline
+{\tt tag:s} & {\tt --tag 1} & {\tt "1"} \\
+			& {\tt --tag 0.1} & {\tt "0.1"} \\
+			& {\tt --tag a} & {\tt "a"} \\
+			& {\tt --tag} & {\tt ""} \\		
+\hline
+{\tt tag:f} & {\tt --tag 1} & {\tt 1} \\
+			& {\tt --tag 0.1} & {\tt 0.1} \\
+			& {\tt --tag a} & {\tt 0} \\
+			& {\tt --tag} & {\tt 0} \\
+\hline
+{\tt tag} & {\tt --tag 1} & {\tt TRUE} \\
+			& {\tt --tag 0} & {\tt TRUE} \\
+			& {\tt --tag 0.1} & {\tt TRUE} \\
+			& {\tt --tag a} & {\tt TRUE} \\
+			& {\tt --tag} & {\tt TRUE} \\
+			& no argument & {\tt FALSE} \\
+\hline
 \end{tabular}
 \caption{Detailed example of options specification}
 \label{table:spec}
 \end{table}
 
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{lll}
+\hline
+Options & Command-line arguments & Value of {\tt tag} \\
+\hline
+{\tt tag=i@} & {\tt --tag 1} & {\tt 1} \\
+            & {\tt --tag 1 --tag 2} & {\tt 1 2} \\
+\hline
+{\tt tag=i\%} & {\tt --tag 1} & Option tag, key "1", requires a value \\
+            & {\tt --tag name=1} & {\tt tag["name"] = 1} \\
+\hline
+{\tt tag=i\{2\}} & {\tt --tag 1} & Insufficient arguments for option tag \\
+            & {\tt --tag 1 2} & {\tt 1 2} \\
+            & {\tt --tag 1 --tag 2} & Value "--tag" invalid for option tag \\
+\hline
+{\tt tag!} & {\tt --tag} & {\tt TRUE} \\
+            & {\tt --no-tag} & {\tt FALSE} \\
+\hline
+\end{tabular}
+\caption{Detailed example of options specification (continued)}
+\label{table:spec2}
+\end{table}
+
 \section{Set default value and import options as variables}
 
-Since options will be imported into user's environment, any definition of these options
-in front of {\tt GetoptLong} will be treated as default values.
+Options will be imported into user's environment as R variables by default.
+The first option name in option alternative names will be taken as variable name,
+which means, it must be a valid R variable name. Any definition of these variables
+in front of {\tt GetoptLong} will be treated as default values for corresponding options.
 
-\section{Help and ersion options}
+If you don't like such importing, you can set {\tt export} to {\tt FALSE} as:
+
+<<eval = FALSE, echo = TRUE>>==
+opt = GetoptLong(spec, export = FALSE)
+@
+
+Then options will be returned to {\tt opt} as a list, and there will be no check
+for mandatory options and default values.
+
+\section{Help and version options}
 
 {\tt help} and {\tt version} are two universal options. By default, these two options
 will be inferred from user's source code. 
 
 {\tt GetoptLong} only provide descriptions of all specified options. Users can set
 {\tt options('GetoptLong.startingMsg')} and {\tt options('GetoptLong.endingMsg')} to
-add informaiton for a complete help message:
+add informaiton for a complete help message. And version is from {\tt VERSION} variable
+defined in user's environment.
 
-<<eval = FALSE, echo = TRUE>>=
+<<eval = FALSE, echo = TRUE>>==
 options('GetoptLong.startingMsg' = '
 Usage: Rscript test.R [options]
 An example to show how to use the packages
@@ -183,12 +244,59 @@ An example to show how to use the packages
 options('GetoptLong.endingMsg' = '
 Please contact author@gmail.com for comments
 ')
-
+VERSION = "0.0.1"
 GetoptLong(...)
 @
 
+Then you can specify {\tt help}:
+
+<<eval = TRUE, echo = FALSE, include = TRUE>>==
+cat("
+$~\\> Rscript command.R --help
+
+Usage: Rscript test.R [options]
+An example to show how to use the packages
+  --tag integer
+    this is a description of tag which is long long and very long and extremly
+    long...
+
+  --help
+    Print help message and exit
+
+  --version
+    Print version information and exit
+
+
+Please contact author@gmail.com for comments
+")
+@
+
+Or {\tt version} option
+
+<<eval = TRUE, echo = FALSE, include = TRUE>>==
+cat("
+$~\\> Rscript command.R --version
+0.0.1
+")
+@
+ 
 \section{Configuring {\tt Getopt::Long}}
 
-Configuration of {\tt Getopt::Long} can be set by {\tt options('GetoptLong.Config')}.
+Configuration of {\tt Getopt::Long} can be set by {\tt options("GetoptLong.Config")}:
+
+<<eval = FALSE, echo = TRUE, include = FALSE>>==
+options("GetoptLong.Config" = "bundling")
+@
+
+With different configuration, it can support more types of option specifications:
+
+<<eval = TRUE, echo = FALSE, include = TRUE>>==
+cat("-a -b -c  -abc
+-s 24 -s24 -s=24
+")
+@
+
+Please refer to website of \href{http://search.cpan.org/perldoc?Getopt%3A%3ALong}{{\tt Getopt::Long}}
+for more information.
 
 \end{document}

@@ -167,7 +167,7 @@ GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(),
 	# export to envir
 	export_parent_env(opt, envir = envir)
 	
-	return(opt)
+	return(invisible(opt))
 }
 
 

@@ -80,9 +80,10 @@ GetoptLong(spec, argv_str = "--tag")
 
 
 spec = c(
-	"tag!", "desc"
+	"tag", "desc"
 )
 GetoptLong(spec, argv_str = "--tag 1")
+GetoptLong(spec, argv_str = "--tag 0")
 GetoptLong(spec, argv_str = "--tag 0.1")
 GetoptLong(spec, argv_str = "--tag a")
 GetoptLong(spec, argv_str = "--tag")
@@ -92,6 +93,7 @@ spec = c(
 	"tag=i@", "desc"
 )
 GetoptLong(spec, argv_str = "--tag 1")
+GetoptLong(spec, argv_str = "--tag 1 --tag 2")
 GetoptLong(spec, argv_str = "--tag 1 --tag a")
 GetoptLong(spec, argv_str = "--tag 0.1")
 GetoptLong(spec, argv_str = "--tag a")
