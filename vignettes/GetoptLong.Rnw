@@ -156,22 +156,6 @@ Options & Command-line arguments & Value of {\tt tag} \\
 			& {\tt --tag 0.1} & Value "0.1" invalid for option tag (extended number expected) \\
 			& {\tt --tag a} & Value "a" invalid for option tag (extended number expected) \\
 \hline
-{\tt tag:i} & {\tt --tag 1} & {\tt 1} \\
-			& {\tt --tag 0.1} & {\tt 0} \\
-			& {\tt --tag a} & {\tt 0} \\
-			& {\tt --tag} & {\tt 0} \\
-			& no argument & {\tt NULL} \\
-\hline
-{\tt tag:s} & {\tt --tag 1} & {\tt "1"} \\
-			& {\tt --tag 0.1} & {\tt "0.1"} \\
-			& {\tt --tag a} & {\tt "a"} \\
-			& {\tt --tag} & {\tt ""} \\		
-\hline
-{\tt tag:f} & {\tt --tag 1} & {\tt 1} \\
-			& {\tt --tag 0.1} & {\tt 0.1} \\
-			& {\tt --tag a} & {\tt 0} \\
-			& {\tt --tag} & {\tt 0} \\
-\hline
 {\tt tag} & {\tt --tag 1} & {\tt TRUE} \\
 			& {\tt --tag 0} & {\tt TRUE} \\
 			& {\tt --tag 0.1} & {\tt TRUE} \\
@@ -179,17 +163,8 @@ Options & Command-line arguments & Value of {\tt tag} \\
 			& {\tt --tag} & {\tt TRUE} \\
 			& no argument & {\tt FALSE} \\
 \hline
-\end{tabular}
-\caption{Detailed example of options specification}
-\label{table:spec}
-\end{table}
-
-
-\begin{table}[ht]
-\centering
-\begin{tabular}{lll}
-\hline
-Options & Command-line arguments & Value of {\tt tag} \\
+{\tt tag!} & {\tt --tag} & {\tt TRUE} \\
+            & {\tt --no-tag} & {\tt FALSE} \\
 \hline
 {\tt tag=i@} & {\tt --tag 1} & {\tt 1} \\
             & {\tt --tag 1 --tag 2} & {\tt 1 2} \\
@@ -201,12 +176,9 @@ Options & Command-line arguments & Value of {\tt tag} \\
             & {\tt --tag 1 2} & {\tt 1 2} \\
             & {\tt --tag 1 --tag 2} & Value "--tag" invalid for option tag \\
 \hline
-{\tt tag!} & {\tt --tag} & {\tt TRUE} \\
-            & {\tt --no-tag} & {\tt FALSE} \\
-\hline
 \end{tabular}
-\caption{Detailed example of options specification (continued)}
-\label{table:spec2}
+\caption{Detailed example of options specification}
+\label{table:spec}
 \end{table}
 
 \section{Set default value and import options as variables}

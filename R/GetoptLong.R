@@ -10,12 +10,11 @@
 # -help     whether to add help option
 # -version  whether to add version option
 # -envir    user's enrivonment where `GetoptLong` will look for default values and export variables
-# -export   whether export options as variables into user's enrivonment
 # -argv_str command-line arguments, only for testing purpose
 #
 # == details
 # please see vignette.
-GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(), export = FALSE, argv_str = NULL) {
+GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(), argv_str = NULL) {
 	
 	# check first argument
 	if(is.matrix(spec)) {
@@ -32,6 +31,10 @@ GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(),
 		} else {
 			stop("Wrong `spec` class.\n")
 		}
+	}
+	
+	if(any(detect_optional(spec[, 1]))) {
+		stop("type :[isfo] is not allowed, use =[isfo] instead.\n")
 	}
 	
 	# add help and version options in `spec`
@@ -53,24 +56,22 @@ GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(),
 	# first name in each options
 	long_name = extract_first_name(spec[, 1])
 	
-	# if export to user's environment, `long_name` should be valid R variable names
-	if(!export) {
-		# test whether first name in option name is a valid R variable name
-		test_long_name = grepl("^[a-zA-Z_\\.][a-zA-Z0-9_\\.]+$", long_name) 
+	
+	# test whether first name in option name is a valid R variable name
+	test_long_name = grepl("^[a-zA-Z_\\.][a-zA-Z0-9_\\.]+$", long_name) 
 		
-		if(!all(test_long_name)) {
-			cat("First name in option names can only be valid R variable names which only use numbers, letters,\n'.' and '_' (It should match /^[a-zA-Z_\\.][a-zA-Z0-9_\\.]+$/).")
-			cat(qq(" Following option name@{ifelse(sum(test_long_name)==1, ' is', 's are')}\nnot valid:\n\n"))
-			for(k in seq_along(test_long_name)) {
-				if(!test_long_name[k]) cat(qq("  @{spec[k, 1]}\n"))
-			}
-			cat("\n")
+	if(!all(test_long_name)) {
+		cat("First name in option names can only be valid R variable names which only use numbers, letters,\n'.' and '_' (It should match /^[a-zA-Z_\\.][a-zA-Z0-9_\\.]+$/).")
+		cat(qq(" Following option name@{ifelse(sum(test_long_name)==1, ' is', 's are')}\nnot valid:\n\n"))
+		for(k in seq_along(test_long_name)) {
+			if(!test_long_name[k]) cat(qq("  @{spec[k, 1]}\n"))
+		}
+		cat("\n")
 			
-			if(is.null(argv_str)) {
-				q(save = "no")
-			} else {
-				return(NULL)
-			}
+		if(is.null(argv_str)) {
+			q(save = "no")
+		} else {
+			return(NULL)
 		}
 	}
 	
@@ -144,25 +145,21 @@ GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(),
 		}
 	}
 	
-	if(!export) {
-		return(opt)
-	}
-	
-	for(i in seq_len(nrow(spec))) {
-		if(is_mandatory[i] && exists(long_name[i], envir = envir)) {
-			tmp = get(long_name[i], envir = envir)
-			if(mode(tmp) %in% c("numeric", "character")) {
-				cat(qq("@{long_name[i]} is mandatory, but detect in envoking environment you have already \ndefined `@{first_name[i]}`. Please remove definition of `@{long_name[i]}` in your source code.\n"))
-				print_help_msg(spec)
-				
-				if(is.null(argv_str)) {
-					q(save = "no")
-				} else {
-					return(NULL)
-				}
-			}	
-		}
-	}
+#	for(i in seq_len(nrow(spec))) {
+#		if(is_mandatory[i] && exists(long_name[i], envir = envir)) {
+#			tmp = get(long_name[i], envir = envir)
+#			if(mode(tmp) %in% c("numeric", "character")) {
+#				cat(qq("@{long_name[i]} is mandatory, but detect in envoking environment you have already \ndefined `@{first_name[i]}`. Please remove definition of `@{long_name[i]}` in your source code.\n"))
+#				print_help_msg(spec)
+#				
+#				if(is.null(argv_str)) {
+#					q(save = "no")
+#				} else {
+#					return(NULL)
+#				}
+#			}	
+#		}
+#	}
 	
 	# export to envir
 	export_parent_env(opt, envir = envir)
@@ -416,6 +413,17 @@ detect_mandatory = function(opt) {
 	opt = gsub("\\{.*\\}$", "", opt)
 	
 	grepl("=[siof]$", opt)
+}
+
+detect_optional = function(opt) {
+	opt = gsub("[$@%]$", "", opt)
+	opt = gsub("\\{.*\\}$", "", opt)
+	
+	grepl(":[siof]$", opt)
+}
+
+has_default_value = function(opt, env) {
+
 }
 
 extract_first_name = function(opt) {
