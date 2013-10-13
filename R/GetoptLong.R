@@ -1,4 +1,3 @@
-
 # == title
 # Wrapper of the Perl module ``Getopt::Long`` in R
 #
@@ -133,7 +132,7 @@ GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(),
 	# check mandatory options
 	is_mandatory = detect_mandatory(spec[, 1])
 	for(i in seq_len(nrow(spec))) {
-		if(is_mandatory[i] && is.null(opt[[ long_name[i] ]])) {
+		if(is_mandatory[i] && ！exists(long_name[i], envir = envir)) {
 			cat(qq("@{long_name[i]} is mandatory, please specify it.\n"))
 			print_help_msg(spec)
 			
@@ -145,21 +144,21 @@ GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(),
 		}
 	}
 	
-#	for(i in seq_len(nrow(spec))) {
-#		if(is_mandatory[i] && exists(long_name[i], envir = envir)) {
-#			tmp = get(long_name[i], envir = envir)
-#			if(mode(tmp) %in% c("numeric", "character")) {
-#				cat(qq("@{long_name[i]} is mandatory, but detect in envoking environment you have already \ndefined `@{first_name[i]}`. Please remove definition of `@{long_name[i]}` in your source code.\n"))
-#				print_help_msg(spec)
-#				
-#				if(is.null(argv_str)) {
-#					q(save = "no")
-#				} else {
-#					return(NULL)
-#				}
-#			}	
-#		}
-#	}
+	for(i in seq_len(nrow(spec))) {
+		if(is_mandatory[i] && exists(long_name[i], envir = envir)) {
+			tmp = get(long_name[i], envir = envir)
+			if(！mode(tmp) %in% c("numeric", "character")) {
+				cat(qq("@{long_name[i]} is mandatory, and also detect in envoking environment you have already \ndefined `@{first_name[i]}`. Please make sure `@{long_name[i]}` should only be a simple vector.\n"))
+				print_help_msg(spec)
+				
+				if(is.null(argv_str)) {
+					q(save = "no")
+				} else {
+					return(NULL)
+				}
+			}	
+		}
+	}
 	
 	# export to envir
 	export_parent_env(opt, envir = envir)
@@ -420,10 +419,6 @@ detect_optional = function(opt) {
 	opt = gsub("\\{.*\\}$", "", opt)
 	
 	grepl(":[siof]$", opt)
-}
-
-has_default_value = function(opt, env) {
-
 }
 
 extract_first_name = function(opt) {
