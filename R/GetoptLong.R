@@ -293,7 +293,10 @@ print_help_msg = function(spec) {
 	
 	if(!is.null(options("GetoptLong.startingMsg")[[1]])) {
 		cat(options("GetoptLong.startingMsg")[[1]])
-	}
+	} else {
+                script_name = get_scriptname()
+                cat(qq("Usage: Rscript @{script_name} [options]\n\n"))
+        }
 	
 	for(i in seq_len(nrow(spec))) {
 		print_single_option(spec[i, 1], spec[i, 2])
@@ -453,4 +456,9 @@ export_parent_env = function(opt, envir = parent.frame()) {
 
 	return(invisible(NULL))
 	
+}
+
+get_scriptname = function() {
+
+
 }
