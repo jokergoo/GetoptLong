@@ -459,6 +459,5 @@ export_parent_env = function(opt, envir = parent.frame()) {
 }
 
 get_scriptname = function() {
-
-
+        basename(commandArgs()[1])
 }
