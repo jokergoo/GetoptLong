@@ -98,9 +98,7 @@ Options for argument specification are:
 	\item{no argument specification}: taking no argument. Options are logical.
 	\item{{\tt !}}: taking no argument. Options are logical. You can set its oposite value by prefixing it with {\tt no} or {\tt no-}. E.g. {\tt foo!} allows {\tt --foo} as well as {\tt --nofoo} and {\tt --no-foo}.
 	\item{{\tt =type[desttype][repeat]}}
-		options are mandatory. If they are not specified in command-line, there is an error.
-	\item{{\tt :type[desttype]}}
-		options are optional, they should always have default values.
+		options should have arguments. 
 \end{itemize}
 
 Available {\tt type} options are:
@@ -187,16 +185,7 @@ Options will be imported into user's environment as R variables by default.
 The first option name in option alternative names will be taken as variable name,
 which means, it must be a valid R variable name. Any definition of these variables
 in front of {\tt GetoptLong} will be treated as default values for corresponding options.
-
-If you don't like such importing, you can set {\tt export} to {\tt FALSE} as:
-
-<<eval = FALSE, echo = TRUE>>==
-opt = GetoptLong(spec, export = FALSE)
-@
-
-Then options will be returned to {\tt opt} as a list, and there will be no check
-for mandatory options and default values.
-
+If options already have default values, they are optional in command-line.
 \section{Help and version options}
 
 {\tt help} and {\tt version} are two universal options. By default, these two options
