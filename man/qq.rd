@@ -11,11 +11,11 @@
 
 }
 \usage{
-qq(text, env = parent.frame(), code.pattern = NULL)
+qq(text, envir = parent.frame(), code.pattern = NULL)
 }
 \arguments{
   \item{text}{text string in which variables are marked with certain rules}
-  \item{env}{environment where to find those variables. By default it is the environment where \code{\link{qq}} is envoked. It can also be a list in which list element names are the variable names going to be interpolated.}
+  \item{envir}{environment where to find those variables. By default it is the environment where \code{\link{qq}} is envoked. It can also be a list in which list element names are the variable names going to be interpolated.}
   \item{code.pattern}{pattern of marks for the variables. By default it is \code{@\\\\{CODE\\\\}} which means you can write your variable as \code{@{variable}}.}
 
 }

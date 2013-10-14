@@ -11,11 +11,11 @@
 
 }
 \usage{
-qqcat(text, env = parent.frame(), code.pattern = NULL)
+qqcat(text, envir = parent.frame(), code.pattern = NULL)
 }
 \arguments{
   \item{text}{text string in which variables are marked with certain rules}
-  \item{env}{environment where to find those variables}
+  \item{envir}{environment where to find those variables}
   \item{code.pattern}{pattern of marks for the variables}
 
 }
@@ -23,7 +23,7 @@ qqcat(text, env = parent.frame(), code.pattern = NULL)
   This function is a shortcut of  
 
   \preformatted{
-  cat(qq(text, env, code.pattern))
+  cat(qq(text, envir, code.pattern))
   }
   Please refer to \code{\link{qq}} to find more details. 
 

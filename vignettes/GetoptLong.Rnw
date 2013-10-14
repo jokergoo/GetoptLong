@@ -28,7 +28,7 @@ is always your best reference.
 
 \begin{figure}[h!]
 \centering
-\includegraphics{workflow.pdf}
+\includegraphics{workflow.png}
 \caption{Workflow of wrapping}
 \label{fig:workflow}
 \end{figure}
@@ -42,7 +42,7 @@ library(GetoptLong)
 cutoff = 0.05
 GetoptLong(matrix(c(
     "number=i", "Number of items, integer, mandatory option",
-    "cutoff:f", "cutoff to filter results, optional, default (0.05)",
+    "cutoff=f", "cutoff to filter results, optional, default (0.05)",
     "verbose",  "print messages"
 )))
 @
@@ -55,7 +55,7 @@ library(GetoptLong)
 cutoff = 0.05
 GetoptLong(c(
     "number=i", "Number of items, integer, mandatory option",
-    "cutoff:f", "cutoff to filter results, optional, default (0.05)",
+    "cutoff=f", "cutoff to filter results, optional, default (0.05)",
     "verbose",  "print messages"
 ))
 @
@@ -96,10 +96,13 @@ Options for argument specification are:
 
 \begin{itemize}
 	\item{no argument specification}: taking no argument. Options are logical.
-	\item{{\tt !}}: taking no argument. Options are logical. You can set its oposite value by prefixing it with {\tt no} or {\tt no-}. E.g. {\tt foo!} allows {\tt --foo} as well as {\tt --nofoo} and {\tt --no-foo}.
+	\item{{\tt !}}: taking no argument. Options are logical. You can set its oposite value by prefixing it with {\tt no} or {\tt no-}. E.g. {\tt foo!} allows {\tt -}{\tt -foo} as well as {\tt -}{\tt -nofoo} and {\tt -}{\tt -no-foo}.
 	\item{{\tt =type[desttype][repeat]}}
 		options should have arguments. 
 \end{itemize}
+
+Please note {\tt :[desttype]} is not supported here. We use another way to define
+required options and optional options. See following sections.
 
 Available {\tt type} options are:
 \begin{itemize}
@@ -116,7 +119,7 @@ Available {\tt desttype} settings are:
 	\item{nothing}: scalar, single argument for one option.
 \end{itemize}
 
-Available {\tt repeat} settings are formatted as {\tt \{\textbackslashd,\textbackslashd\}}. Note there is no blank character inside:
+Available {\tt repeat} settings are formatted as {\tt \{\textbackslash d,\textbackslash d\}}. Note there is no blank character inside:
 \begin{itemize}
 	\item{{\tt \{2\}}}: exactly 2 arguments for one option.
 	\item{{\tt \{2,\}}}: at least 2 arguments for one option.
@@ -132,47 +135,47 @@ Following tables are detailed examples for each type of option specification:
 \hline
 Options & Command-line arguments & Value of {\tt tag} \\
 \hline
-{\tt tag=i} & {\tt --tag 1} & {\tt 1} \\
-            & {\tt --tag 1 --tag 2} & {\tt 2} \\
-			& {\tt --tag 0.1} & Value "0.1" invalid for option tag (number expected) \\
-			& {\tt --tag a} & Value "a" invalid for option tag (number expected) \\
-			& {\tt --tag} & Option tag requires an argument \\
+{\tt tag=i} & {\tt -}{\tt -tag 1} & {\tt 1} \\
+            & {\tt -}{\tt -tag 1 -}{\tt -tag 2} & {\tt 2} \\
+			& {\tt -}{\tt -tag 0.1} & Value "0.1" invalid for option tag (number expected) \\
+			& {\tt -}{\tt -tag a} & Value "a" invalid for option tag (number expected) \\
+			& {\tt -}{\tt -tag} & Option tag requires an argument \\
 			& no argument & tag is mandatory, please specify it \\
 \hline
-{\tt tag=s} & {\tt --tag 1} & {\tt "1"} \\
-			& {\tt --tag 0.1} & {\tt "0.1"} \\
-			& {\tt --tag a} & {\tt "a"} \\
+{\tt tag=s} & {\tt -}{\tt -tag 1} & {\tt "1"} \\
+			& {\tt -}{\tt -tag 0.1} & {\tt "0.1"} \\
+			& {\tt -}{\tt -tag a} & {\tt "a"} \\
 \hline
-{\tt tag=f} & {\tt --tag 1} & {\tt 1} \\
-			& {\tt --tag 0.1} & {\tt 0.1} \\
-			& {\tt --tag a} & Value "a" invalid for option tag (real number expected) \\
+{\tt tag=f} & {\tt -}{\tt -tag 1} & {\tt 1} \\
+			& {\tt -}{\tt -tag 0.1} & {\tt 0.1} \\
+			& {\tt -}{\tt -tag a} & Value "a" invalid for option tag (real number expected) \\
 \hline
-{\tt tag=o} & {\tt --tag 1} & {\tt 1} \\
-			& {\tt --tag 0b001001} & {\tt 9} \\
-			& {\tt --tag 0721} & {\tt 465} \\
-			& {\tt --tag 0xaf2} & {\tt 2802} \\
-			& {\tt --tag 0.1} & Value "0.1" invalid for option tag (extended number expected) \\
-			& {\tt --tag a} & Value "a" invalid for option tag (extended number expected) \\
+{\tt tag=o} & {\tt -}{\tt -tag 1} & {\tt 1} \\
+			& {\tt -}{\tt -tag 0b001001} & {\tt 9} \\
+			& {\tt -}{\tt -tag 0721} & {\tt 465} \\
+			& {\tt -}{\tt -tag 0xaf2} & {\tt 2802} \\
+			& {\tt -}{\tt -tag 0.1} & Value "0.1" invalid for option tag (extended number expected) \\
+			& {\tt -}{\tt -tag a} & Value "a" invalid for option tag (extended number expected) \\
 \hline
-{\tt tag} & {\tt --tag 1} & {\tt TRUE} \\
-			& {\tt --tag 0} & {\tt TRUE} \\
-			& {\tt --tag 0.1} & {\tt TRUE} \\
-			& {\tt --tag a} & {\tt TRUE} \\
-			& {\tt --tag} & {\tt TRUE} \\
+{\tt tag} & {\tt -}{\tt -tag 1} & {\tt TRUE} \\
+			& {\tt -}{\tt -tag 0} & {\tt TRUE} \\
+			& {\tt -}{\tt -tag 0.1} & {\tt TRUE} \\
+			& {\tt -}{\tt -tag a} & {\tt TRUE} \\
+			& {\tt -}{\tt -tag} & {\tt TRUE} \\
 			& no argument & {\tt FALSE} \\
 \hline
-{\tt tag!} & {\tt --tag} & {\tt TRUE} \\
-            & {\tt --no-tag} & {\tt FALSE} \\
+{\tt tag!} & {\tt -}{\tt -tag} & {\tt TRUE} \\
+            & {\tt -}{\tt -no-tag} & {\tt FALSE} \\
 \hline
-{\tt tag=i@} & {\tt --tag 1} & {\tt 1} \\
-            & {\tt --tag 1 --tag 2} & {\tt 1 2} \\
+{\tt tag=i@} & {\tt -}{\tt -tag 1} & {\tt 1} \\
+            & {\tt -}{\tt -tag 1 -}{\tt -tag 2} & {\tt 1 2} \\
 \hline
-{\tt tag=i\%} & {\tt --tag 1} & Option tag, key "1", requires a value \\
-            & {\tt --tag name=1} & {\tt tag["name"] = 1} \\
+{\tt tag=i\%} & {\tt -}{\tt -tag 1} & Option tag, key "1", requires a value \\
+            & {\tt -}{\tt -tag name=1} & {\tt tag["name"] = 1} \\
 \hline
-{\tt tag=i\{2\}} & {\tt --tag 1} & Insufficient arguments for option tag \\
-            & {\tt --tag 1 2} & {\tt 1 2} \\
-            & {\tt --tag 1 --tag 2} & Value "--tag" invalid for option tag \\
+{\tt tag=i\{2\}} & {\tt -}{\tt -tag 1} & Insufficient arguments for option tag \\
+            & {\tt -}{\tt -tag 1 2} & {\tt 1 2} \\
+            & {\tt -}{\tt -tag 1 -}{\tt -tag 2} & Value "--tag" invalid for option tag \\
 \hline
 \end{tabular}
 \caption{Detailed example of options specification}
@@ -247,6 +250,7 @@ Configuration of {\tt Getopt::Long} can be set by {\tt options("GetoptLong.Confi
 
 <<eval = FALSE, echo = TRUE, include = FALSE>>==
 options("GetoptLong.Config" = "bundling")
+options("GetoptLong.Config" = c("no_ignore_case", "bundling"))
 @
 
 With different configuration, it can support more types of option specifications:
@@ -257,7 +261,7 @@ cat("-a -b -c  -abc
 ")
 @
 
-Please refer to website of \href{http://search.cpan.org/perldoc?Getopt%3A%3ALong}{{\tt Getopt::Long}}
+Please refer to website of \href{http://search.cpan.org/perldoc?Getopt%3A%3ALong#Configuring_Getopt%3A%3ALong}{{\tt Getopt::Long}}
 for more information.
 
 \end{document}

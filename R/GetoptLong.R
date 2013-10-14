@@ -132,7 +132,7 @@ GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(),
 	# check mandatory options
 	is_mandatory = detect_mandatory(spec[, 1])
 	for(i in seq_len(nrow(spec))) {
-		if(is_mandatory[i] && ！exists(long_name[i], envir = envir)) {
+		if(is.null(opt[[ long_name[i]] ]) && is_mandatory[i] && !exists(long_name[i], envir = envir)) {
 			cat(qq("@{long_name[i]} is mandatory, please specify it.\n"))
 			print_help_msg(spec)
 			
@@ -147,7 +147,7 @@ GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(),
 	for(i in seq_len(nrow(spec))) {
 		if(is_mandatory[i] && exists(long_name[i], envir = envir)) {
 			tmp = get(long_name[i], envir = envir)
-			if(！mode(tmp) %in% c("numeric", "character")) {
+			if(!mode(tmp) %in% c("numeric", "character")) {
 				cat(qq("@{long_name[i]} is mandatory, and also detect in envoking environment you have already \ndefined `@{first_name[i]}`. Please make sure `@{long_name[i]}` should only be a simple vector.\n"))
 				print_help_msg(spec)
 				
@@ -459,5 +459,10 @@ export_parent_env = function(opt, envir = parent.frame()) {
 }
 
 get_scriptname = function() {
-        basename(commandArgs()[1])
+		args = commandArgs()
+		i_arg = which(args == "--args")[1]
+		args = args[seq_len(i_arg)]
+        f = grep("^--file=", args, value = TRUE)[1]
+        f = gsub("^--file=(.*)$", "\\1", f)
+        return(basename(f))
 }

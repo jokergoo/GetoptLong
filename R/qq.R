@@ -3,7 +3,7 @@
 #
 # == param
 # -text         text string in which variables are marked with certain rules
-# -env          environment where to find those variables. By default it is the environment
+# -envir          environment where to find those variables. By default it is the environment
 #               where `qq` is envoked. It can also be a list in which list element names are
 #               the variable names going to be interpolated.
 # -code.pattern pattern of marks for the variables. By default it is ``@\\\\{CODE\\\\}`` which means
@@ -22,7 +22,7 @@
 #
 # == value
 # A single text
-qq = function(text, env = parent.frame(), code.pattern = NULL) {
+qq = function(text, envir = parent.frame(), code.pattern = NULL) {
 	
 	if(is.null(code.pattern)) {
 		if(is.null(options("code.pattern")[[1]])) {
@@ -36,11 +36,11 @@ qq = function(text, env = parent.frame(), code.pattern = NULL) {
         stop("Now only support text with length of 1.\n")
     }
 	
-    if(!is.null(env)) {
-		if(is.environment(env)) {
-			e = env
+    if(!is.null(envir)) {
+		if(is.environment(envir)) {
+			e = envir
 		} else {
-			e = as.environment(env)
+			e = as.environment(envir)
 		}
     } else {
         e = .GlobalEnv
@@ -124,15 +124,15 @@ find_code = function(m, text) {
 #
 # == param
 # -text         text string in which variables are marked with certain rules
-# -env          environment where to find those variables
+# -envir          environment where to find those variables
 # -code.pattern pattern of marks for the variables
 #
 # == details
 # This function is a shortcut of
 #
-#     cat(qq(text, env, code.pattern))
+#     cat(qq(text, envir, code.pattern))
 #
 # Please refer to `qq` to find more details.
-qqcat = function(text, env = parent.frame(), code.pattern = NULL) {
-	cat(qq(text, env, code.pattern))
+qqcat = function(text, envir = parent.frame(), code.pattern = NULL) {
+	cat(qq(text, envir, code.pattern))
 }
