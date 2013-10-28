@@ -75,12 +75,16 @@ qqcat("This is a message")
 
 You can use it together with {\tt GetoptLong} when you want to run the R script in command line.
 
-<<eval = TRUE, include = TRUE, echo = TRUE>>==
+<<eval = FALSE, include = FALSE, echo = TRUE>>==
 GetoptLongc(
     "verbose", "Print message"
 )
 options("cat_verbose" = verbose)
 qqcat("This is a message")
+@
+
+<<eval = TRUE, include = FALSE, echo = FALSE>>==
+options("cat_verbose" = NULL)
 @
 
 \section{Code patterns}
