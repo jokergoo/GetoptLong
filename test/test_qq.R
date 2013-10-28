@@ -53,3 +53,27 @@ for(i in seq_along(a)) {
 text
 `", code.pattern = "`CODE`"),
             equals("<tr><td>a</td><td>1</td></tr>\n<tr><td>b</td><td>2</td></tr>\n<tr><td>c</td><td>3</td></tr>\n"))
+            
+options("cat_prefix" = "[INFO] ")
+expect_that(qqcat("a"),
+            prints_text("[INFO] a"))
+            
+options("cat_prefix" = function() "[INFO] ")
+expect_that(qqcat("a"),
+            prints_text("[INFO] a"))
+            
+options("cat_prefix" = NULL)
+expect_that(qqcat("a"),
+            prints_text("a"))
+
+options("cat_prefix" = "[INFO] ", "cat_verbose" = FALSE)
+expect_that(qqcat("a"),
+            prints_text(""))
+            
+options("cat_prefix" = "[INFO] ", "cat_verbose" = NULL)
+expect_that(qqcat("a"),
+            prints_text(""))
+            
+options("cat_prefix" = "[INFO] ", "cat_verbose" = TRUE)
+expect_that(qqcat("a"),
+            prints_text("[INFO] a"))
