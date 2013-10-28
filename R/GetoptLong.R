@@ -24,6 +24,10 @@ GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(),
 	if(!check_perl("Getopt::Long", perl_bin = perl_bin)) {
 		stop("Cannot find Getopt::Long module in your Perl library.\n")
 	}
+	
+	if(!check_perl("JSON", inc = qq("@{system.file('extdata', 'GetoptLong')}/perl_lib"), perl_bin = perl_bin)) {
+		stop("Cannot find JSON module in your Perl library.\n")
+	}
 
 	# check first argument
 	if(is.matrix(spec)) {
@@ -477,6 +481,7 @@ get_scriptname = function() {
         return(basename(f))
 }
 
+# find path of binary perl
 find_perl_bin = function() {
 
 	# first look at user's options
@@ -510,6 +515,8 @@ find_perl_bin = function() {
 	return(perl_bin)
 }
 
+# check whether perl can be called
+# check whether perl has certain module
 check_perl = function(module = NULL, inc = NULL, perl_bin = "perl") {
 	
 	if(is.null(module)) {
@@ -548,8 +555,5 @@ look_for_file_in_path = function(file) {
 }
 
 is.dir = function(dir) {
-	if(!file.exists(dir)) {
-		return(FALSE)
-	}
-	return(file.info(dir)[1, "isdir"])
+	sapply(dir, function(x) file.exists(x) && file.info(x)[1, "isdir"])
 }
