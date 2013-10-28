@@ -74,6 +74,7 @@ qqcat("This is a message")
 @
 
 You can use it together with {\tt GetoptLong} when you want to run the R script in command line.
+In following example code, if you do not specify {\tt -}{\tt -verbose}, all messages will be shut down.
 
 <<eval = FALSE, include = FALSE, echo = TRUE>>==
 GetoptLongc(
