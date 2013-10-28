@@ -15,11 +15,13 @@
 # please see vignette.
 GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(), argv_str = NULL) {
 	
-	if(!check_perl()) {
-		stop("Cannot find Perl in your PATH.\n")
+	perl_bin = find_perl_bin()
+	
+	if(!check_perl(perl_bin = perl_bin)) {
+		stop(qq("Error when testing Perl: @{perl_bin}.\n"))
 	}
 	
-	if(!check_perl("Getopt::Long")) {
+	if(!check_perl("Getopt::Long", perl_bin = perl_bin)) {
 		stop("Cannot find Getopt::Long module in your Perl library.\n")
 	}
 
@@ -89,7 +91,7 @@ GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(),
 	# supress warnings
 	ow = options("warn")[[1]]
 	options(warn = -1)
-	msg = system(qq("perl @{perl_script} @{ARGV_string}"), intern = FALSE)
+	msg = system(qq("\"@{perl_bin}\" @{perl_script} @{ARGV_string}"), intern = FALSE)
 	options(warn = ow)
 	
 	# if there is error with execute perl program in which msg is non-zero
@@ -302,9 +304,9 @@ print_help_msg = function(spec) {
 	if(!is.null(options("GetoptLong.startingMsg")[[1]])) {
 		cat(options("GetoptLong.startingMsg")[[1]])
 	} else {
-                script_name = get_scriptname()
-                cat(qq("Usage: Rscript @{script_name} [options]\n\n"))
-        }
+        script_name = get_scriptname()
+        cat(qq("Usage: Rscript @{script_name} [options]\n\n"))
+    }
 	
 	for(i in seq_len(nrow(spec))) {
 		print_single_option(spec[i, 1], spec[i, 2])
@@ -475,13 +477,47 @@ get_scriptname = function() {
         return(basename(f))
 }
 
-check_perl = function(module = NULL, inc = NULL) {
+find_perl_bin = function() {
+
+	# first look at user's options
+	args = commandArgs()
+	i = which(args == "--")
+	if(length(i) && length(args) > i) {
+		perl_bin = args[i + 1]
+	} else {  # look at PATH
+		perl_bin = look_for_file_in_path("perl")
+		if(is.null(perl_bin)) {
+			stop("cannot find Perl in PATH.\n")
+		}
+	}
+	
+	if(!file.exists(perl_bin)) {
+		stop(qq("Cannot find @{perl_bin}\n"))
+	}
+	
+	OS = Sys.info()["sysname"]
+	if(is.dir(perl_bin)) {
+		if(OS == "Windows") {
+			perl_bin = qq("@{perl_bin}\\perl.exe")
+		} else {
+			perl_bin = qq("@{perl_bin}/perl")
+		}
+		if(!file.exists(perl_bin)) {
+			stop(qq("Cannot find @{perl_bin}\n"))
+		}
+	}
+	
+	return(perl_bin)
+}
+
+check_perl = function(module = NULL, inc = NULL, perl_bin = "perl") {
+	
 	if(is.null(module)) {
-		cmd = "perl -v"
+		cmd = qq("\"@{perl_bin}\" -v")
 	} else if(!is.null(module) && is.null(inc)) {
-		cmd = qq("perl -M@{module} -e \"use @{module}\"")
+		cmd = qq("\"@{perl_bin}\" -M@{module} -e \"use @{module}\"")
 	} else if(!is.null(module) && !is.null(inc)) {
-		cmd = qq("perl \"-I@{inc}\" -M@{module} -e \"use @{module}\"")
+		cmd = qq("\"@{perl_bin}\" \"-I@{inc}\" -M@{module} -e \"use @{module}\"")
 	}
 	
 	if(Sys.info()["sysname"] == "Windows") {
@@ -490,4 +526,30 @@ check_perl = function(module = NULL, inc = NULL) {
 		exit_code = system(cmd, ignore.stdout = TRUE, ignore.stderr = TRUE)
 	}
 	return(ifelse(exit_code, FALSE, TRUE))
+}
+
+look_for_file_in_path = function(file) {
+
+	OS = Sys.info()["sysname"]
+	if(OS == "Windows") {
+		dir = strsplit(Sys.getenv("PATH"), ";")[[1]]
+	} else {
+		dir = strsplit(Sys.getenv("PATH"), ":")[[1]]
+	}
+	
+	for(d in dir) {
+		if(OS == "Windows" && file.exists(qq("@{d}\\@{file}.exe"))) {
+			return(qq("@{d}\\@{file}.exe"))
+		} else if(file.exists(qq("@{d}/@{file}"))) {
+			return(qq("@{d}/@{file}"))
+		}
+	}
+	return(NULL)
+}
+
+is.dir = function(dir) {
+	if(!file.exists(dir)) {
+		return(FALSE)
+	}
+	return(file.info(dir)[1, "isdir"])
 }
