@@ -27,5 +27,12 @@ qqcat(text, envir = parent.frame(), code.pattern = NULL)
   }
   Please refer to \code{\link{qq}} to find more details. 
 
+  Additionally, you can add global prefix when using \code{\link{qqcat}}
+  
+  \preformatted{
+  options("cat_prefix" = "[INFO] ")
+  options("cat_prefix" = function(x) format(Sys.time(), "[\%Y-\%m-\%d \%H:\%M:\%S] "))
+  options("cat_prefix" = NULL)
+  }
 
 }

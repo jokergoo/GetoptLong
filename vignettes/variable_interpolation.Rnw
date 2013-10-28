@@ -49,9 +49,21 @@ cat(str)
 Or use the shortcut function {\tt qqcat}:
 
 <<eval = TRUE, include = TRUE, echo = TRUE>>==
-library(GetoptLong)
-
 qqcat("region = (@{region[1]}, @{region[2]}), value = @{value}, name = '@{name}'")
+@
+
+By the way, another feature of {\tt qqcat} is you can set a global prefix to the message
+printed by {\tt qqcat}. It can be set through {\tt options("cat\_prefix")}, either a string or a function:
+
+<<eval = TRUE, include = TRUE, echo = TRUE>>==
+options("cat_prefix" = "[INFO] ")
+qqcat("This is a message")
+
+options("cat_prefix" = function(x) format(Sys.time(), "[%Y-%m-%d %H:%M:%S] "))
+qqcat("This is a message")
+
+options("cat_prefix" = NULL)
+qqcat("This is a message")
 @
 
 \section{Code patterns}
@@ -95,7 +107,7 @@ code.pattern = "\\[%CODE%\\]"  # Template Toolkit (Perl module) style :)
 @
 
 Since we just replace {\tt CODE} to {\tt .*?}, the function will only match to the first right parentheses/brackets.
-(In {\it Perl}, I always use recursive regular expression to extrace such pairing parentheses. But in {\it R}, it seems difficult.)
+(In {\it Perl}, I always use recursive regular expression to extract such pairing parentheses. But in {\it R}, it seems difficult.)
 So, for example, you are using {\tt @\textbackslash\textbackslash[CODE\textbackslash\textbackslash]} and your string is {\tt "@[a[1]]"}, it will fail to
 extract the correct variable name while only returns {\tt a[1}. In such condition, you should use other styles
 that do not contain {\tt []}.
@@ -117,9 +129,9 @@ y = 2
 qqcat("x = @{x}, y = @{y}", envir = list(x = "a", y = "b"))
 @
 
-If varaibles are passed through list, {\tt qq} only looks up in the specified list.
+If variables are passed through list, {\tt qq} only looks up in the specified list.
 
-\section{What if variables return non-vector values}
+\section{Variables should only return vectors}
 
 {\tt qq} only allows variables to return vectors. The whole string will be interpolated repeatedly according to longest vectors,
 and finally concatenated into a single long string.

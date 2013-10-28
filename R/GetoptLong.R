@@ -15,6 +15,14 @@
 # please see vignette.
 GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(), argv_str = NULL) {
 	
+	if(!check_perl()) {
+		stop("Cannot find Perl in your PATH.\n")
+	}
+	
+	if(!check_perl("Getopt::Long")) {
+		stop("Cannot find Getopt::Long module in your Perl library.\n")
+	}
+
 	# check first argument
 	if(is.matrix(spec)) {
 		if(ncol(spec) != 2) {
@@ -435,11 +443,11 @@ extract_first_name = function(opt) {
 }
 
 export_parent_env = function(opt, envir = parent.frame()) {
-	parent_opt_name = ls(envir = envir)
-	parent_opt_name = parent_opt_name[ sapply(parent_opt_name, function(x) {
-									tmp = get(x, envir = envir)
-									mode(tmp) %in% c("numeric", "character")
-									}) ]
+	#parent_opt_name = ls(envir = envir)
+	#parent_opt_name = parent_opt_name[ sapply(parent_opt_name, function(x) {
+	#								tmp = get(x, envir = envir)
+	#								mode(tmp) %in% c("numeric", "character")
+	#								}) ]
 	
 	opt_name = names(opt)
 	
@@ -451,7 +459,7 @@ export_parent_env = function(opt, envir = parent.frame()) {
 	}
 
 	# defined with default values while not specified in command line
-	specified_parent_opt_name = intersect(opt_name[ sapply(opt, is.null) ], parent_opt_name)
+	#specified_parent_opt_name = intersect(opt_name[ sapply(opt, is.null) ], parent_opt_name)
 	# already have, do nothing
 
 	return(invisible(NULL))
@@ -465,4 +473,21 @@ get_scriptname = function() {
         f = grep("^--file=", args, value = TRUE)[1]
         f = gsub("^--file=(.*)$", "\\1", f)
         return(basename(f))
+}
+
+check_perl = function(module = NULL, inc = NULL) {
+	if(is.null(module)) {
+		cmd = "perl -v"
+	} else if(!is.null(module) && is.null(inc)) {
+		cmd = qq("perl -M@{module} -e \"use @{module}\"")
+	} else if(!is.null(module) && !is.null(inc)) {
+		cmd = qq("perl \"-I@{inc}\" -M@{module} -e \"use @{module}\"")
+	}
+	
+	if(Sys.info()["sysname"] == "Windows") {
+		exit_code = system(cmd, ignore.stdout = TRUE, ignore.stderr = TRUE, show.output.on.console = FALSE)
+	} else {
+		exit_code = system(cmd, ignore.stdout = TRUE, ignore.stderr = TRUE)
+	}
+	return(ifelse(exit_code, FALSE, TRUE))
 }

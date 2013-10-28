@@ -132,7 +132,29 @@ find_code = function(m, text) {
 #
 #     cat(qq(text, envir, code.pattern))
 #
+# Additionally, you can add global prefix when using `qqcat`
+#
+#     options("cat_prefix" = "[INFO] ")
+#     options("cat_prefix" = function(x) format(Sys.time(), "[%Y-%m-%d %H:%M:%S] "))
+#     options("cat_prefix" = NULL)
+#
 # Please refer to `qq` to find more details.
+#
 qqcat = function(text, envir = parent.frame(), code.pattern = NULL) {
 	cat(qq(text, envir, code.pattern))
+}
+
+cat = function(... , file = "", sep = " ", fill = FALSE, labels = NULL, append = FALSE) {
+    if(!is.null(options("cat_verbose")[[1]]) && !options("cat_verbose")[[1]]) {
+        return(invisible(NULL))
+    }
+    cat_prefix = options("cat_prefix")[[1]]
+    if(is.null(cat_prefix)) {
+        
+    } else if(is.function(cat_prefix)) {
+        base::cat(cat_prefix(), file = file, sep = sep, fill = fill, labels = labels, append = append)
+    } else {
+        base::cat(cat_prefix, file = file, sep = sep, fill = fill, labels = labels, append = append)
+    }
+    base::cat(... , file = file, sep = sep, fill = fill, labels = labels, append = append)
 }
