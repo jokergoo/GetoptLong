@@ -66,6 +66,23 @@ options("cat_prefix" = NULL)
 qqcat("This is a message")
 @
 
+You can shut down message by {\tt options("cat_verbose" = FALSE)}. 
+
+<<eval = TRUE, include = TRUE, echo = TRUE>>==
+options("cat_prefix" = "[INFO] ", "cat_verbose" = FALSE)
+qqcat("This is a message")
+@
+
+You can use it together with {\tt GetoptLong} when you want to run the R script in command line.
+
+<<eval = TRUE, include = TRUE, echo = TRUE>>==
+GetoptLongc(
+    "verbose", "Print message"
+)
+options("cat_verbose" = verbose)
+qqcat("This is a message")
+@
+
 \section{Code patterns}
 In above exmaple, {\tt @\{\}} is used to mark variables. Later variables will be extracted from these marks
 and replaced with their real values.
