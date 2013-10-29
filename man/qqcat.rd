@@ -11,13 +11,18 @@
 
 }
 \usage{
-qqcat(text, envir = parent.frame(), code.pattern = NULL)
+qqcat(text, envir = parent.frame(), code.pattern = NULL,
+      file = "", sep = " ", fill = FALSE, labels = NULL, append = FALSE)
 }
 \arguments{
   \item{text}{text string in which variables are marked with certain rules}
   \item{envir}{environment where to find those variables}
   \item{code.pattern}{pattern of marks for the variables}
-
+  \item{file}{pass to \code{\link[base]{cat}}}
+  \item{sep}{pass to \code{\link[base]{cat}}}
+  \item{fill}{pass to \code{\link[base]{cat}}}
+  \item{labels}{pass to \code{\link[base]{cat}}}
+  \item{append}{pass to \code{\link[base]{cat}}}
 }
 \details{
   This function is a shortcut of  

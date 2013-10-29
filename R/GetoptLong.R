@@ -16,6 +16,12 @@
 GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(), argv_str = NULL) {
 	
 	perl_bin = find_perl_bin()
+	if(is.null(argv_str)) {
+		STDOUT = stderr()
+	} else {
+		STDOUT = stdout()
+	}
+	
 	
 	if(!check_perl(perl_bin = perl_bin)) {
 		stop(qq("Error when testing Perl: @{perl_bin}.\n"))
@@ -84,24 +90,25 @@ GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(),
 		if(is.null(argv_str)) {
 			q(save = "no")
 		} else {
-			return(NULL)
+			return(invisible(NULL))
 		}
 	}
 	
-	json_file = tempfile(tmpdir = ".", fileext = ".json")
-	#json_file = "tmp.json"
+	json_file = tempfile(fileext = ".json")
 	perl_script = generate_perl_script(spec, json_file)
 	
-	# supress warnings
-	ow = options("warn")[[1]]
-	options(warn = -1)
-	msg = system(qq("\"@{perl_bin}\" @{perl_script} @{ARGV_string}"), intern = FALSE)
-	options(warn = ow)
+	
+	res = run_command(qq("\"@{perl_bin}\" \"@{perl_script}\" @{ARGV_string}"))
 	
 	# if there is error with execute perl program in which msg is non-zero
-	if(msg) {
-		print_help_msg(spec)
-		
+	if(res$status) {
+
+		qqcat("@{res$message}\n")
+
+		if(is.null(argv_str)) {
+			print_help_msg(spec)
+		}
+
 		ow = options("warn")[[1]]
 		options(warn = -1)
 		file.remove(json_file)
@@ -111,7 +118,7 @@ GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(),
 		if(is.null(argv_str)) {
 			q(save = "no")
 		} else {
-			return(NULL)
+			return(invisible(NULL))
 		}
 	}
 
@@ -126,7 +133,7 @@ GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(),
 		if(is.null(argv_str)) {
 			q(save = "no")
 		} else {
-			return(NULL)
+			return(invisible(NULL))
 		}
 	}
 	
@@ -134,9 +141,9 @@ GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(),
 		print_version_msg(envir)
 		
 		if(is.null(argv_str)) {
-			q(save = "no")
+			q(save = "no", status = 127)
 		} else {
-			return(NULL)
+			return(invisible(NULL))
 		}
 	}
 	
@@ -148,12 +155,14 @@ GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(),
 	for(i in seq_len(nrow(spec))) {
 		if(is.null(opt[[ long_name[i]] ]) && is_mandatory[i] && !exists(long_name[i], envir = envir)) {
 			cat(qq("@{long_name[i]} is mandatory, please specify it.\n"))
-			print_help_msg(spec)
-			
 			if(is.null(argv_str)) {
-				q(save = "no")
+				print_help_msg(spec)
+			}
+
+			if(is.null(argv_str)) {
+				q(save = "no", status = 127)
 			} else {
-				return(NULL)
+				return(invisible(NULL))
 			}
 		}
 	}
@@ -161,14 +170,16 @@ GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(),
 	for(i in seq_len(nrow(spec))) {
 		if(is_mandatory[i] && exists(long_name[i], envir = envir)) {
 			tmp = get(long_name[i], envir = envir)
-			if(!mode(tmp) %in% c("numeric", "character")) {
-				cat(qq("@{long_name[i]} is mandatory, and also detect in envoking environment you have already \ndefined `@{first_name[i]}`. Please make sure `@{long_name[i]}` should only be a simple vector.\n"))
-				print_help_msg(spec)
-				
+			if(!mode(tmp) %in% c("numeric", "character", "list")) {
+				cat(qq("@{long_name[i]} is mandatory, and also detect in envoking environment you have already \ndefined `@{long_name[i]}`. Please make sure `@{long_name[i]}` should only be a simple vector.\n"))
 				if(is.null(argv_str)) {
-					q(save = "no")
+					print_help_msg(spec)
+				}
+
+				if(is.null(argv_str)) {
+					q(save = "no", status = 127)
 				} else {
-					return(NULL)
+					return(invisible(NULL))
 				}
 			}	
 		}
@@ -182,7 +193,7 @@ GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(),
 
 
 generate_perl_script = function(spec, json_file) {
-	perl_script = tempfile(tmpdir = ".", fileext = ".pl")
+	perl_script = tempfile(fileext = ".pl")
 	#perl_script = "tmp.pl"
 	
 	long_name = extract_first_name(spec[, 1])
@@ -474,7 +485,14 @@ export_parent_env = function(opt, envir = parent.frame()) {
 
 get_scriptname = function() {
 		args = commandArgs()
-		i_arg = which(args == "--args")[1]
+		if(length(args) == 1) {
+			return("foo.R")
+		}
+		i_arg = which(args == "--args")
+		if(length(i_arg) == 0) {
+			return("foo.R")
+		}
+		i_arg = i_arg[1]
 		args = args[seq_len(i_arg)]
         f = grep("^--file=", args, value = TRUE)[1]
         f = gsub("^--file=(.*)$", "\\1", f)
@@ -527,12 +545,8 @@ check_perl = function(module = NULL, inc = NULL, perl_bin = "perl") {
 		cmd = qq("\"@{perl_bin}\" \"-I@{inc}\" -M@{module} -e \"use @{module}\"")
 	}
 	
-	if(Sys.info()["sysname"] == "Windows") {
-		exit_code = system(cmd, ignore.stdout = TRUE, ignore.stderr = TRUE, show.output.on.console = FALSE)
-	} else {
-		exit_code = system(cmd, ignore.stdout = TRUE, ignore.stderr = TRUE)
-	}
-	return(ifelse(exit_code, FALSE, TRUE))
+	res = run_command(cmd)
+	return(ifelse(res$status, FALSE, TRUE))
 }
 
 look_for_file_in_path = function(file) {
@@ -556,4 +570,42 @@ look_for_file_in_path = function(file) {
 
 is.dir = function(dir) {
 	sapply(dir, function(x) file.exists(x) && file.info(x)[1, "isdir"])
+}
+
+# wrapper of `base::system`
+#
+# == param
+# -command command
+#
+# == details
+# It will return a list with two elements:
+#
+# -status status of the command
+#
+# This function is platform independent.
+#
+# Assume binary file exists.
+#
+# I cannot capture error when binary file cannot be found
+#
+run_command = function(command) {
+	OS = Sys.info()["sysname"]
+
+	command = qq("@{command} 2>&1")
+
+	# supress warnings
+	ow = options("warn")[[1]]
+	options(warn = -1)
+	if(OS == "Windows") {
+		res = try(system(command, show.output.on.console = FALSE, intern = TRUE), silent = TRUE)
+	} else {
+		res = try(system(command, intern = TRUE), silent = TRUE)
+	}
+	options(warn = ow)
+	
+	if(is.null(attributes(res))) {
+		return(list(status = 0, message = res))
+	} else {
+		return(list(status = ifelse(is.null(attributes(res)$status), 127, attributes(res)$status), message = as.vector(res)))
+	}
 }

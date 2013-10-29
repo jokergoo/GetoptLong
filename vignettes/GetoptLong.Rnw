@@ -268,8 +268,8 @@ for more information.
 In some conditions that path of binary perl is not in your {\tt PATH} environment variable and you do not
 have permission to modify it. You can specify your perl path from command line like:
 
-<<eval = FALSE, echo = TRUE, include = FALSE>>==
-Rscript test.R -a -b -c -- /your/perl/bin/perl
+<<eval = TRUE, echo = FALSE, include = TRUE>>==
+cat("Rscript test.R -a -b -c -- /your/perl/bin/perl")
 @
 
 Since arguments following after {\tt -}{\tt -} will be ignored by {\tt Getopt::Long}, we 

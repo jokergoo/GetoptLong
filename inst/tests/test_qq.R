@@ -63,27 +63,27 @@ test_that("simple template", {
 })
 
 test_that("test `cat_prefix`", {
-	options("cat_prefix" = "[INFO] ")
+	options("cat_prefix" = "INFO:")
 	expect_that(qqcat("a"),
-				prints_text("[INFO] a"))
+				prints_text("INFO:a"))
 				
-	options("cat_prefix" = function() "[INFO] ")
+	options("cat_prefix" = function() "DEBUG:")
 	expect_that(qqcat("a"),
-				prints_text("[INFO] a"))
+				prints_text("DEBUG:a"))
 				
 	options("cat_prefix" = NULL)
 	expect_that(qqcat("a"),
 				prints_text("a"))
 
-	options("cat_prefix" = "[INFO] ", "cat_verbose" = FALSE)
+	options("cat_prefix" = "INFO:", "cat_verbose" = FALSE)
 	expect_that(qqcat("a"),
 				prints_text(""))
 				
-	options("cat_prefix" = "[INFO] ", "cat_verbose" = NULL)
+	options("cat_prefix" = "INFO:", "cat_verbose" = NULL)
 	expect_that(qqcat("a"),
 				prints_text(""))
 				
-	options("cat_prefix" = "[INFO] ", "cat_verbose" = TRUE)
+	options("cat_prefix" = "INFO:", "cat_verbose" = TRUE)
 	expect_that(qqcat("a"),
-				prints_text("[INFO] a"))
-}
+				prints_text("INFO:a"))
+})

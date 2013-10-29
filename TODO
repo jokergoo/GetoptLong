@@ -1,0 +1,3 @@
+-Write help message to STDERR
+-test on Windows OS
+-test on non-Perl OS

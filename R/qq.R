@@ -126,6 +126,11 @@ find_code = function(m, text) {
 # -text         text string in which variables are marked with certain rules
 # -envir          environment where to find those variables
 # -code.pattern pattern of marks for the variables
+# -file        pass to `base::cat`
+# -sep         pass to `base::cat`
+# -fill        pass to `base::cat`
+# -labels      pass to `base::cat`
+# -append      pass to `base::cat`
 #
 # == details
 # This function is a shortcut of
@@ -140,8 +145,8 @@ find_code = function(m, text) {
 #
 # Please refer to `qq` to find more details.
 #
-qqcat = function(text, envir = parent.frame(), code.pattern = NULL) {
-	cat(qq(text, envir, code.pattern))
+qqcat = function(text, envir = parent.frame(), code.pattern = NULL, file = "", sep = " ", fill = FALSE, labels = NULL, append = FALSE) {
+	cat(qq(text, envir, code.pattern), file = file, sep = sep, fill = fill, labels = labels, append = append)
 }
 
 cat = function(... , file = "", sep = " ", fill = FALSE, labels = NULL, append = FALSE) {

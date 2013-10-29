@@ -66,7 +66,7 @@ options("cat_prefix" = NULL)
 qqcat("This is a message")
 @
 
-You can shut down message by {\tt options("cat_verbose" = FALSE)}. 
+You can shut down message by {\tt options("cat\_verbose" = FALSE)}. 
 
 <<eval = TRUE, include = TRUE, echo = TRUE>>==
 options("cat_prefix" = "[INFO] ", "cat_verbose" = FALSE)
