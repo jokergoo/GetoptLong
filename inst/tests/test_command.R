@@ -6,7 +6,9 @@ setwd(qq("@{system.file('tests', package = 'GetoptLong')}/scripts"))
 run_command = function(command) {
 	OS = Sys.info()["sysname"]
 
-	command = qq("@{command} 2>&1")
+	if(OS != "Windows") {
+		command = qq("@{command} 2>&1")
+	}
 
 	# supress warnings
 	ow = options("warn")[[1]]

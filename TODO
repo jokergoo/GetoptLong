@@ -1,4 +1,3 @@
-- Write help message to STDERR
 - test on Windows OS
 - test on non-Perl OS
-- `run_command`, how to better capture stdout and stderr or a command
+- `run_command`, how to better capture stdout and stderr or a command, in Windows

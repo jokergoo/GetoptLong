@@ -56,7 +56,14 @@ qq = function(text, envir = parent.frame(), code.pattern = NULL) {
         if(length(template)) {   # if there is code replacement
            
             # replace the code with its value
-            return_value = lapply(code, function(c) eval(parse(text = c), envir = e))  # anony function is the first level parent
+            return_value = lapply(code, function(c) {
+				x = eval(parse(text = c), envir = e)
+				if(length(x) == 0 || is.null(x)) {
+					return("")
+				} else {
+					return(x)
+				}
+			})  # anony function is the first level parent
 			
 			is_return_value_vector = sapply(return_value, function(r) is.vector(r) & !is.list(r))
 			if(! all(is_return_value_vector)) {
@@ -140,7 +147,7 @@ find_code = function(m, text) {
 # Additionally, you can add global prefix when using `qqcat`
 #
 #     options("cat_prefix" = "[INFO] ")
-#     options("cat_prefix" = function(x) format(Sys.time(), "[%Y-%m-%d %H:%M:%S] "))
+#     options("cat_prefix" = function(x) format(Sys.time(), "[\%Y-\%m-\%d \%H:\%M:\%S] "))
 #     options("cat_prefix" = NULL)
 #
 # Please refer to `qq` to find more details.

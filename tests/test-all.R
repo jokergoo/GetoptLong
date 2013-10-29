@@ -15,7 +15,7 @@ if(OS == "Windows") {
 }
 options(warn = ow)
 
-if(is.null(attributes(res))) {
+if(is.null(attributes(res)) && OS != "Windows") {
 	test_package("GetoptLong", filter = "qq|GetoptLong")
 } else {
 	test_package("GetoptLong", filter = "qq")

@@ -22,17 +22,31 @@ GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(),
 		STDOUT = stdout()
 	}
 	
-	
 	if(!check_perl(perl_bin = perl_bin)) {
-		stop(qq("Error when testing Perl: @{perl_bin}.\n"))
+		qqcat("Error when testing Perl: @{perl_bin}.\n", file = STDOUT)
+		if(is.null(argv_str)) {
+			q(save = "no", status = 127)
+		} else {
+			return(invisible(NULL))
+		}
 	}
 	
 	if(!check_perl("Getopt::Long", perl_bin = perl_bin)) {
-		stop("Cannot find Getopt::Long module in your Perl library.\n")
+		cat("Cannot find Getopt::Long module in your Perl library.\n", file = STDOUT)
+		if(is.null(argv_str)) {
+			q(save = "no", status = 127)
+		} else {
+			return(invisible(NULL))
+		}
 	}
 	
 	if(!check_perl("JSON", inc = qq("@{system.file('extdata', 'GetoptLong')}/perl_lib"), perl_bin = perl_bin)) {
-		stop("Cannot find JSON module in your Perl library.\n")
+		cat("Cannot find JSON module in your Perl library.\n", file = STDOUT)
+		if(is.null(argv_str)) {
+			q(save = "no", status = 127)
+		} else {
+			return(invisible(NULL))
+		}
 	}
 
 	# check first argument
@@ -80,15 +94,15 @@ GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(),
 	test_long_name = grepl("^[a-zA-Z_\\.][a-zA-Z0-9_\\.]+$", long_name) 
 		
 	if(!all(test_long_name)) {
-		cat("First name in option names can only be valid R variable names which only use numbers, letters,\n'.' and '_' (It should match /^[a-zA-Z_\\.][a-zA-Z0-9_\\.]+$/).")
-		cat(qq(" Following option name@{ifelse(sum(test_long_name)==1, ' is', 's are')}\nnot valid:\n\n"))
+		cat("First name in option names can only be valid R variable names which only use numbers, letters,\n'.' and '_' (It should match /^[a-zA-Z_\\.][a-zA-Z0-9_\\.]+$/).", file = STDOUT)
+		qqcat(" Following option name@{ifelse(sum(test_long_name)==1, ' is', 's are')}\nnot valid:\n\n", file = STDOUT)
 		for(k in seq_along(test_long_name)) {
 			if(!test_long_name[k]) cat(qq("  @{spec[k, 1]}\n"))
 		}
-		cat("\n")
+		cat("\n", file = STDOUT)
 			
 		if(is.null(argv_str)) {
-			q(save = "no")
+			q(save = "no", status = 127)
 		} else {
 			return(invisible(NULL))
 		}
@@ -103,10 +117,11 @@ GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(),
 	# if there is error with execute perl program in which msg is non-zero
 	if(res$status) {
 
-		qqcat("@{res$message}\n")
+		qqcat(text = "@{res$message}\n", file = STDOUT)
+		cat(res$message)
 
 		if(is.null(argv_str)) {
-			print_help_msg(spec)
+			print_help_msg(spec, file = STDOUT)
 		}
 
 		ow = options("warn")[[1]]
@@ -116,7 +131,7 @@ GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(),
 		options(warn = ow)
 		
 		if(is.null(argv_str)) {
-			q(save = "no")
+			q(save = "no", status = 127)
 		} else {
 			return(invisible(NULL))
 		}
@@ -128,17 +143,17 @@ GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(),
 	
 	# if detect user has specified --help or --version
 	if(!is.null(opt$help) && opt$help) {
-		print_help_msg(spec)
+		print_help_msg(spec, file = STDOUT)
 		
 		if(is.null(argv_str)) {
-			q(save = "no")
+			q(save = "no", status = 127)
 		} else {
 			return(invisible(NULL))
 		}
 	}
 	
 	if(!is.null(opt$version) && opt$version) {
-		print_version_msg(envir)
+		print_version_msg(envir, file = STDOUT)
 		
 		if(is.null(argv_str)) {
 			q(save = "no", status = 127)
@@ -154,9 +169,9 @@ GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(),
 	is_mandatory = detect_mandatory(spec[, 1])
 	for(i in seq_len(nrow(spec))) {
 		if(is.null(opt[[ long_name[i]] ]) && is_mandatory[i] && !exists(long_name[i], envir = envir)) {
-			cat(qq("@{long_name[i]} is mandatory, please specify it.\n"))
+			qqcat("@{long_name[i]} is mandatory, please specify it.\n", file = STDOUT)
 			if(is.null(argv_str)) {
-				print_help_msg(spec)
+				print_help_msg(spec, file = STDOUT)
 			}
 
 			if(is.null(argv_str)) {
@@ -171,9 +186,9 @@ GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(),
 		if(is_mandatory[i] && exists(long_name[i], envir = envir)) {
 			tmp = get(long_name[i], envir = envir)
 			if(!mode(tmp) %in% c("numeric", "character", "list")) {
-				cat(qq("@{long_name[i]} is mandatory, and also detect in envoking environment you have already \ndefined `@{long_name[i]}`. Please make sure `@{long_name[i]}` should only be a simple vector.\n"))
+				qqcat("@{long_name[i]} is mandatory, and also detect in envoking environment you have already \ndefined `@{long_name[i]}`. Please make sure `@{long_name[i]}` should only be a simple vector.\n", file = STDOUT)
 				if(is.null(argv_str)) {
-					print_help_msg(spec)
+					print_help_msg(spec, file = STDOUT)
 				}
 
 				if(is.null(argv_str)) {
@@ -314,25 +329,25 @@ perl_sigil = function(type) {
 	}
 }
 
-print_help_msg = function(spec) {
+print_help_msg = function(spec, file = stderr()) {
 	
 	if(!is.null(options("GetoptLong.startingMsg")[[1]])) {
-		cat(options("GetoptLong.startingMsg")[[1]])
+		cat(options("GetoptLong.startingMsg")[[1]], file = file)
 	} else {
         script_name = get_scriptname()
-        cat(qq("Usage: Rscript @{script_name} [options]\n\n"))
+        qqcat("Usage: Rscript @{script_name} [options]\n\n", file = file)
     }
 	
 	for(i in seq_len(nrow(spec))) {
-		print_single_option(spec[i, 1], spec[i, 2])
+		print_single_option(spec[i, 1], spec[i, 2], file = file)
 	}
 	
 	if(!is.null(options("GetoptLong.endingMsg")[[1]])) {
-		cat(options("GetoptLong.endingMsg")[[1]])
+		cat(options("GetoptLong.endingMsg")[[1]], file = file)
 	}
 }
 
-print_single_option = function(opt, desc) {
+print_single_option = function(opt, desc, file = stderr()) {
 	var_type = detect_var_type(opt)
 	opt_type = detect_opt_type(opt)
 	
@@ -343,56 +358,56 @@ print_single_option = function(opt, desc) {
 	
 	choices = strsplit(opt, "\\|")[[1]]
 	
-	cat("  ")
+	cat("  ", file = file)
 	for(i in seq_along(choices)) {
-		cat(qq("@{ifelse(nchar(choices[i]) == 1, '-', '--')}@{choices[i]}@{ifelse(i == length(choices), '', ', ')}"))
+		qqcat("@{ifelse(nchar(choices[i]) == 1, '-', '--')}@{choices[i]}@{ifelse(i == length(choices), '', ', ')}", file = file)
 	}
-	cat(" ")
+	cat(" ", file = file)
 	if(var_type == "scalar" && opt_type == "extended_integer") {
-		cat("extended_integer")
+		cat("extended_integer", file = file)
 	} else if(var_type == "scalar" && opt_type == "logical") {
-		cat("")
+		cat("", file = file)
 	} else if(var_type == "scalar") {
-		cat(opt_type)
+		cat(opt_type, file = file)
 	} else if(var_type == "array") {
-		cat(qq("[ @{opt_type}, ... ]"))
+		qqcat("[ @{opt_type}, ... ]", file = file)
 	} else if(var_type == "hash") {
-		cat(qq("{ name=@{opt_type}, ... }"))
+		qqcat("{ name=@{opt_type}, ... }", file = file)
 	}
 	
-	cat("\n")
+	cat("\n", file = file)
 	
-	cat_format_line(desc, prefix = "    ")
+	cat_format_line(desc, prefix = "    ", file = file)
 
 }
 
-print_version_msg = function(envir) {
+print_version_msg = function(envir, file = stderr()) {
 	if(exists("VERSION", envir = envir)) {
-		cat(get("VERSION", envir = envir))
+		cat(get("VERSION", envir = envir), file = file)
 	} else {
-		cat("No version information is found in source code.\n")
+		cat("No version information is found in source code.\n", file = file)
 	}
-	cat("\n")
+	cat("\n", file = file)
 }
 
-cat_format_line = function(text, prefix = "", max.width = 70) {
+cat_format_line = function(text, prefix = "", max.width = 70, file = stderr()) {
 	words = strsplit(text, "\\s+")[[1]]
 	
 	i_width = nchar(prefix)
-	cat(prefix)
+	cat(prefix, file = file)
 	for(i in seq_along(words)) {
 		if(i_width + 1 + nchar(words[i]) > max.width) {
-			cat("\n")
-			cat(prefix)
-			cat(words[i])
+			cat("\n", file = file)
+			cat(prefix, file = file)
+			cat(words[i], file = file)
 			i_width = nchar(prefix) + nchar(words[i])
 		} else {
-			cat(ifelse(i == 1, "", " "))
-			cat(qq("@{words[i]}"))
+			cat(ifelse(i == 1, "", " "), file = file)
+			qqcat("@{words[i]}", file = file)
 			i_width = i_width + nchar(prefix)
 		}
 	}
-	cat("\n\n")
+	cat("\n\n", file = file)
 }
 
 detect_var_type = function(opt) {
@@ -590,13 +605,16 @@ is.dir = function(dir) {
 #
 run_command = function(command) {
 	OS = Sys.info()["sysname"]
-
-	command = qq("@{command} 2>&1")
-
+	
+	if(OS != "Windows") {
+		command = qq("@{command} 2>&1")
+	}
+	
 	# supress warnings
 	ow = options("warn")[[1]]
 	options(warn = -1)
 	if(OS == "Windows") {
+		# how to capture STDERR in Windows? envoke a perl script
 		res = try(system(command, show.output.on.console = FALSE, intern = TRUE), silent = TRUE)
 	} else {
 		res = try(system(command, intern = TRUE), silent = TRUE)

@@ -86,4 +86,5 @@ test_that("test `cat_prefix`", {
 	options("cat_prefix" = "INFO:", "cat_verbose" = TRUE)
 	expect_that(qqcat("a"),
 				prints_text("INFO:a"))
+	options("cat_prefix" = NULL)
 })

@@ -3,5 +3,4 @@ export(
 	qq,
 	qqcat
 )
-
 importFrom("rjson", fromJSON)
