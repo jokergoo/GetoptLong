@@ -1,7 +1,6 @@
 ^\..*
 README.*
-test/
-to-do.txt
-circlize_.*\.tar\.gz
+TODO
 check.bat
-R/link-bezier.R
+inst/tests/test_command.R
+inst/tests/scripts
