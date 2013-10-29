@@ -242,16 +242,13 @@ generate_perl_script = function(spec, json_file) {
 	}
 	
 	perl_code = c(perl_code, qq(""))
-	perl_code = c(perl_code, qq("eval { GetOptions("))
+	perl_code = c(perl_code, qq("GetOptions("))
 	
 	for (i in seq_len(nrow(spec))) {
-		perl_code = perl_code = c(perl_code, qq("    '@{spec[i, 1]}' => \\@{perl_sigil(var_type[i])}opt_@{i},"))
+		perl_code = c(perl_code, qq("    '@{spec[i, 1]}' => \\@{perl_sigil(var_type[i])}opt_@{i},"))
 	}
-	
-	perl_code = c(perl_code, qq(") or die 'Errors when parsing command-line arguments.'; };"))
-	
-	perl_code = c(perl_code, "")
-	perl_code = c(perl_code, "if($@) { exit(123); }")
+	perl_code = c(perl_code, qq("    -exitval => 127,"))
+	perl_code = c(perl_code, qq("    -output => \*STDERR,);"))
 	
 	perl_code = c(perl_code, qq(""))
 	
