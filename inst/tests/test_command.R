@@ -3,32 +3,22 @@ context("test command-line")
 
 setwd(qq("@{system.file('tests', package = 'GetoptLong')}/scripts"))
 
-run_command = function(command) {
-	OS = Sys.info()["sysname"]
 
-	if(OS != "Windows") {
-		command = qq("@{command} 2>&1")
-	}
+OS = Sys.info()["sysname"]
 
-	# supress warnings
-	ow = options("warn")[[1]]
-	options(warn = -1)
-	if(OS == "Windows") {
-		res = try(system(command, show.output.on.console = FALSE, intern = TRUE), silent = TRUE)
-	} else {
-		res = try(system(command, intern = TRUE), silent = TRUE)
-	}
-	options(warn = ow)
-	
-	if(is.null(attributes(res))) {
-		return(list(status = 0, message = res))
-	} else {
-		return(list(status = ifelse(is.null(attributes(res)$status), 127, attributes(res)$status), message = as.vector(res)))
-	}
+command = "Rscript --version"
+
+# supress warnings
+ow = options("warn")[[1]]
+options(warn = -1)
+if(OS == "Windows") {
+	res = try(system(command, show.output.on.console = FALSE, ignore.stderr = TRUE, intern = TRUE), silent = TRUE)
+} else {
+	res = try(system(command, intern = TRUE), silent = TRUE)
 }
+options(warn = ow)
 
-res = run_command("Rscript --version")
-if(!res$status) {
+if(is.null(attributes(res))) {
 
 	test_that("test command-line", {
 		res = run_command("Rscript general.R --tag 1")

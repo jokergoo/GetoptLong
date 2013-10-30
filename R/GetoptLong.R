@@ -70,14 +70,6 @@ GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(),
 		stop("type :[isfo] is not allowed, use =[isfo] instead.\n")
 	}
 	
-	# add help and version options in `spec`
-	if(help) {
-		spec = rbind(spec, c("help", "Print help message and exit"))
-	}
-	if(version) {
-		spec = rbind(spec, c("version", "Print version information and exit"))
-	}
-	
 	# get arguments string
 	if(is.null(argv_str)) {
 		ARGV = commandArgs(TRUE)
@@ -88,7 +80,13 @@ GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(),
 	
 	# first name in each options
 	long_name = extract_first_name(spec[, 1])
+	if(help && long_name %in% "help") {
+		stop("`help` is reserved as default options, please do not use it.\n")
+	}
 	
+	if(version && long_name %in% "version") {
+		stop("`version` is reserved as default options, please do not use it.\n")
+	}
 	
 	# test whether first name in option name is a valid R variable name
 	test_long_name = grepl("^[a-zA-Z_\\.][a-zA-Z0-9_\\.]+$", long_name) 
@@ -117,11 +115,10 @@ GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(),
 	# if there is error with execute perl program in which msg is non-zero
 	if(res$status) {
 
-		qqcat(text = "@{res$message}\n", file = STDOUT)
-		cat(res$message)
-
+		qqcat("@{res$message}\n", file = STDOUT)
+		
 		if(is.null(argv_str)) {
-			print_help_msg(spec, file = STDOUT)
+			print_help_msg(spec, file = STDOUT, help = TRUE, version = TRUE)
 		}
 
 		ow = options("warn")[[1]]
@@ -143,7 +140,7 @@ GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(),
 	
 	# if detect user has specified --help or --version
 	if(!is.null(opt$help) && opt$help) {
-		print_help_msg(spec, file = STDOUT)
+		print_help_msg(spec, file = STDOUT, help = help, version = version)
 		
 		if(is.null(argv_str)) {
 			q(save = "no", status = 127)
@@ -163,7 +160,7 @@ GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(),
 	}
 	
 	# remove `help` and `version` if they exist
-	opt = opt[! names(opt) %in% c("help", "version")]
+	#opt = opt[! names(opt) %in% c("help", "version")]
 	
 	# check mandatory options
 	is_mandatory = detect_mandatory(spec[, 1])
@@ -171,7 +168,7 @@ GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(),
 		if(is.null(opt[[ long_name[i]] ]) && is_mandatory[i] && !exists(long_name[i], envir = envir)) {
 			qqcat("@{long_name[i]} is mandatory, please specify it.\n", file = STDOUT)
 			if(is.null(argv_str)) {
-				print_help_msg(spec, file = STDOUT)
+				print_help_msg(spec, file = STDOUT, help = help, version = version)
 			}
 
 			if(is.null(argv_str)) {
@@ -188,7 +185,7 @@ GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(),
 			if(!mode(tmp) %in% c("numeric", "character", "list")) {
 				qqcat("@{long_name[i]} is mandatory, and also detect in envoking environment you have already \ndefined `@{long_name[i]}`. Please make sure `@{long_name[i]}` should only be a simple vector.\n", file = STDOUT)
 				if(is.null(argv_str)) {
-					print_help_msg(spec, file = STDOUT)
+					print_help_msg(spec, file = STDOUT, help = help, version = version)
 				}
 
 				if(is.null(argv_str)) {
@@ -241,14 +238,13 @@ generate_perl_script = function(spec, json_file) {
 		
 	}
 	
-	perl_code = c(perl_code, qq(""))
+	perl_code = c(perl_code, qq("*STDERR = *STDOUT;"))
 	perl_code = c(perl_code, qq("GetOptions("))
 	
 	for (i in seq_len(nrow(spec))) {
 		perl_code = c(perl_code, qq("    '@{spec[i, 1]}' => \\@{perl_sigil(var_type[i])}opt_@{i},"))
 	}
-	perl_code = c(perl_code, qq("    -exitval => 127,"))
-	perl_code = c(perl_code, qq("    -output => \*STDERR,);"))
+	perl_code = c(perl_code, qq(") or exit(127);"))
 	
 	perl_code = c(perl_code, qq(""))
 	
@@ -326,7 +322,15 @@ perl_sigil = function(type) {
 	}
 }
 
-print_help_msg = function(spec, file = stderr()) {
+print_help_msg = function(spec, file = stderr(), help = TRUE, version = TRUE) {
+	
+	# add help and version options in `spec`
+	if(help) {
+		spec = rbind(spec, c("help", "Print help message and exit"))
+	}
+	if(version) {
+		spec = rbind(spec, c("version", "Print version information and exit"))
+	}
 	
 	if(!is.null(options("GetoptLong.startingMsg")[[1]])) {
 		cat(options("GetoptLong.startingMsg")[[1]], file = file)
@@ -606,13 +610,12 @@ run_command = function(command) {
 	if(OS != "Windows") {
 		command = qq("@{command} 2>&1")
 	}
-	
 	# supress warnings
 	ow = options("warn")[[1]]
 	options(warn = -1)
 	if(OS == "Windows") {
-		# how to capture STDERR in Windows? envoke a perl script
-		res = try(system(command, show.output.on.console = FALSE, intern = TRUE), silent = TRUE)
+		# under windows, `system` can only capture STDOUT
+		res = try(system(command, show.output.on.console = FALSE, ignore.stderr = TRUE, intern = TRUE), silent = TRUE)
 	} else {
 		res = try(system(command, intern = TRUE), silent = TRUE)
 	}

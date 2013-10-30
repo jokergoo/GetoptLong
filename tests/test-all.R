@@ -9,7 +9,7 @@ command = "perl -v"
 ow = options("warn")[[1]]
 options(warn = -1)
 if(OS == "Windows") {
-	res = try(system(command, show.output.on.console = FALSE, intern = TRUE), silent = TRUE)
+	res = try(system(command, show.output.on.console = FALSE, ignore.stderr = TRUE, intern = TRUE), silent = TRUE)
 } else {
 	res = try(system(command, intern = TRUE), silent = TRUE)
 }
