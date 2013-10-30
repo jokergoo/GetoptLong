@@ -95,7 +95,7 @@ GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(),
 		cat("First name in option names can only be valid R variable names which only use numbers, letters,\n'.' and '_' (It should match /^[a-zA-Z_\\.][a-zA-Z0-9_\\.]+$/).", file = STDOUT)
 		qqcat(" Following option name@{ifelse(sum(test_long_name)==1, ' is', 's are')}\nnot valid:\n\n", file = STDOUT)
 		for(k in seq_along(test_long_name)) {
-			if(!test_long_name[k]) cat(qq("  @{spec[k, 1]}\n"))
+			if(!test_long_name[k]) qqcat("  @{spec[k, 1]}\n", file = STDOUT)
 		}
 		cat("\n", file = STDOUT)
 			
@@ -107,15 +107,21 @@ GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(),
 	}
 	
 	json_file = tempfile(fileext = ".json")
-	perl_script = generate_perl_script(spec, json_file)
+	spec2 = spec
+	if(help) {
+		spec2 = rbind(spec2, c("help", ""))
+	}
+	if(version) {
+		spec2 = rbind(spec2, c("version", ""))
+	}
+	perl_script = generate_perl_script(spec2, json_file)
 	
+	cmd = qq("\"@{perl_bin}\" \"@{perl_script}\" @{ARGV_string}")
+	res = system(cmd, intern = TRUE)
 	
-	res = run_command(qq("\"@{perl_bin}\" \"@{perl_script}\" @{ARGV_string}"))
-	
-	# if there is error with execute perl program in which msg is non-zero
-	if(res$status) {
+	if(length(res)) {
 
-		qqcat("@{res$message}\n", file = STDOUT)
+		qqcat("@{res}\n", file = STDOUT)
 		
 		if(is.null(argv_str)) {
 			print_help_msg(spec, file = STDOUT, help = TRUE, version = TRUE)
@@ -238,15 +244,17 @@ generate_perl_script = function(spec, json_file) {
 		
 	}
 	
-	perl_code = c(perl_code, qq("*STDERR = *STDOUT;"))
-	perl_code = c(perl_code, qq("GetOptions("))
+	perl_code = c(perl_code, qq("*STDERR = *STDOUT;")) # all write to STDOUT
+	perl_code = c(perl_code, qq("my $is_successful = GetOptions("))
 	
 	for (i in seq_len(nrow(spec))) {
 		perl_code = c(perl_code, qq("    '@{spec[i, 1]}' => \\@{perl_sigil(var_type[i])}opt_@{i},"))
 	}
-	perl_code = c(perl_code, qq(") or exit(127);"))
+	perl_code = c(perl_code, qq(");"))
 	
-	perl_code = c(perl_code, qq(""))
+	perl_code = c(perl_code, qq("if(!$is_successful) {"))
+	perl_code = c(perl_code, qq("    exit;"))
+	perl_code = c(perl_code, qq("}"))
 	
 	# if var_type == integer or numberic, value should be forced ensured
 	for (i in seq_len(nrow(spec))) {
@@ -561,8 +569,14 @@ check_perl = function(module = NULL, inc = NULL, perl_bin = "perl") {
 		cmd = qq("\"@{perl_bin}\" \"-I@{inc}\" -M@{module} -e \"use @{module}\"")
 	}
 	
-	res = run_command(cmd)
-	return(ifelse(res$status, FALSE, TRUE))
+	OS = Sys.info()["sysname"]
+	if(OS == "Windows") {
+		res = system(cmd, ignore.stdout = TRUE, ignore.stderr = TRUE, show.output.on.console = FALSE)
+	} else {
+		res = system(cmd, ignore.stdout = TRUE, ignore.stderr = TRUE)
+	}
+
+	return(ifelse(res, FALSE, TRUE))
 }
 
 look_for_file_in_path = function(file) {
@@ -588,42 +602,3 @@ is.dir = function(dir) {
 	sapply(dir, function(x) file.exists(x) && file.info(x)[1, "isdir"])
 }
 
-# wrapper of `base::system`
-#
-# == param
-# -command command
-#
-# == details
-# It will return a list with two elements:
-#
-# -status status of the command
-#
-# This function is platform independent.
-#
-# Assume binary file exists.
-#
-# I cannot capture error when binary file cannot be found
-#
-run_command = function(command) {
-	OS = Sys.info()["sysname"]
-	
-	if(OS != "Windows") {
-		command = qq("@{command} 2>&1")
-	}
-	# supress warnings
-	ow = options("warn")[[1]]
-	options(warn = -1)
-	if(OS == "Windows") {
-		# under windows, `system` can only capture STDOUT
-		res = try(system(command, show.output.on.console = FALSE, ignore.stderr = TRUE, intern = TRUE), silent = TRUE)
-	} else {
-		res = try(system(command, intern = TRUE), silent = TRUE)
-	}
-	options(warn = ow)
-	
-	if(is.null(attributes(res))) {
-		return(list(status = 0, message = res))
-	} else {
-		return(list(status = ifelse(is.null(attributes(res)$status), 127, attributes(res)$status), message = as.vector(res)))
-	}
-}

@@ -3,19 +3,16 @@ library(GetoptLong)
 
 OS = Sys.info()["sysname"]
 
-command = "perl -v"
+cmd = "perl -v"
 
-# supress warnings
-ow = options("warn")[[1]]
-options(warn = -1)
 if(OS == "Windows") {
-	res = try(system(command, show.output.on.console = FALSE, ignore.stderr = TRUE, intern = TRUE), silent = TRUE)
+	res = system(cmd, ignore.stdout = TRUE, ignore.stderr = TRUE, show.output.on.console = FALSE)
 } else {
-	res = try(system(command, intern = TRUE), silent = TRUE)
+	res = system(cmd, ignore.stdout = TRUE, ignore.stderr = TRUE)
 }
-options(warn = ow)
 
-if(is.null(attributes(res)) && OS != "Windows") {
+
+if(res == 0 && OS != "Windows") {
 	test_package("GetoptLong", filter = "qq|GetoptLong")
 } else {
 	test_package("GetoptLong", filter = "qq")

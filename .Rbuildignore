@@ -2,6 +2,4 @@
 README.*
 TODO
 check.bat
-inst/tests/test_command.R
-inst/tests/scripts
 test_run_command/
