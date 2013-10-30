@@ -44,7 +44,7 @@ GetoptLong(matrix(c(
     "number=i", "Number of items, integer, mandatory option",
     "cutoff=f", "cutoff to filter results, optional, default (0.05)",
     "verbose",  "print messages"
-)))
+), ncol = 2, byrow = TRUE))
 @
 
 Or more simply:
@@ -88,7 +88,7 @@ cat("length|size|l=s@")
 Here {\tt length|size|l} is a list of alternative names seperated by {\tt |}. The remaining part is argument
 specification which defines the mode and amount of arguments. The argument specification is optional.
 
-Specify any one of alternative option name is OK and it also doesn't matter whether using one or two slash in
+Specify any one of alternative option name is OK and it doesn't matter whether using one or two slash in
 front of the option name. Sometimes you even don't need to specify complete option names, you only need to make
 sure the partial name match is unique. If the partial match is not uniqe, it will throw an error.
 
@@ -97,19 +97,22 @@ Options for argument specification are:
 \begin{itemize}
 	\item{no argument specification}: taking no argument. Options are logical.
 	\item{{\tt !}}: taking no argument. Options are logical. You can set its oposite value by prefixing it with {\tt no} or {\tt no-}. E.g. {\tt foo!} allows {\tt -}{\tt -foo} as well as {\tt -}{\tt -nofoo} and {\tt -}{\tt -no-foo}.
-	\item{{\tt =type[desttype][repeat]}}
+	\item{{\tt =type[desttype][repeat]}}:
 		options should have arguments. 
 \end{itemize}
 
-Please note {\tt :[desttype]} is not supported here. We use another way to define
-required options and optional options. See following sections.
+Please note ``{\tt :[desttype]}'' is not supported here. We use another way to define
+mandatory options and optional options. See following sections.
 
 Available {\tt type} options are:
 \begin{itemize}
 	\item{{\tt s}}: strings
 	\item{{\tt i}}: integers
 	\item{{\tt f}}: real numbers
-	\item{{\tt o}}: extended integer, an octal string (a zero, optionally followed by '0', '1', .. '7'), or a hexadecimal string (0x followed by '0' .. '9', 'a' .. 'f', case insensitive), or a binary string (0b followed by a series of '0' and '1').
+	\item{{\tt o}}: extended integer, an octal string (a zero, optionally followed
+	by {\tt 0}, {\tt 1} .. {\tt 7}), or a hexadecimal string ({\tt 0x} followed by
+	{\tt 0} .. {\tt 9}, {\tt A} .. {\tt F}, case insensitive), or a binary string
+	({\tt 0b} followed by a series of {\tt 0} and {\tt 1}).
 \end{itemize}
 
 Available {\tt desttype} settings are:
@@ -121,11 +124,15 @@ Available {\tt desttype} settings are:
 
 Available {\tt repeat} settings are formatted as {\tt \{\textbackslash d,\textbackslash d\}}. Note there is no blank character inside:
 \begin{itemize}
-	\item{{\tt \{2\}}}: exactly 2 arguments for one option.
-	\item{{\tt \{2,\}}}: at least 2 arguments for one option.
-	\item{{\tt \{,4\}}}: at most 4 arguments for one option.
-	\item{{\tt \{2,5\}}}: minimal 2 and maximal 5 arguments for one option.
+	\item{{\tt \{2\}}}: exactly 2 arguments for an option.
+	\item{{\tt \{2,\}}}: at least 2 arguments for an option.
+	\item{{\tt \{,4\}}}: at most 4 arguments for an option.
+	\item{{\tt \{2,5\}}}: minimal 2 and maximal 5 arguments for an option.
 \end{itemize}
+
+Note although {\tt @} and {\tt \{\textbackslash d,\textbackslash d\}} are all for array,
+their usages are different. If option is specified as {\tt tag=i@}, {\tt --tag 1 --tag 2} is only valid.
+And if option is specified as {\tt tag=i\{2\}}, {\tt --tag 1 2} is only valid.
 
 Following tables are detailed examples for each type of option specification:
 
@@ -178,7 +185,7 @@ Options & Command-line arguments & Value of {\tt tag} \\
             & {\tt -}{\tt -tag 1 -}{\tt -tag 2} & Value "--tag" invalid for option tag \\
 \hline
 \end{tabular}
-\caption{Detailed example of options specification}
+\caption{Detailed example of option specification}
 \label{table:spec}
 \end{table}
 
@@ -187,7 +194,7 @@ Options & Command-line arguments & Value of {\tt tag} \\
 Options will be imported into user's environment as R variables by default.
 The first option name in option alternative names will be taken as variable name,
 which means, it must be a valid R variable name. Any definition of these variables
-in front of {\tt GetoptLong} will be treated as default values for corresponding options.
+in front of {\tt GetoptLong()} will be treated as default values for corresponding options.
 If options already have default values, they are optional in command-line.
 \section{Help and version options}
 
@@ -197,7 +204,7 @@ will be inferred from user's source code.
 {\tt GetoptLong} only provide descriptions of all specified options. Users can set
 {\tt options('GetoptLong.startingMsg')} and {\tt options('GetoptLong.endingMsg')} to
 add informaiton for a complete help message. And version is from {\tt VERSION} variable
-defined in user's environment.
+defined in user's environment (Of course, {\tt VERSION} should be defined before {\tt GetoptLong()}).
 
 <<eval = FALSE, echo = TRUE>>==
 options('GetoptLong.startingMsg' = '
@@ -220,6 +227,7 @@ $~\\> Rscript command.R --help
 
 Usage: Rscript test.R [options]
 An example to show how to use the packages
+
   --tag integer
     this is a description of tag which is long long and very long and extremly
     long...
@@ -235,7 +243,7 @@ Please contact author@gmail.com for comments
 ")
 @
 
-Or {\tt version} option
+Or print version of your script:
 
 <<eval = TRUE, echo = FALSE, include = TRUE>>==
 cat("
@@ -266,7 +274,7 @@ for more information.
 
 \section{Specify path of {\it perl} in command line}
 In some conditions that path of binary perl is not in your {\tt PATH} environment variable and you do not
-have permission to modify it. You can specify your perl path from command line like:
+have permission to modify {\tt PATH}. You can specify your perl path from command line like:
 
 <<eval = TRUE, echo = FALSE, include = TRUE>>==
 cat("Rscript test.R -a -b -c -- /your/perl/bin/perl")

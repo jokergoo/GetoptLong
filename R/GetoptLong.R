@@ -15,12 +15,13 @@
 # please see vignette.
 GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(), argv_str = NULL) {
 	
-	perl_bin = find_perl_bin()
 	if(is.null(argv_str)) {
 		STDOUT = stderr()
 	} else {
 		STDOUT = stdout()
 	}
+	
+	perl_bin = find_perl_bin(con = STDOUT, from_command_line = is.null(argv_str))
 	
 	if(!check_perl(perl_bin = perl_bin)) {
 		qqcat("Error when testing Perl: @{perl_bin}.\n", file = STDOUT)
@@ -40,7 +41,7 @@ GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(),
 		}
 	}
 	
-	if(!check_perl("JSON", inc = qq("@{system.file('extdata', 'GetoptLong')}/perl_lib"), perl_bin = perl_bin)) {
+	if(!check_perl("JSON", inc = qq("@{system.file('extdata', package='GetoptLong')}/perl_lib"), perl_bin = perl_bin)) {
 		cat("Cannot find JSON module in your Perl library.\n", file = STDOUT)
 		if(is.null(argv_str)) {
 			q(save = "no", status = 127)
@@ -223,7 +224,7 @@ generate_perl_script = function(spec, json_file) {
 	perl_code = NULL
 	perl_code = c(perl_code, qq("#!/usr/bin/perl"))
 	perl_code = c(perl_code, qq(""))
-	perl_lib = qq("@{system.file('extdata', 'GetoptLong')}/perl_lib")
+	perl_lib = qq("@{system.file('extdata', package='GetoptLong')}/perl_lib")
 	perl_code = c(perl_code, qq("BEGIN { push (@INC, '@{perl_lib}'); }"))
 	perl_code = c(perl_code, qq(""))
 	perl_code = c(perl_code, qq("use strict;"))
@@ -484,11 +485,6 @@ extract_first_name = function(opt) {
 }
 
 export_parent_env = function(opt, envir = parent.frame()) {
-	#parent_opt_name = ls(envir = envir)
-	#parent_opt_name = parent_opt_name[ sapply(parent_opt_name, function(x) {
-	#								tmp = get(x, envir = envir)
-	#								mode(tmp) %in% c("numeric", "character")
-	#								}) ]
 	
 	opt_name = names(opt)
 	
@@ -524,7 +520,7 @@ get_scriptname = function() {
 }
 
 # find path of binary perl
-find_perl_bin = function() {
+find_perl_bin = function(con = stderr(), from_command_line = TRUE) {
 
 	# first look at user's options
 	args = commandArgs()
@@ -534,12 +530,22 @@ find_perl_bin = function() {
 	} else {  # look at PATH
 		perl_bin = look_for_file_in_path("perl")
 		if(is.null(perl_bin)) {
-			stop("cannot find Perl in PATH.\n")
+			cat("cannot find Perl in PATH.\n", file = con)
+			if(from_command_line) {
+				q(save = "no", status = 127)
+			} else {
+				return(invisible(NULL))
+			}
 		}
 	}
 	
 	if(!file.exists(perl_bin)) {
-		stop(qq("Cannot find @{perl_bin}\n"))
+		qqcat("Cannot find @{perl_bin}\n", file = con)
+		if(from_command_line) {
+			q(save = "no", status = 127)
+		} else {
+			return(invisible(NULL))
+		}
 	}
 	
 	OS = Sys.info()["sysname"]
@@ -550,7 +556,12 @@ find_perl_bin = function() {
 			perl_bin = qq("@{perl_bin}/perl")
 		}
 		if(!file.exists(perl_bin)) {
-			stop(qq("Cannot find @{perl_bin}\n"))
+			qqcat("Cannot find @{perl_bin}\n", file = con)
+			if(from_command_line) {
+				q(save = "no", status = 127)
+			} else {
+				return(invisible(NULL))
+			}
 		}
 	}
 	

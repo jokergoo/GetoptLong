@@ -35,7 +35,7 @@ In {\it Perl}, we always use variable interpolation to construct complicated str
 which variables are started with special marks (sigil), and variables will be replaced with
 their real values. In this package, we aim to implement variable interpolation in {\it R}.
 The idea is rather simple: use special marks to identify variables and then
-replace with their values. The function is {\tt qq} which is named from the
+replace with their values. The function here is {\tt qq} which is named from the
 subroutine with the same name in {\it Perl} (It stands for double quote). Using variable interpolation, above
 example can be written as:
 
@@ -66,14 +66,18 @@ options("cat_prefix" = NULL)
 qqcat("This is a message")
 @
 
-You can shut down message by {\tt options("cat\_verbose" = FALSE)}. 
+You can shut down all messages by {\tt options("cat\_verbose" = FALSE)}. 
 
 <<eval = TRUE, include = TRUE, echo = TRUE>>==
 options("cat_prefix" = "[INFO] ", "cat_verbose" = FALSE)
 qqcat("This is a message")
 @
 
-You can use it together with {\tt GetoptLong} when you want to run the R script in command line.
+<<eval = TRUE, include = FALSE, echo = FALSE>>==
+options("cat_prefix" = NULL)
+@
+
+You can use it together with {\tt GetoptLong()} when you want to run the R script in command line.
 In following example code, if you do not specify {\tt -}{\tt -verbose}, all messages will be shut down.
 
 <<eval = FALSE, include = FALSE, echo = TRUE>>==
@@ -88,8 +92,17 @@ qqcat("This is a message")
 options("cat_verbose" = NULL)
 @
 
+Not only simple scalars but also pieces of codes can be interpolated:
+
+<<eval = TRUE, include = TRUE, echo = TRUE>>==
+n = 1
+qqcat("There @{ifelse(n == 1, 'is', 'are')} @{n} dog@{ifelse(n == 1, '', 's')}.\n")
+n = 2
+qqcat("There @{ifelse(n == 1, 'is', 'are')} @{n} dog@{ifelse(n == 1, '', 's')}.\n")
+@
+
 \section{Code patterns}
-In above exmaple, {\tt @\{\}} is used to mark variables. Later variables will be extracted from these marks
+In above exmaple, {\tt @\{\}} is used to mark variables. Later, variable names will be extracted from these marks
 and replaced with their real values.
 
 The marking code pattern can be any type. But you should make sure it is easy to tell the difference
@@ -102,14 +115,14 @@ x = 1
 qqcat("x = #{x}", code.pattern = "#\\{CODE\\}")
 @
 
-Or set in {\tt options} as a global setting:
+Or set in {\tt options()} as a global setting:
 
 <<eval = FALSE, echo = TRUE>>=
-options(code.pattern = "#\\{CODE\\}")
+options("code.pattern" = "#\\{CODE\\}")
 @
 
 As you can guess, in {\tt @\textbackslash\textbackslash\{CODE\textbackslash\textbackslash\}}, {\tt CODE} will be replaced with {\tt .*?} to construct a regular
-expression to match variables in the string. So if your {\tt code.pattern} contains special characters,
+expression and to match variable names in the string. So if your {\tt code.pattern} contains special characters,
 make sure to escape them. Some candidate {\tt code.pattern} are:
 
 <<eval = FALSE, echo = TRUE>>=
@@ -130,8 +143,8 @@ code.pattern = "\\[%CODE%\\]"  # Template Toolkit (Perl module) style :)
 
 Since we just replace {\tt CODE} to {\tt .*?}, the function will only match to the first right parentheses/brackets.
 (In {\it Perl}, I always use recursive regular expression to extract such pairing parentheses. But in {\it R}, it seems difficult.)
-So, for example, you are using {\tt @\textbackslash\textbackslash[CODE\textbackslash\textbackslash]} and your string is {\tt "@[a[1]]"}, it will fail to
-extract the correct variable name while only returns {\tt a[1}. In such condition, you should use other styles
+So, for example, if you are using {\tt @\textbackslash\textbackslash[CODE\textbackslash\textbackslash]} and your string is {\tt "@[a[1]]"}, it will fail to
+extract the correct variable name while only extracts {\tt a[1}, finally it generates an error when executing {\tt a[1}. In such condition, you should use other styles
 that do not contain {\tt []}.
 
 Finally, I suggest a more safe code pattern style that you do not need to worry about parentheses stuff:
@@ -179,8 +192,8 @@ qqcat("<tr><td>@{name}</td><td>@{value}</td><tr>\n")
 \section{You can also interpolate more complicated codes}
 
 Besides simple variables, you can also put chunk of codes in the string. 
-Since {\tt qq} takes value of the last variable as final return values, you need 
-to explicitly specify the return value of the chunk.
+Since {\tt qq} takes value of the last variable in the chunk as final returning values, you need 
+to explicitly specify the return value in the chunk.
 
 Following example is another way to contruct a HTML table in which eval rows and 
 odd rows are assigned with different class names.
@@ -239,7 +252,7 @@ report_name = "test"
 name = letters[1:4]
 value = 1:4
 html = qq(template, code.pattern = "\\[%CODE%\\]")
-writeLines(html, file = "report.html")
+writeLines(html, con = "report.html")
 @
 
 You will get a report like:
