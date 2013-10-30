@@ -18,7 +18,7 @@
 # marked in the text with certain rule. `qq` will look up these variables in user's
 # environment and replace the variable marks with their real values.
 #
-# For more explaination of this function, please refer to vignette, "text interpolation" section.
+# For more explaination of this function, please refer to vignette.
 #
 # == value
 # A single text
