@@ -1,5 +1,5 @@
 ^\..*
-README.*
+README.md
 TODO
 check.bat
 test_run_command/

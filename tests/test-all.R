@@ -14,4 +14,6 @@ if(OS == "Windows") {
 
 if(res == 0 ) {
 	test_package("GetoptLong", filter = "qq|GetoptLong")
+} else {
+	test_package("GetoptLong", filter = "qq")
 }

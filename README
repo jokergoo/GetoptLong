@@ -1,0 +1,4 @@
+This R package is a wrapper of perl module `Getopt::Long`. 
+Basically, all Perl distributions contain `Getopt::Long` as a core module and 
+`JSON` module is already included in this package. So minimal requirement
+for you to use this package is you should have Perl to be installed.
