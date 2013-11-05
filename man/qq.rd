@@ -24,7 +24,7 @@ qq(text, envir = parent.frame(), code.pattern = NULL)
 
   This function allows you to construct strings as in Perl style. Variables are marked in the text with certain rule. \code{\link{qq}} will look up these variables in user's environment and replace the variable marks with their real values.  
 
-  For more explaination of this function, please refer to vignette.
+  For more explaination of this function, please refer to vignette.  
 
 
 }

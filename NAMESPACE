@@ -1,6 +1,8 @@
 export(
 	GetoptLong,
+	get_scriptname,
 	qq,
 	qqcat
 )
+
 importFrom("rjson", fromJSON)

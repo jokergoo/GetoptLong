@@ -344,7 +344,7 @@ print_help_msg = function(spec, file = stderr(), help = TRUE, version = TRUE) {
 	if(!is.null(options("GetoptLong.startingMsg")[[1]])) {
 		cat(options("GetoptLong.startingMsg")[[1]], file = file)
 	} else {
-        script_name = get_scriptname()
+        script_name = basename(get_scriptname())
         qqcat("Usage: Rscript @{script_name} [options]\n\n", file = file)
     }
 	
@@ -503,6 +503,11 @@ export_parent_env = function(opt, envir = parent.frame()) {
 	
 }
 
+# == title
+# full path of current script
+#
+# == details
+# if not run under command-line, return ``foo.R``
 get_scriptname = function() {
 		args = commandArgs()
 		if(length(args) == 1) {
@@ -516,7 +521,7 @@ get_scriptname = function() {
 		args = args[seq_len(i_arg)]
         f = grep("^--file=", args, value = TRUE)[1]
         f = gsub("^--file=(.*)$", "\\1", f)
-        return(basename(f))
+        return(f)
 }
 
 # find path of binary perl
