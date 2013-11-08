@@ -101,6 +101,14 @@ n = 2
 qqcat("There @{ifelse(n == 1, 'is', 'are')} @{n} dog@{ifelse(n == 1, '', 's')}.\n")
 @
 
+{\bf NOTE:} Since {\tt qq} as the function name is very easy to be used by other packages
+(E.g., in {\tt lattice}, there is a homonymic function) and if so, you may enforce
+{\tt qq} as the function in {\tt GetoptLong} by:
+
+<<eval = FALSE, include = FALSE, echo = TRUE>>==
+qq = GetoptLong::qq
+@
+
 \section{Code patterns}
 In above exmaple, {\tt @\{\}} is used to mark variables. Later, variable names will be extracted from these marks
 and replaced with their real values.
