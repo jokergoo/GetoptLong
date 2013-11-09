@@ -1,7 +1,7 @@
 Package: GetoptLong
 Type: Package
 Title: Parse command-line arguments
-Version: 0.0.1
+Version: 0.0.2
 Date: 2013-10-29
 Author: Zuguang Gu
 Maintainer: Zuguang Gu <z.gu@dkfz.de>

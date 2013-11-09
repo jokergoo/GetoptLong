@@ -8,6 +8,8 @@
 #               the variable names going to be interpolated.
 # -code.pattern pattern of marks for the variables. By default it is ``@\\\\{CODE\\\\}`` which means
 #               you can write your variable as ``@{variable}``.
+# -collapse     If variables return vector of length larger than one, whether collapse into one string
+#               or return a vector
 #
 # == details
 # I like variable interpolation in Perl. But in R, if you want to concatenate plain text and variables,
@@ -20,9 +22,7 @@
 #
 # For more explaination of this function, please refer to vignette.
 #
-# == value
-# A single text
-qq = function(text, envir = parent.frame(), code.pattern = NULL) {
+qq = function(text, envir = parent.frame(), code.pattern = NULL, collapse = TRUE) {
 	
 	if(is.null(code.pattern)) {
 		if(is.null(options("code.pattern")[[1]])) {
@@ -46,10 +46,10 @@ qq = function(text, envir = parent.frame(), code.pattern = NULL) {
         e = .GlobalEnv
     }
 	
-    for (i in 1:length(text)) {
+#    for (i in 1:length(text)) {
  
         # check wether there are code replacements
-        fc = find_code(code.pattern, text[i])
+        fc = find_code(code.pattern, text)
         template = fc[[1]]
         code = fc[[2]]
  
@@ -77,7 +77,7 @@ qq = function(text, envir = parent.frame(), code.pattern = NULL) {
             if(max(return_value_length) > 1) {
             # if some piece of codes return a vector
             # recycle to `max(return_value_length)`
-                current = rep(text[i], max(return_value_length))
+                current = rep(text, max(return_value_length))
                 
                 for(ai in 1:max(return_value_length)) {
                     for(iv in 1:length(template)) {
@@ -87,21 +87,25 @@ qq = function(text, envir = parent.frame(), code.pattern = NULL) {
                     }
                 }
                 
-                text[i] = paste(current, collapse = "")
+				if(collapse) {
+					text = paste(current, collapse = "")
+				} else {
+					text = current
+				}
                 
             } else if(max(return_value_length == 1)) {   # all variable returns a scalar
             
-                current = text[i]
+                current = text
                 
                 for(iv in 1:length(template)) {
                     current = gsub(template[iv], return_value[[iv]], current, fixed = TRUE)
                 }
                 
-                text[i] = current
+                text = current
                 
             }
         }
-    }
+#    }
  
 	return(text)
 }

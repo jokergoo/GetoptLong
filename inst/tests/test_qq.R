@@ -20,6 +20,8 @@ test_that("variables are multiple element vector", {
 	a = 1:6
 	expect_that(qq("@{a} is an @{ifelse(a %% 2, 'odd', 'even')} number\n"),
 				equals("1 is an odd number\n2 is an even number\n3 is an odd number\n4 is an even number\n5 is an odd number\n6 is an even number\n"))
+	expect_that(qq("@{a} is an @{ifelse(a %% 2, 'odd', 'even')} number\n", collapse = FALSE),
+				equals(c("1 is an odd number\n", "2 is an even number\n", "3 is an odd number\n", "4 is an even number\n", "5 is an odd number\n", "6 is an even number\n")))
 })
 
 test_that("different code patterns", {

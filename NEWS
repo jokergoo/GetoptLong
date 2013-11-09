@@ -1,3 +1,10 @@
+Changes in version 0.0.2
+------------------------------------------------------------------------------
+
+* add `collapse` option in `qq` so that `qq` can return a vector instead of
+  only collapsing them into one string.
+
+
 Changes in version 0.0.1
 ------------------------------------------------------------------------------
 
