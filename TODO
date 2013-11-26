@@ -1,3 +1,1 @@
-- test on Windows OS
-- test on non-Perl OS
-- `run_command`, how to better capture stdout and stderr or a command, in Windows
+- change `find_perl_bin` to `Sys.which`

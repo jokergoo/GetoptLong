@@ -11,7 +11,8 @@
 
 }
 \usage{
-qqcat(text, envir = parent.frame(), code.pattern = NULL, file = "", sep = " ", fill = FALSE, labels = NULL, append = FALSE)
+qqcat(text, envir = parent.frame(), code.pattern = NULL, file = "",
+    sep = " ", fill = FALSE, labels = NULL, append = FALSE)
 }
 \arguments{
   \item{text}{text string in which variables are marked with certain rules}

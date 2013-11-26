@@ -13,6 +13,25 @@ test_that("test `tag=i`", {
 	expect_that(GetoptLong(spec, argv_str = ""),          prints_text("mandatory"))
 })
 
+test_that("test `len|size=i`", {
+	spec = c(
+		"len|size=i", "length"
+	)
+	GetoptLong(spec, argv_str = "--len 1");      expect_that(len, equals(1)); rm(len)
+	GetoptLong(spec, argv_str = "--size 1");     expect_that(len, equals(1)); rm(len)
+	GetoptLong(spec, argv_str = "-l 1");         expect_that(len, equals(1)); rm(len)
+	GetoptLong(spec, argv_str = "-s 1");         expect_that(len, equals(1)); rm(len)
+	expect_that(GetoptLong(spec, argv_str = ""), prints_text("mandatory"))
+})
+
+test_that("test `length=i`", {
+	spec = c(
+		"length|size=i", "length"
+	)
+	GetoptLong(spec, argv_str = "--length 1");   expect_that(length, equals(1)); rm(length)
+	expect_that(GetoptLong(spec, argv_str = ""), prints_text("mandatory"))
+})
+
 test_that("test `tag=s`", {
 	spec = c(
 		"tag=s", "desc"

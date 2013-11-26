@@ -172,7 +172,9 @@ GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(),
 	# check mandatory options
 	is_mandatory = detect_mandatory(spec[, 1])
 	for(i in seq_len(nrow(spec))) {
-		if(is.null(opt[[ long_name[i]] ]) && is_mandatory[i] && !exists(long_name[i], envir = envir)) {
+		# if variable not defined, or defined as a function
+		if(is.null(opt[[ long_name[i]] ]) && is_mandatory[i] &&
+		   (!exists(long_name[i], envir = envir) || class(get(long_name[i], envir = envir)) == "function")) {
 			qqcat("@{long_name[i]} is mandatory, please specify it.\n", file = STDOUT)
 			if(is.null(argv_str)) {
 				print_help_msg(spec, file = STDOUT, help = help, version = version)
@@ -189,8 +191,14 @@ GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(),
 	for(i in seq_len(nrow(spec))) {
 		if(is_mandatory[i] && exists(long_name[i], envir = envir)) {
 			tmp = get(long_name[i], envir = envir)
-			if(!mode(tmp) %in% c("numeric", "character", "list")) {
-				qqcat("@{long_name[i]} is mandatory, and also detect in envoking environment you have already \ndefined `@{long_name[i]}`. Please make sure `@{long_name[i]}` should only be a simple vector.\n", file = STDOUT)
+			
+			# if mode is function, skip it
+			if(mode(tmp) == "function") {
+				next
+			}
+			
+			if(!mode(tmp) %in% c("numeric", "character", "NULL", "logical", "complex")) {
+				qqcat("@{long_name[i]} is mandatory, and also detect in envoking environment you have already \ndefined `@{long_name[i]}`. Please make sure `@{long_name[i]}` should only be a simple vector or NULL.\n", file = STDOUT)
 				if(is.null(argv_str)) {
 					print_help_msg(spec, file = STDOUT, help = help, version = version)
 				}
@@ -489,6 +497,7 @@ export_parent_env = function(opt, envir = parent.frame()) {
 	opt_name = names(opt)
 	
 	# specified from command line
+	# if option is not specified and has default values, it is NULL by Getopt::Long
 	specified_opt_name = opt_name[ !sapply(opt, is.null) ]
 	# export to global environment
 	for(o in specified_opt_name) {
