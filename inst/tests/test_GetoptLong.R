@@ -24,6 +24,7 @@ test_that("test `len|size=i`", {
 	expect_that(GetoptLong(spec, argv_str = ""), prints_text("mandatory"))
 })
 
+# option name is a built-in function
 test_that("test `length=i`", {
 	spec = c(
 		"length|size=i", "length"
@@ -227,4 +228,12 @@ Report bugs to xxx@xx.xx
 ")
 	expect_that(GetoptLong(spec, argv_str = "--help"), prints_text("Report bugs"))
 	expect_that(GetoptLong(spec, argv_str = "--help", help = FALSE), prints_text("Unknown"))
+})
+
+perl_bin = Sys.which("perl")
+test_that(qq("--tag 1 -- @{perl_bin}"), {
+	spec = c(
+		"tag=i", "this is a description of tag which is long long and very long and extremly long..."
+	)
+	GetoptLong(spec, argv_str = qq("--tag 1 -- @{perl_bin}")); expect_that(tag, equals(1)); rm(tag)
 })
