@@ -109,7 +109,7 @@ Available {\tt type} options are:
 	\item{{\tt s}}: strings
 	\item{{\tt i}}: integers
 	\item{{\tt f}}: real numbers
-	\item{{\tt o}}: extended integer, an octal string (a zero, optionally followed
+	\item{{\tt o}}: extended integer, an octal string ({\tt 0} followed
 	by {\tt 0}, {\tt 1} .. {\tt 7}), or a hexadecimal string ({\tt 0x} followed by
 	{\tt 0} .. {\tt 9}, {\tt A} .. {\tt F}, case insensitive), or a binary string
 	({\tt 0b} followed by a series of {\tt 0} and {\tt 1}).
@@ -144,25 +144,25 @@ Options & Command-line arguments & Value of {\tt tag} \\
 \hline
 {\tt tag=i} & {\tt -}{\tt -tag 1} & {\tt 1} \\
             & {\tt -}{\tt -tag 1 -}{\tt -tag 2} & {\tt 2} \\
-			& {\tt -}{\tt -tag 0.1} & Value "0.1" invalid for option tag (number expected) \\
-			& {\tt -}{\tt -tag a} & Value "a" invalid for option tag (number expected) \\
-			& {\tt -}{\tt -tag} & Option tag requires an argument \\
+			& {\tt -}{\tt -tag 0.1} & Error: Value ``0.1'' invalid for option tag (number expected) \\
+			& {\tt -}{\tt -tag a} & Error: Value ``a'' invalid for option tag (number expected) \\
+			& {\tt -}{\tt -tag} & Error: Option tag requires an argument \\
 			& no argument & tag is mandatory, please specify it \\
 \hline
-{\tt tag=s} & {\tt -}{\tt -tag 1} & {\tt "1"} \\
+{\tt tag=s} & {\tt -}{\tt -tag 1} & {\tt "1"}. Here double quote is used because it is a string. \\
 			& {\tt -}{\tt -tag 0.1} & {\tt "0.1"} \\
 			& {\tt -}{\tt -tag a} & {\tt "a"} \\
 \hline
 {\tt tag=f} & {\tt -}{\tt -tag 1} & {\tt 1} \\
 			& {\tt -}{\tt -tag 0.1} & {\tt 0.1} \\
-			& {\tt -}{\tt -tag a} & Value "a" invalid for option tag (real number expected) \\
+			& {\tt -}{\tt -tag a} & Error: Value ``a'' invalid for option tag (real number expected) \\
 \hline
 {\tt tag=o} & {\tt -}{\tt -tag 1} & {\tt 1} \\
 			& {\tt -}{\tt -tag 0b001001} & {\tt 9} \\
 			& {\tt -}{\tt -tag 0721} & {\tt 465} \\
 			& {\tt -}{\tt -tag 0xaf2} & {\tt 2802} \\
-			& {\tt -}{\tt -tag 0.1} & Value "0.1" invalid for option tag (extended number expected) \\
-			& {\tt -}{\tt -tag a} & Value "a" invalid for option tag (extended number expected) \\
+			& {\tt -}{\tt -tag 0.1} & Error: Value ``0.1'' invalid for option tag (extended number expected) \\
+			& {\tt -}{\tt -tag a} & Error: Value ``a'' invalid for option tag (extended number expected) \\
 \hline
 {\tt tag} & {\tt -}{\tt -tag 1} & {\tt TRUE} \\
 			& {\tt -}{\tt -tag 0} & {\tt TRUE} \\
@@ -175,14 +175,14 @@ Options & Command-line arguments & Value of {\tt tag} \\
             & {\tt -}{\tt -no-tag} & {\tt FALSE} \\
 \hline
 {\tt tag=i@} & {\tt -}{\tt -tag 1} & {\tt 1} \\
-            & {\tt -}{\tt -tag 1 -}{\tt -tag 2} & {\tt 1 2} \\
+            & {\tt -}{\tt -tag 1 -}{\tt -tag 2} & {\tt c(1, 2)} \\
 \hline
-{\tt tag=i\%} & {\tt -}{\tt -tag 1} & Option tag, key "1", requires a value \\
-            & {\tt -}{\tt -tag name=1} & {\tt tag["name"] = 1} \\
+{\tt tag=i\%} & {\tt -}{\tt -tag 1} & Error: Option tag, key ``1'', requires a value \\
+            & {\tt -}{\tt -tag name=1} & {\tt tag\$name = 1} \\
 \hline
-{\tt tag=i\{2\}} & {\tt -}{\tt -tag 1} & Insufficient arguments for option tag \\
+{\tt tag=i\{2\}} & {\tt -}{\tt -tag 1} & Error: Insufficient arguments for option tag \\
             & {\tt -}{\tt -tag 1 2} & {\tt 1 2} \\
-            & {\tt -}{\tt -tag 1 -}{\tt -tag 2} & Value "--tag" invalid for option tag \\
+            & {\tt -}{\tt -tag 1 -}{\tt -tag 2} & Error: Value ``--tag'' invalid for option tag \\
 \hline
 \end{tabular}
 \caption{Detailed example of option specification}
@@ -195,13 +195,15 @@ Options will be imported into user's environment as R variables by default.
 The first option name in option alternative names will be taken as variable name,
 which means, it must be a valid R variable name. Any definition of these variables
 in front of {\tt GetoptLong()} will be treated as default values for corresponding options.
-If options already have default values, they are optional in command-line.
+So of course, these already-defined variables should be simple vectors.
+If options already have default values, they are optional in command-line. If the variable
+is defined as a function before {\tt GetoptLong} is called, it is treated as undefined.
 \section{Help and version options}
 
 {\tt help} and {\tt version} are two universal options. By default, these two options
 will be inferred from user's source code. 
 
-{\tt GetoptLong} only provide descriptions of all specified options. Users can set
+By default, {\tt GetoptLong} only provides descriptions of all specified options. Users can set
 {\tt options('GetoptLong.startingMsg')} and {\tt options('GetoptLong.endingMsg')} to
 add informaiton for a complete help message. And version is from {\tt VERSION} variable
 defined in user's environment (Of course, {\tt VERSION} should be defined before {\tt GetoptLong()}).

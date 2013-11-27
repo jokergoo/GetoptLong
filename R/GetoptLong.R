@@ -15,14 +15,19 @@
 # please see vignette.
 GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(), argv_str = NULL) {
 	
+	# to test whether the script is run under command-line or in R interactive environment
 	if(is.null(argv_str)) {
 		STDOUT = stderr()
 	} else {
-		STDOUT = stdout()
+		STDOUT = stdout()  # testing environment
 	}
 	
+	# get the path of binary perl
+	# it will look in PATH and also user's command-line argument
 	perl_bin = find_perl_bin(con = STDOUT, from_command_line = is.null(argv_str))
 	
+	# check whether `perl` is real Perl,
+	# in fact, this step is not necessary
 	if(!check_perl(perl_bin = perl_bin)) {
 		qqcat("Error when testing Perl: @{perl_bin}.\n", file = STDOUT)
 		if(is.null(argv_str)) {
@@ -32,6 +37,8 @@ GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(),
 		}
 	}
 	
+	# check whether Getopt::Long is in @INC
+	# normally, it is shippped with standard Perl distributions
 	if(!check_perl("Getopt::Long", perl_bin = perl_bin)) {
 		cat("Cannot find Getopt::Long module in your Perl library.\n", file = STDOUT)
 		if(is.null(argv_str)) {
@@ -41,6 +48,7 @@ GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(),
 		}
 	}
 	
+	# check whether JSON is in @INC
 	if(!check_perl("JSON", inc = qq("@{system.file('extdata', package='GetoptLong')}/perl_lib"), perl_bin = perl_bin)) {
 		cat("Cannot find JSON module in your Perl library.\n", file = STDOUT)
 		if(is.null(argv_str)) {
@@ -51,6 +59,7 @@ GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(),
 	}
 
 	# check first argument
+	# it should be a matrix with two columns or a vector with even number of elements
 	if(is.matrix(spec)) {
 		if(ncol(spec) != 2) {
 			stop("`spec` should be a two-column matrix.\n")
@@ -67,6 +76,7 @@ GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(),
 		}
 	}
 	
+	# we use another way to implement 'optional' options
 	if(any(detect_optional(spec[, 1]))) {
 		stop("type :[isfo] is not allowed, use =[isfo] instead.\n")
 	}
@@ -82,11 +92,11 @@ GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(),
 	# first name in each options
 	long_name = extract_first_name(spec[, 1])
 	if(help && long_name %in% "help") {
-		stop("`help` is reserved as default options, please do not use it.\n")
+		stop("`help` is reserved as a default option, please do not use it.\n")
 	}
 	
 	if(version && long_name %in% "version") {
-		stop("`version` is reserved as default options, please do not use it.\n")
+		stop("`version` is reserved as default option, please do not use it.\n")
 	}
 	
 	# test whether first name in option name is a valid R variable name
@@ -120,6 +130,7 @@ GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(),
 	cmd = qq("\"@{perl_bin}\" \"@{perl_script}\" @{ARGV_string}")
 	res = system(cmd, intern = TRUE)
 	
+	# if you specified wrong arguments
 	if(length(res)) {
 
 		qqcat("@{res}\n", file = STDOUT)
@@ -140,12 +151,14 @@ GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(),
 			return(invisible(NULL))
 		}
 	}
-
+	
+	# if arguments are correct, values for options will be stored in .json file
 	opt = fromJSON(file = json_file)
 	file.remove(json_file)
 	file.remove(perl_script)
 	
 	# if detect user has specified --help or --version
+	# basically, !is.null(opt$help) measn opt$help == 1
 	if(!is.null(opt$help) && opt$help) {
 		print_help_msg(spec, file = STDOUT, help = help, version = version)
 		
@@ -166,10 +179,8 @@ GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(),
 		}
 	}
 	
-	# remove `help` and `version` if they exist
-	#opt = opt[! names(opt) %in% c("help", "version")]
-	
 	# check mandatory options
+	# note here `spec` does not contain `help`` or `version`
 	is_mandatory = detect_mandatory(spec[, 1])
 	for(i in seq_len(nrow(spec))) {
 		# if variable not defined, or defined as a function
@@ -541,36 +552,29 @@ find_perl_bin = function(con = stderr(), from_command_line = TRUE) {
 	i = which(args == "--")
 	if(length(i) && length(args) > i) {
 		perl_bin = args[i + 1]
-	} else {  # look at PATH
-		perl_bin = look_for_file_in_path("perl")
-		if(is.null(perl_bin)) {
-			cat("cannot find Perl in PATH.\n", file = con)
+		
+		if(!file.exists(perl_bin)) {
+			qqcat("Cannot find @{perl_bin}\n", file = con)
 			if(from_command_line) {
 				q(save = "no", status = 127)
 			} else {
 				return(invisible(NULL))
 			}
 		}
-	}
-	
-	if(!file.exists(perl_bin)) {
-		qqcat("Cannot find @{perl_bin}\n", file = con)
-		if(from_command_line) {
-			q(save = "no", status = 127)
-		} else {
-			return(invisible(NULL))
+		
+		if(!file.info(perl_bin)$isdir) {
+			qqcat("@{perl_bin} should be a file, not a directory.\n", file = con)
+			if(from_command_line) {
+				q(save = "no", status = 127)
+			} else {
+				return(invisible(NULL))
+			}
 		}
-	}
-	
-	OS = Sys.info()["sysname"]
-	if(is.dir(perl_bin)) {
-		if(OS == "Windows") {
-			perl_bin = qq("@{perl_bin}\\perl.exe")
-		} else {
-			perl_bin = qq("@{perl_bin}/perl")
-		}
-		if(!file.exists(perl_bin)) {
-			qqcat("Cannot find @{perl_bin}\n", file = con)
+		
+	} else {  # look at PATH
+		perl_bin = Sys.which("perl")
+		if(perl_bin == "") {
+			cat("cannot find Perl in PATH.\n", file = con)
 			if(from_command_line) {
 				q(save = "no", status = 127)
 			} else {
@@ -604,24 +608,6 @@ check_perl = function(module = NULL, inc = NULL, perl_bin = "perl") {
 	return(ifelse(res, FALSE, TRUE))
 }
 
-look_for_file_in_path = function(file) {
-
-	OS = Sys.info()["sysname"]
-	if(OS == "Windows") {
-		dir = strsplit(Sys.getenv("PATH"), ";")[[1]]
-	} else {
-		dir = strsplit(Sys.getenv("PATH"), ":")[[1]]
-	}
-	
-	for(d in dir) {
-		if(OS == "Windows" && file.exists(qq("@{d}\\@{file}.exe"))) {
-			return(qq("@{d}\\@{file}.exe"))
-		} else if(file.exists(qq("@{d}/@{file}"))) {
-			return(qq("@{d}/@{file}"))
-		}
-	}
-	return(NULL)
-}
 
 is.dir = function(dir) {
 	sapply(dir, function(x) file.exists(x) && file.info(x)[1, "isdir"])

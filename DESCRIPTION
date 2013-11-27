@@ -2,7 +2,7 @@ Package: GetoptLong
 Type: Package
 Title: Parse command-line arguments
 Version: 0.0.2
-Date: 2013-10-29
+Date: 2013-11-27
 Author: Zuguang Gu
 Maintainer: Zuguang Gu <z.gu@dkfz.de>
 Depends: R (>= 2.10.0)
@@ -13,6 +13,6 @@ Description: Parsing command-line arguments by Perl module Getopt::Long.
 URL: https://github.com/jokergoo/GetoptLong
 SystemRequirements: Perl, Getopt::Long
 License: GPL (>= 2)
-Packaged: 2013-10-29 00:00:00 UTC; Administrator
+Packaged: 2013-11-27 00:00:00 UTC; Administrator
 Repository: CRAN
-Date/Publication: 2013-10-29 00:00:00
+Date/Publication: 2013-11-27 00:00:00
