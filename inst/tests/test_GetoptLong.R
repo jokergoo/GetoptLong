@@ -98,7 +98,7 @@ test_that("test `tag=i%`", {
 	)
 	GetoptLong(spec, argv_str = "--tag name=1"); expect_that(tag, is_identical_to(list(name = 1))); rm(tag)
 	GetoptLong(spec, argv_str = "--tag name=1 value=2"); expect_that(tag, is_identical_to(list(name = 1))); rm(tag)
-	GetoptLong(spec, argv_str = "--tag name=1 --tag value=2"); expect_that(tag, is_identical_to(list(value = 2, name = 1))); rm(tag)
+	GetoptLong(spec, argv_str = "--tag name=1 --tag value=2"); tag = tag[sort(names(tag))]; expect_that(tag, is_identical_to(list(name = 1, value = 2))); rm(tag)
 	GetoptLong(spec, argv_str = "--tag name=1 --tag name=2"); expect_that(tag, is_identical_to(list(name = 2))); rm(tag)
 	expect_that(GetoptLong(spec, argv_str = "--tag 1"),   prints_text("requires"))
 	expect_that(GetoptLong(spec, argv_str = "--tag 0.1"), prints_text("requires"))

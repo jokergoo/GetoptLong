@@ -61,6 +61,9 @@ qq = function(text, envir = parent.frame(), code.pattern = NULL, collapse = TRUE
 				if(length(x) == 0 || is.null(x)) {
 					return("")
 				} else {
+					if(is.factor(x)) {
+						x = as.vector(x)
+					}
 					return(x)
 				}
 			})  # anony function is the first level parent

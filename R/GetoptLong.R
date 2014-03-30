@@ -512,6 +512,9 @@ export_parent_env = function(opt, envir = parent.frame()) {
 	specified_opt_name = opt_name[ !sapply(opt, is.null) ]
 	# export to global environment
 	for(o in specified_opt_name) {
+		if(o == "help" || o == "version") {
+			next
+		}
 		assign(o, opt[[o]], envir = envir)
 	}
 

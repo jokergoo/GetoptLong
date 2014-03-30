@@ -1,3 +1,11 @@
+Changes in version 0.0.3
+------------------------------------------------------------------------------
+
+* If command-line variable is a list, enforce the order of names of elements to 
+  be alphabetical (in testing file, tag=%i).
+  
+* `help` and `version` will not be exported.
+
 Changes in version 0.0.2
 ------------------------------------------------------------------------------
 
