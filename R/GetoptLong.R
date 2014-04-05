@@ -100,7 +100,7 @@ GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(),
 	}
 	
 	# test whether first name in option name is a valid R variable name
-	test_long_name = grepl("^[a-zA-Z_\\.][a-zA-Z0-9_\\.]+$", long_name) 
+	test_long_name = grepl("^[a-zA-Z_\\.][a-zA-Z0-9_\\.]*$", long_name) 
 		
 	if(!all(test_long_name)) {
 		cat("First name in option names can only be valid R variable names which only use numbers, letters,\n'.' and '_' (It should match /^[a-zA-Z_\\.][a-zA-Z0-9_\\.]+$/).", file = STDOUT)
