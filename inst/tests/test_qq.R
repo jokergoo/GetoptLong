@@ -89,4 +89,12 @@ test_that("test `cat_prefix`", {
 	expect_that(qqcat("a"),
 				prints_text("INFO:a"))
 	options("cat_prefix" = NULL)
+	
+	expect_that(qqcat("a", cat_prefix = "DEBUG:a"),
+				prints_text("DEBUG:a"))
+				
+	options("cat_prefix" = "INFO:")
+	expect_that(qqcat("a", cat_prefix = "DEBUG:a"),
+				prints_text("DEBUG:a"))
+	options("cat_prefix" = NULL)
 })

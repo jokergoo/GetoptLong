@@ -77,6 +77,18 @@ qqcat("This is a message")
 options("cat_prefix" = NULL)
 @
 
+Also you can set a prefix which has local effect. 
+<<eval = TRUE, include = TRUE, echo = TRUE>>==
+options("cat_verbose" = NULL)
+options("cat_prefix" = "[DEBUG] ")
+qqcat("This is a message", cat_prefix = "[INFO] ")
+qqcat("This is a message")
+@
+
+<<eval = TRUE, include = FALSE, echo = FALSE>>==
+options("cat_prefix" = NULL)
+@
+
 You can use it together with {\tt GetoptLong()} when you want to run the R script in command line.
 In following example code, if you do not specify {\tt -}{\tt -verbose}, all messages will be shut down.
 

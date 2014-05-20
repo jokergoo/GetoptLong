@@ -145,6 +145,7 @@ find_code = function(m, text) {
 # -fill        pass to `base::cat`
 # -labels      pass to `base::cat`
 # -append      pass to `base::cat`
+# -cat_prefix  prefix string. It is prior than ``options(cat_prefix)``.
 #
 # == details
 # This function is a shortcut of
@@ -157,17 +158,23 @@ find_code = function(m, text) {
 #     options("cat_prefix" = function(x) format(Sys.time(), "[\%Y-\%m-\%d \%H:\%M:\%S] "))
 #     options("cat_prefix" = NULL)
 #
+# You can also add local prefix by specifying ``cat_prefix`` in `qqcat`.
+#
+#     qqcat(text, cat_prefix = "[INFO] ")
+#
 # Please refer to `qq` to find more details.
 #
-qqcat = function(text, envir = parent.frame(), code.pattern = NULL, file = "", sep = " ", fill = FALSE, labels = NULL, append = FALSE) {
-	cat(qq(text, envir, code.pattern), file = file, sep = sep, fill = fill, labels = labels, append = append)
+qqcat = function(text, envir = parent.frame(), code.pattern = NULL, file = "", sep = " ", fill = FALSE, labels = NULL, append = FALSE, cat_prefix = NULL) {
+	cat(qq(text, envir, code.pattern), file = file, sep = sep, fill = fill, labels = labels, append = append, cat_prefix = cat_prefix)
 }
 
-cat = function(... , file = "", sep = " ", fill = FALSE, labels = NULL, append = FALSE) {
+cat = function(... , file = "", sep = " ", fill = FALSE, labels = NULL, append = FALSE, cat_prefix = NULL) {
     if(!is.null(options("cat_verbose")[[1]]) && !options("cat_verbose")[[1]]) {
         return(invisible(NULL))
     }
-    cat_prefix = options("cat_prefix")[[1]]
+	if(is.null(cat_prefix)) {
+		cat_prefix = options("cat_prefix")[[1]]
+	}
     if(is.null(cat_prefix)) {
         
     } else if(is.function(cat_prefix)) {

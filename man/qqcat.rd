@@ -12,7 +12,7 @@
 }
 \usage{
 qqcat(text, envir = parent.frame(), code.pattern = NULL, file = "",
-    sep = " ", fill = FALSE, labels = NULL, append = FALSE)
+    sep = " ", fill = FALSE, labels = NULL, append = FALSE, cat_prefix = NULL)
 }
 \arguments{
   \item{text}{text string in which variables are marked with certain rules}
@@ -23,6 +23,7 @@ qqcat(text, envir = parent.frame(), code.pattern = NULL, file = "",
   \item{fill}{pass to \code{\link[base]{cat}}}
   \item{labels}{pass to \code{\link[base]{cat}}}
   \item{append}{pass to \code{\link[base]{cat}}}
+  \item{cat_prefix}{prefix string. It is prior than \code{options(cat_prefix)}.}
 
 }
 \details{
@@ -37,6 +38,11 @@ qqcat(text, envir = parent.frame(), code.pattern = NULL, file = "",
   options("cat_prefix" = "[INFO] ")
   options("cat_prefix" = function(x) format(Sys.time(), "[\%Y-\%m-\%d \%H:\%M:\%S] "))
   options("cat_prefix" = NULL)
+  }
+  You can also add local prefix by specifying \code{cat_prefix} in \code{\link{qqcat}}.  
+
+  \preformatted{
+  qqcat(text, cat_prefix = "[INFO] ")
   }
   Please refer to \code{\link{qq}} to find more details.  
 
