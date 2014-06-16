@@ -82,15 +82,23 @@ command-line argument.
 Each specifier in options consists of two parts: the name specification and the argument specification:
 
 <<eval = TRUE, echo = FALSE, include = TRUE>>==
-cat("length|size|l=s@")
+cat("length|size|l=i@")
 @
 
 Here {\tt length|size|l} is a list of alternative names seperated by {\tt |}. The remaining part is argument
 specification which defines the mode and amount of arguments. The argument specification is optional.
 
-Specify any one of alternative option name is OK and it doesn't matter whether using one or two slash in
+Specify any one of alternative option namefrom command-line is OK and it doesn't matter whether using one or two slash in
 front of the option name. Sometimes you even don't need to specify complete option names, you only need to make
-sure the partial name match is unique. If the partial match is not uniqe, it will throw an error.
+sure the partial name match is unique. If the partial match is not uniqe, it will throw an error. For above example,
+we can specify the argument like:
+
+<<eval = TRUE, echo = FALSE, include = TRUE>>==
+cat("Rscript foo.R --length 1
+Rscript foo.R -len 1
+Rscript foo.R --size 1
+Rscript foo.R -l 1")
+@
 
 Options for argument specification are:
 
@@ -101,7 +109,7 @@ Options for argument specification are:
 		options should have arguments. 
 \end{itemize}
 
-Please note ``{\tt :[desttype]}'' is not supported here. We use another way to define
+Please note ``{\tt :[type][desttype]}'' is not supported here. We use another way to define
 mandatory options and optional options. See following sections.
 
 Available {\tt type} options are:
@@ -119,7 +127,7 @@ Available {\tt desttype} settings are:
 \begin{itemize}
 	\item{{\tt @}}: array, allow more than one arguments for an option.
 	\item{{\tt \%}}: hash, allow arguments like {\tt name=value}.
-	\item{nothing}: scalar, single argument for one option.
+	\item{nothing}: scalar, single argument for single option.
 \end{itemize}
 
 Available {\tt repeat} settings are formatted as {\tt \{\textbackslash d,\textbackslash d\}}. Note there is no blank character inside:
@@ -134,7 +142,7 @@ Note although {\tt @} and {\tt \{\textbackslash d,\textbackslash d\}} are all fo
 their usages are different. If option is specified as {\tt tag=i@}, {\tt --tag 1 --tag 2} is only valid.
 And if option is specified as {\tt tag=i\{2\}}, {\tt --tag 1 2} is only valid.
 
-Following tables are detailed examples for each type of option specification:
+Table \ref{table:spec} contains detailed examples for each type of option specification:
 
 \begin{table}[ht]
 \centering
@@ -143,13 +151,13 @@ Following tables are detailed examples for each type of option specification:
 Options & Command-line arguments & Value of {\tt tag} \\
 \hline
 {\tt tag=i} & {\tt -}{\tt -tag 1} & {\tt 1} \\
-            & {\tt -}{\tt -tag 1 -}{\tt -tag 2} & {\tt 2} \\
+            & {\tt -}{\tt -tag 1 -}{\tt -tag 2} & {\tt 2}, only take the last one \\
 			& {\tt -}{\tt -tag 0.1} & Error: Value ``0.1'' invalid for option tag (number expected) \\
 			& {\tt -}{\tt -tag a} & Error: Value ``a'' invalid for option tag (number expected) \\
 			& {\tt -}{\tt -tag} & Error: Option tag requires an argument \\
 			& no argument & tag is mandatory, please specify it \\
 \hline
-{\tt tag=s} & {\tt -}{\tt -tag 1} & {\tt "1"}. Here double quote is used because it is a string. \\
+{\tt tag=s} & {\tt -}{\tt -tag 1} & {\tt "1"}. Here double quote is used because it is specified as a string. \\
 			& {\tt -}{\tt -tag 0.1} & {\tt "0.1"} \\
 			& {\tt -}{\tt -tag a} & {\tt "a"} \\
 \hline
@@ -165,7 +173,7 @@ Options & Command-line arguments & Value of {\tt tag} \\
 			& {\tt -}{\tt -tag a} & Error: Value ``a'' invalid for option tag (extended number expected) \\
 \hline
 {\tt tag} & {\tt -}{\tt -tag 1} & {\tt TRUE} \\
-			& {\tt -}{\tt -tag 0} & {\tt TRUE} \\
+			& {\tt -}{\tt -tag 0} & {\tt TRUE}, it doesn't care the value for the option. \\
 			& {\tt -}{\tt -tag 0.1} & {\tt TRUE} \\
 			& {\tt -}{\tt -tag a} & {\tt TRUE} \\
 			& {\tt -}{\tt -tag} & {\tt TRUE} \\
@@ -178,7 +186,7 @@ Options & Command-line arguments & Value of {\tt tag} \\
             & {\tt -}{\tt -tag 1 -}{\tt -tag 2} & {\tt c(1, 2)} \\
 \hline
 {\tt tag=i\%} & {\tt -}{\tt -tag 1} & Error: Option tag, key ``1'', requires a value \\
-            & {\tt -}{\tt -tag name=1} & {\tt tag\$name = 1} \\
+            & {\tt -}{\tt -tag name=1} & {\tt tag\$name = 1}, {\tt tag} is a list. \\
 \hline
 {\tt tag=i\{2\}} & {\tt -}{\tt -tag 1} & Error: Insufficient arguments for option tag \\
             & {\tt -}{\tt -tag 1 2} & {\tt 1 2} \\
@@ -193,9 +201,9 @@ Options & Command-line arguments & Value of {\tt tag} \\
 
 Options will be imported into user's environment as R variables by default.
 The first option name in option alternative names will be taken as variable name,
+(e.g. for specification of {\tt length|size=s}, {\tt length} will be used as the variable name.)
 which means, it must be a valid R variable name. Any definition of these variables
 in front of {\tt GetoptLong()} will be treated as default values for corresponding options.
-So of course, these already-defined variables should be simple vectors.
 If options already have default values, they are optional in command-line. If the variable
 is defined as a function before {\tt GetoptLong} is called, it is treated as undefined.
 \section{Help and version options}

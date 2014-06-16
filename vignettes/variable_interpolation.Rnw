@@ -29,7 +29,8 @@ str = paste("region = (", region[1], ", ", region[2], "), value = ", value,
 cat(str)
 @
 
-As you can see, it is hard to read and very easy to make mistakes.
+As you can see, it is hard to read and very easy to make mistakes. (Syntax highlighting may be 
+helpful to match quotes, but it is still quite annoying to see so many quotes.)
 
 In {\it Perl}, we always use variable interpolation to construct complicated strings in 
 which variables are started with special marks (sigil), and variables will be replaced with
@@ -89,7 +90,7 @@ qqcat("This is a message")
 options("cat_prefix" = NULL)
 @
 
-You can use it together with {\tt GetoptLong()} when you want to run the R script in command line.
+You can use {\tt cat\_verbose} together with {\tt GetoptLong()} when you want to run the R script in command line.
 In following example code, if you do not specify {\tt -}{\tt -verbose}, all messages will be shut down.
 
 <<eval = FALSE, include = FALSE, echo = TRUE>>==
@@ -115,7 +116,7 @@ qqcat("There @{ifelse(n == 1, 'is', 'are')} @{n} dog@{ifelse(n == 1, '', 's')}.\
 
 {\bf NOTE:} Since {\tt qq} as the function name is very easy to be used by other packages
 (E.g., in {\tt lattice}, there is a homonymic function) and if so, you may enforce
-{\tt qq} as the function in {\tt GetoptLong} by:
+{\tt qq} in your working environment as the function in {\tt GetoptLong} by:
 
 <<eval = FALSE, include = FALSE, echo = TRUE>>==
 qq = GetoptLong::qq
@@ -164,7 +165,7 @@ code.pattern = "\\[%CODE%\\]"  # Template Toolkit (Perl module) style :)
 Since we just replace {\tt CODE} to {\tt .*?}, the function will only match to the first right parentheses/brackets.
 (In {\it Perl}, I always use recursive regular expression to extract such pairing parentheses. But in {\it R}, it seems difficult.)
 So, for example, if you are using {\tt @\textbackslash\textbackslash[CODE\textbackslash\textbackslash]} and your string is {\tt "@[a[1]]"}, it will fail to
-extract the correct variable name while only extracts {\tt a[1}, finally it generates an error when executing {\tt a[1}. In such condition, you should use other styles
+extract the correct variable name while only extracts {\tt a[1}, finally it generates an error when executing {\tt a[1}. In such condition, you should use other pattern styles
 that do not contain {\tt []}.
 
 Finally, I suggest a more safe code pattern style that you do not need to worry about parentheses stuff:
@@ -209,14 +210,18 @@ value = 1:4
 qqcat("<tr><td>@{name}</td><td>@{value}</td><tr>\n")
 @
 
+The returned value can also be a vector while not collapsed into one string:
+<<eval = TRUE, include = TRUE, echo = TRUE>>==
+qq("@{x}, @{y}, @{z}", collapse = FALSE)
+@
+
 \section{You can also interpolate more complicated codes}
 
 Besides simple variables, you can also put chunk of codes in the string. 
-Since {\tt qq} takes value of the last variable in the chunk as final returning values, you need 
+Since {\tt qq} takes value of the last variable in the chunk as final returning value, you need 
 to explicitly specify the return value in the chunk.
 
-Following example is another way to contruct a HTML table in which eval rows and 
-odd rows are assigned with different class names.
+Following example is another way to contruct a HTML table in which the first row is assigned with class name.
 
 <<eval = TRUE, include = TRUE, echo = TRUE>>==
 name = letters[1:4]
@@ -224,8 +229,11 @@ value = 1:4
 str = qq("`
   text = character(length(name))
   for(i in seq_along(name)) {
-    class = ifelse(i %% 2, 'odd', 'even')
-      text[i] = qq(\"<tr class='@{class}'><td>@{name[i]}</td><td>@{value[i]}</td></tr>\n\")
+    if(i == 1) {
+      text[i] = qq(\"<tr class='highlight'><td>@{name[i]}</td><td>@{value[i]}</td></tr>\n\")
+    } else {
+      text[i] = qq(\"<tr><td>@{name[i]}</td><td>@{value[i]}</td></tr>\n\")
+    }
   }
 text
 `", code.pattern = "`CODE`")
@@ -245,14 +253,10 @@ html = "<html>
 <body>
 <h2>Report for [% report_name %]</h2>
 <table>
-	<tr><th>name</th><th>value</th></tr>
+<tr><th>name</th><th>value</th></tr>
 [% 
-text = character(length(name))
-for(i in seq_along(name)) {
-  class = ifelse(i %% 2, 'odd', 'even')
-    text[i] = qq(\"<tr class='@{class}'><td>@{name[i]}</td><td>@{value[i]}</td></tr>\\n\")
-}
-paste(text, collapse = '')  # make sure this chunk only returns vector with length of 1.
+i = seq_along(name)
+qq(\"<tr@{ifelse(i == 1, ' class=\\\"highlight\\\"', '')}><td>@{name}</td><td>@{value}</td></tr>\n\")
 %]
 </table>
 </body>
@@ -260,9 +264,6 @@ paste(text, collapse = '')  # make sure this chunk only returns vector with leng
 "
 cat(html)
 @
-
-It is important to collapse {\tt text} into one string, or else other part out of the template
-codes will be recycled.
 
 Read {\tt template.html} and do the interpolation:
 <<eval = FALSE, echo = TRUE>>==
