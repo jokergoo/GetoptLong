@@ -128,6 +128,7 @@ GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(),
 	perl_script = generate_perl_script(spec2, json_file)
 	
 	cmd = qq("\"@{perl_bin}\" \"@{perl_script}\" @{ARGV_string}")
+	cat(cmd)
 	res = system(cmd, intern = TRUE)
 	
 	# if you specified wrong arguments
@@ -155,7 +156,8 @@ GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(),
 	# if arguments are correct, values for options will be stored in .json file
 	opt = fromJSON(file = json_file)
 	file.remove(json_file)
-	file.remove(perl_script)
+	cat(perl_script)
+	#file.remove(perl_script)
 	
 	# if detect user has specified --help or --version
 	# basically, !is.null(opt$help) measn opt$help == 1
