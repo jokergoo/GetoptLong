@@ -2,7 +2,7 @@ Change in version 0.0.4
 ------------------------------------------------------------------------------
 
 * add `cat_prefix` argument in `qqcat` which is prior than `options('cat_prefix')`
-  and not global effective.
+  and not globally effective.
 
 Changes in version 0.0.3
 ------------------------------------------------------------------------------
