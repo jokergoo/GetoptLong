@@ -212,7 +212,9 @@ qqcat("<tr><td>@{name}</td><td>@{value}</td><tr>\n")
 
 The returned value can also be a vector while not collapsed into one string:
 <<eval = TRUE, include = TRUE, echo = TRUE>>==
-qq("@{x}, @{y}, @{z}", collapse = FALSE)
+str = qq("@{x}, @{y}, @{z}", collapse = FALSE)
+length(str)
+str
 @
 
 \section{You can also interpolate more complicated codes}
