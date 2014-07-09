@@ -60,7 +60,7 @@ printed by {\tt qqcat}. It can be set through {\tt options("cat\_prefix")}, eith
 options("cat_prefix" = "[INFO] ")
 qqcat("This is a message")
 
-options("cat_prefix" = function(x) format(Sys.time(), "[%Y-%m-%d %H:%M:%S] "))
+options("cat_prefix" = function() format(Sys.time(), "[%Y-%m-%d %H:%M:%S] "))
 qqcat("This is a message")
 
 options("cat_prefix" = NULL)
