@@ -16,45 +16,51 @@
 GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(), argv_str = NULL) {
 	
 	# to test whether the script is run under command-line or in R interactive environment
-	if(is.null(argv_str)) {
-		STDOUT = stderr()
+	if(.IS_UNDER_COMMAND_LINE) {
+		OUT = stderr()
 	} else {
-		STDOUT = stdout()  # testing environment
+		OUT = stdout()
 	}
 	
 	# get the path of binary perl
 	# it will look in PATH and also user's command-line argument
-	perl_bin = find_perl_bin(con = STDOUT, from_command_line = is.null(argv_str))
+	perl_bin = find_perl_bin(con = OUT, from_command_line = .IS_UNDER_COMMAND_LINE)
 	
 	# check whether `perl` is real Perl,
 	# in fact, this step is not necessary
 	if(!check_perl(perl_bin = perl_bin)) {
-		qqcat("Error when testing Perl: @{perl_bin}.\n", file = STDOUT)
-		if(is.null(argv_str)) {
+		qqcat("Error when testing Perl: @{perl_bin}.\n", file = OUT)
+		if(.IS_UNDER_COMMAND_LINE) {
 			q(save = "no", status = 127)
-		} else {
+		} else if(!is.null(argv_str)) {  # under test
 			return(invisible(NULL))
+		} else {
+			stop("You have an error.\n")
 		}
 	}
 	
 	# check whether Getopt::Long is in @INC
 	# normally, it is shippped with standard Perl distributions
 	if(!check_perl("Getopt::Long", perl_bin = perl_bin)) {
-		cat("Cannot find Getopt::Long module in your Perl library.\n", file = STDOUT)
-		if(is.null(argv_str)) {
+		cat("Cannot find Getopt::Long module in your Perl library.\n", file = OUT)
+		if(.IS_UNDER_COMMAND_LINE) {
 			q(save = "no", status = 127)
-		} else {
+		} else if(!is.null(argv_str)) {  # under test
 			return(invisible(NULL))
+		} else {
+			stop("You have an error.\n")
 		}
 	}
 	
 	# check whether JSON is in @INC
 	if(!check_perl("JSON", inc = qq("@{system.file('extdata', package='GetoptLong')}/perl_lib"), perl_bin = perl_bin)) {
-		cat("Cannot find JSON module in your Perl library.\n", file = STDOUT)
-		if(is.null(argv_str)) {
+		cat("Cannot find JSON module in your Perl library.\n", file = OUT)
+		if(.IS_UNDER_COMMAND_LINE) {
 			q(save = "no", status = 127)
-		} else {
+		} else if(!is.null(argv_str)) {  # under test
 			return(invisible(NULL))
+		} else {
+			stop("You have an error.\n")
 		}
 	}
 
@@ -84,7 +90,7 @@ GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(),
 	# get arguments string
 	if(is.null(argv_str)) {
 		ARGV = commandArgs(TRUE)
-		ARGV_string = paste(ARGV, collapse = " ")
+		ARGV_string = combine_and_escape_ARGV(ARGV)
 	} else {
 		ARGV_string = argv_str
 	}
@@ -103,17 +109,19 @@ GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(),
 	test_long_name = grepl("^[a-zA-Z_\\.][a-zA-Z0-9_\\.]*$", long_name) 
 		
 	if(!all(test_long_name)) {
-		cat("First name in option names can only be valid R variable names which only use numbers, letters,\n'.' and '_' (It should match /^[a-zA-Z_\\.][a-zA-Z0-9_\\.]+$/).", file = STDOUT)
-		qqcat(" Following option name@{ifelse(sum(test_long_name)==1, ' is', 's are')}\nnot valid:\n\n", file = STDOUT)
+		cat("First name in option names can only be valid R variable names which only use numbers, letters,\n'.' and '_' (It should match /^[a-zA-Z_\\.][a-zA-Z0-9_\\.]+$/).", file = OUT)
+		qqcat(" Following option name@{ifelse(sum(test_long_name)==1, ' is', 's are')}\nnot valid:\n\n", file = OUT)
 		for(k in seq_along(test_long_name)) {
-			if(!test_long_name[k]) qqcat("  @{spec[k, 1]}\n", file = STDOUT)
+			if(!test_long_name[k]) qqcat("  @{spec[k, 1]}\n", file = OUT)
 		}
-		cat("\n", file = STDOUT)
+		cat("\n", file = OUT)
 			
-		if(is.null(argv_str)) {
+		if(.IS_UNDER_COMMAND_LINE) {
 			q(save = "no", status = 127)
-		} else {
+		} else if(!is.null(argv_str)) {  # under test
 			return(invisible(NULL))
+		} else {
+			stop("You have an error.\n")
 		}
 	}
 	
@@ -133,10 +141,10 @@ GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(),
 	# if you specified wrong arguments
 	if(length(res)) {
 
-		qqcat("@{res}\n", file = STDOUT)
+		qqcat("@{res}\n", file = OUT)
 		
-		if(is.null(argv_str)) {
-			print_help_msg(spec, file = STDOUT, help = TRUE, version = TRUE)
+		if(.IS_UNDER_COMMAND_LINE) {
+			print_help_msg(spec, file = OUT, help = TRUE, version = TRUE)
 		}
 
 		ow = options("warn")[[1]]
@@ -145,10 +153,12 @@ GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(),
 		file.remove(perl_script)
 		options(warn = ow)
 		
-		if(is.null(argv_str)) {
+		if(.IS_UNDER_COMMAND_LINE) {
 			q(save = "no", status = 127)
-		} else {
+		} else if(!is.null(argv_str)) {  # under test
 			return(invisible(NULL))
+		} else {
+			stop("You have an error.\n")
 		}
 	}
 	
@@ -160,22 +170,26 @@ GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(),
 	# if detect user has specified --help or --version
 	# basically, !is.null(opt$help) measn opt$help == 1
 	if(!is.null(opt$help) && opt$help) {
-		print_help_msg(spec, file = STDOUT, help = help, version = version)
+		print_help_msg(spec, file = OUT, help = help, version = version)
 		
-		if(is.null(argv_str)) {
+		if(.IS_UNDER_COMMAND_LINE) {
 			q(save = "no", status = 127)
-		} else {
+		} else if(!is.null(argv_str)) {  # under test
 			return(invisible(NULL))
+		} else {
+			stop("You have an error.\n")
 		}
 	}
 	
 	if(!is.null(opt$version) && opt$version) {
-		print_version_msg(envir, file = STDOUT)
+		print_version_msg(envir, file = OUT)
 		
-		if(is.null(argv_str)) {
+		if(.IS_UNDER_COMMAND_LINE) {
 			q(save = "no", status = 127)
-		} else {
+		} else if(!is.null(argv_str)) {  # under test
 			return(invisible(NULL))
+		} else {
+			stop("You have an error.\n")
 		}
 	}
 	
@@ -186,15 +200,17 @@ GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(),
 		# if variable not defined, or defined as a function
 		if(is.null(opt[[ long_name[i]] ]) && is_mandatory[i] &&
 		   (!exists(long_name[i], envir = envir) || class(get(long_name[i], envir = envir)) == "function")) {
-			qqcat("@{long_name[i]} is mandatory, please specify it.\n", file = STDOUT)
-			if(is.null(argv_str)) {
-				print_help_msg(spec, file = STDOUT, help = help, version = version)
+			qqcat("@{long_name[i]} is mandatory, please specify it.\n", file = OUT)
+			if(.IS_UNDER_COMMAND_LINE) {
+				print_help_msg(spec, file = OUT, help = help, version = version)
 			}
 
-			if(is.null(argv_str)) {
+			if(.IS_UNDER_COMMAND_LINE) {
 				q(save = "no", status = 127)
-			} else {
+			} else if(!is.null(argv_str)) {  # under test
 				return(invisible(NULL))
+			} else {
+				stop("You have an error.\n")
 			}
 		}
 	}
@@ -209,15 +225,17 @@ GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(),
 			}
 			
 			if(!mode(tmp) %in% c("numeric", "character", "NULL", "logical", "complex")) {
-				qqcat("@{long_name[i]} is mandatory, and also detect in envoking environment you have already \ndefined `@{long_name[i]}`. Please make sure `@{long_name[i]}` should only be a simple vector or NULL.\n", file = STDOUT)
-				if(is.null(argv_str)) {
-					print_help_msg(spec, file = STDOUT, help = help, version = version)
+				qqcat("@{long_name[i]} is mandatory, and also detect in envoking environment you have already \ndefined `@{long_name[i]}`. Please make sure `@{long_name[i]}` should only be a simple vector or NULL.\n", file = OUT)
+				if(.IS_UNDER_COMMAND_LINE) {
+					print_help_msg(spec, file = OUT, help = help, version = version)
 				}
 
-				if(is.null(argv_str)) {
+				if(.IS_UNDER_COMMAND_LINE) {
 					q(save = "no", status = 127)
-				} else {
+				} else if(!is.null(argv_str)) {  # under test
 					return(invisible(NULL))
+				} else {
+					stop("You have an error.\n")
 				}
 			}	
 		}
@@ -229,6 +247,11 @@ GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(),
 	return(invisible(opt))
 }
 
+# this function will be improved later
+# it will check whether there are blacks and quotes in users' values
+combine_and_escape_ARGV = function(ARGV) {
+	paste(ARGV, collapse = " ") 
+}
 
 generate_perl_script = function(spec, json_file) {
 	perl_script = tempfile(fileext = ".pl")
@@ -533,6 +556,7 @@ export_parent_env = function(opt, envir = parent.frame()) {
 # if not run under command-line, return ``foo.R``
 get_scriptname = function() {
 		args = commandArgs()
+		
 		if(length(args) == 1) {
 			return("foo.R")
 		}
@@ -542,9 +566,14 @@ get_scriptname = function() {
 		}
 		i_arg = i_arg[1]
 		args = args[seq_len(i_arg)]
-        f = grep("^--file=", args, value = TRUE)[1]
-        f = gsub("^--file=(.*)$", "\\1", f)
-        return(f)
+        f = grep("^--file=", args, value = TRUE)
+        if(length(f)) {
+        	f = gsub("^--file=(.*)$", "\\1", f[1])
+        	return(f)	
+        } else {
+        	return("foo.R")
+        }
+        
 }
 
 # find path of binary perl

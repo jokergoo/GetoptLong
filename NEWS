@@ -1,3 +1,9 @@
+Change in version 0.0.5
+------------------------------------------------------------------------------
+
+* use a global variable which is a flag of whether it is under command-line or not.
+
+
 Change in version 0.0.4
 ------------------------------------------------------------------------------
 
