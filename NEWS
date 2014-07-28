@@ -2,6 +2,8 @@ Change in version 0.0.5
 ------------------------------------------------------------------------------
 
 * use a global variable which is a flag of whether it is under command-line or not.
+* If in interactive session and there is error, the session will be quite while
+  throw error instead.
 
 
 Change in version 0.0.4

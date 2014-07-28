@@ -237,3 +237,10 @@ test_that(qq("--tag 1 -- @{perl_bin}"), {
 	)
 	GetoptLong(spec, argv_str = qq("--tag 1 -- @{perl_bin}")); expect_that(tag, equals(1)); rm(tag)
 })
+
+test_that("no default value under interactive session", {
+	spec = c(
+		"tag=i", "tag"
+	)
+	expect_error(GetoptLong(spec))
+})

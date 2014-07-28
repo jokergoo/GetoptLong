@@ -16,10 +16,10 @@
 GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(), argv_str = NULL) {
 	
 	# to test whether the script is run under command-line or in R interactive environment
-	if(.IS_UNDER_COMMAND_LINE) {
+	if(.IS_UNDER_COMMAND_LINE || is.null(argv_str)) {
 		OUT = stderr()
 	} else {
-		OUT = stdout()
+		OUT = stdout()  # message from STDOUT is important under testing mode
 	}
 	
 	# get the path of binary perl
