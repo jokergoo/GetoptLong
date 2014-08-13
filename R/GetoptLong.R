@@ -224,7 +224,7 @@ GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(),
 				next
 			}
 			
-			if(!mode(tmp) %in% c("numeric", "character", "NULL", "logical", "complex")) {
+			if(! is_simple_vector(tmp)) {
 				qqcat("@{long_name[i]} is mandatory, and also detect in envoking environment you have already \ndefined `@{long_name[i]}`. Please make sure `@{long_name[i]}` should only be a simple vector or NULL.\n", file = OUT)
 				if(.IS_UNDER_COMMAND_LINE) {
 					print_help_msg(spec, file = OUT, help = help, version = version)
@@ -237,7 +237,21 @@ GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(),
 				} else {
 					stop("You have an error.\n")
 				}
-			}	
+			}
+			if(! (is.list(tmp) && all(sapply(tmp, is_simple_vector))) ) {
+				qqcat("@{long_name[i]} is mandatory, and also detect in envoking environment you have already \ndefined `@{long_name[i]}` which is a list. Please make sure `@{long_name[i]}` is a list containing simple vectors.\n", file = OUT)
+				if(.IS_UNDER_COMMAND_LINE) {
+					print_help_msg(spec, file = OUT, help = help, version = version)
+				}
+
+				if(.IS_UNDER_COMMAND_LINE) {
+					q(save = "no", status = 127)
+				} else if(!is.null(argv_str)) {  # under test
+					return(invisible(NULL))
+				} else {
+					stop("You have an error.\n")
+				}
+			}
 		}
 	}
 	
@@ -245,6 +259,10 @@ GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(),
 	export_parent_env(opt, envir = envir)
 	
 	return(invisible(opt))
+}
+
+is_simple_vector = function(obj) {
+	mode(obj) %in% c("numeric", "character", "NULL", "logical", "complex")
 }
 
 # this function will be improved later
