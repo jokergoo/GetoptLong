@@ -115,7 +115,7 @@ GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(),
 	test_long_name = grepl("^[a-zA-Z_\\.][a-zA-Z0-9_\\.]*$", long_name) 
 		
 	if(!all(test_long_name)) {
-		cat("First name in option names can only be valid R variable names which only use numbers, letters,\n'.' and '_' (It should match /^[a-zA-Z_\\.][a-zA-Z0-9_\\.]+$/).", file = OUT)
+		cat("First name in option names can only be valid R variable names which only\nuse numbers, letters,'.' and '_' (It should match\n/^[a-zA-Z_\\.][a-zA-Z0-9_\\.]+$/).", file = OUT)
 		qqcat(" Following option name@{ifelse(sum(test_long_name)==1, ' is', 's are')}\nnot valid:\n\n", file = OUT)
 		for(k in seq_along(test_long_name)) {
 			if(!test_long_name[k]) qqcat("  @{spec[k, 1]}\n", file = OUT)

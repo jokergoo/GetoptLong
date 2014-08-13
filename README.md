@@ -8,17 +8,37 @@ The usage is very simple:
     library(GetoptLong)
     cutoff = 0.05
     GetoptLong(c(
-        "cutoff=f",  "cutoff of something (default is 0.05)",
-        "input=s",   "input file",
-        "verbose=!", "print messages"
+        "cutoff=f", "cutoff of something (default is 0.05)",
+        "input=s%",  "input file",
+        "verbose!", "print messages"
     ))
     
 Then you can run this script by:
 
-    Rscript foo.R --cutoff 0.01 --input foo.txt --verbose
-    Rscript foo.R -i foo.txt -v
-    Rscript foo.R -i foo.txt --no-verbose
+    Rscript foo.R --cutoff 0.01 --input file=foo.txt --verbose
+    Rscript foo.R -i file=foo.txt -v
+    Rscript foo.R -i file=foo.txt --no-verbose
+
+Help message can be automatically generated:
+
+    > Rscript test_list.R --help
+    Usage: Rscript foo.R [options]
     
+      --cutoff numeric
+        cutoff of something (default is 0.05)
+    
+      --input { name=character, ... }
+        input file
+    
+      --verbose
+        print messages
+    
+      --help
+        Print help message and exit
+
+      --version
+        Print version information and exit
+
 This package also supports simple variable interpolation in R, which means you
 can embed variables into texts directly, just like in Perl.
 
