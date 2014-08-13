@@ -6,6 +6,8 @@ test_that("test `tag=i`", {
 		"tag=i", "this is a description of tag which is long long and very long and extremly long..."
 	)
 	GetoptLong(spec, argv_str = "--tag 1");         expect_that(tag, equals(1)); rm(tag)
+	tag = 2; GetoptLong(spec, argv_str = "");         expect_that(tag, equals(2)); rm(tag)
+	tag = 2; GetoptLong(spec, argv_str = "--tag 1");         expect_that(tag, equals(1)); rm(tag)
 	GetoptLong(spec, argv_str = "--tag 1 --tag 2"); expect_that(tag, equals(2)); rm(tag)
 	expect_that(GetoptLong(spec, argv_str = "--tag 0.1"), prints_text("invalid"))
 	expect_that(GetoptLong(spec, argv_str = "--tag a"),   prints_text("invalid"))
@@ -29,6 +31,7 @@ test_that("test `length=i`", {
 	spec = c(
 		"length|size=i", "length"
 	)
+	length = function() {}
 	GetoptLong(spec, argv_str = "--length 1");   expect_that(length, equals(1)); rm(length)
 	expect_that(GetoptLong(spec, argv_str = ""), prints_text("mandatory"))
 })
@@ -105,6 +108,14 @@ test_that("test `tag=i%`", {
 	expect_that(GetoptLong(spec, argv_str = "--tag a"),   prints_text("requires"))
 	expect_that(GetoptLong(spec, argv_str = "--tag"),     prints_text("requires"))
 	expect_that(GetoptLong(spec, argv_str = ""),          prints_text("mandatory"))
+	
+	
+	expect_that({tag = 1;GetoptLong(spec, argv_str = "--tag name=1")},   prints_text("is a list"));rm(tag)
+	expect_that({tag = list(name = list(1));GetoptLong(spec, argv_str = "--tag name=1")},   prints_text("containing simple vectors")); rm(tag)
+	expect_that({tag = list(1);GetoptLong(spec, argv_str = "--tag name=1")},   prints_text("with names")); rm(tag)
+	tag = list(name = 2)
+	GetoptLong(spec, argv_str = ""); expect_that(tag, is_identical_to(list(name = 2))); rm(tag)
+	GetoptLong(spec, argv_str = "--tag name=1"); expect_that(tag, is_identical_to(list(name = 1))); rm(tag)
 })
 
 test_that("test `tag=i{2}`", {

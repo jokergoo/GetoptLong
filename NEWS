@@ -1,3 +1,8 @@
+Change in version 0.0.6
+------------------------------------------------------------------------------
+
+* default value can be set as a list if the option is specified as opt=[sifo]%
+
 Change in version 0.0.5
 ------------------------------------------------------------------------------
 
