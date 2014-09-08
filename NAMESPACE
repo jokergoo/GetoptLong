@@ -6,3 +6,4 @@ export(
 )
 
 importFrom("rjson", fromJSON)
+importFrom("setGlobalOptions", GlobalOptions")

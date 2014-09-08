@@ -25,10 +25,10 @@
 qq = function(text, envir = parent.frame(), code.pattern = NULL, collapse = TRUE) {
 	
 	if(is.null(code.pattern)) {
-		if(is.null(options("code.pattern")[[1]])) {
-			code.pattern = "@\\{CODE\\}"
+		if(!is.null(options("code.pattern"))) {
+			code.pattern = options("code.pattern")[[1]]
 		} else {
-			code.pattern = options("code.pattern")
+			code.pattern = qq.options("code.pattern")
 		}
 	}
 	
@@ -145,7 +145,7 @@ find_code = function(m, text) {
 # -fill        pass to `base::cat`
 # -labels      pass to `base::cat`
 # -append      pass to `base::cat`
-# -cat_prefix  prefix string. It is prior than ``options(cat_prefix)``.
+# -cat_prefix  prefix string. It is prior than ``qq.options(cat_prefix)``.
 #
 # == details
 # This function is a shortcut of
@@ -154,9 +154,9 @@ find_code = function(m, text) {
 #
 # Additionally, you can add global prefix when using `qqcat`
 #
-#     options("cat_prefix" = "[INFO] ")
-#     options("cat_prefix" = function(x) format(Sys.time(), "[\%Y-\%m-\%d \%H:\%M:\%S] "))
-#     options("cat_prefix" = NULL)
+#     qq.options("cat_prefix" = "[INFO] ")
+#     qq.options("cat_prefix" = function(x) format(Sys.time(), "[\%Y-\%m-\%d \%H:\%M:\%S] "))
+#     qq.options("cat_prefix" = NULL)
 #
 # You can also add local prefix by specifying ``cat_prefix`` in `qqcat`.
 #
@@ -169,11 +169,23 @@ qqcat = function(text, envir = parent.frame(), code.pattern = NULL, file = "", s
 }
 
 cat = function(... , file = "", sep = " ", fill = FALSE, labels = NULL, append = FALSE, cat_prefix = NULL) {
-    if(!is.null(options("cat_verbose")[[1]]) && !options("cat_verbose")[[1]]) {
-        return(invisible(NULL))
-    }
+    
+	if(!is.null(options("cat_verbose"))) {
+		if(!options("cat_verbose")[[1]]) {
+			return(invisible(NULL))
+		}
+	}
+	
+	if(!qq.options("cat_verbose")) {
+		return(invisible(NULL))
+	}
+	
 	if(is.null(cat_prefix)) {
-		cat_prefix = options("cat_prefix")[[1]]
+		if(!is.null(options("cat_prefix"))) {
+			cat_prefix = options("cat_prefix")[[1]]
+		} else {
+			cat_prefix = qq.options("cat_prefix")
+		}		
 	}
     if(is.null(cat_prefix)) {
         

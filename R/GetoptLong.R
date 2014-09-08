@@ -324,10 +324,17 @@ generate_perl_script = function(spec, json_file) {
 	perl_code = c(perl_code, qq("BEGIN { push (@INC, '@{perl_lib}'); }"))
 	perl_code = c(perl_code, qq(""))
 	perl_code = c(perl_code, qq("use strict;"))
-	if(is.null(options("GetoptLong.Config")[[1]])) {
+	
+	config = NULL
+	if(!is.null(options("GetoptLong.Config"))) {
+		config = options("GetoptLong.Config")[[1]]
+	} else {
+		config = GetoptLong.options("config")
+	}
+	if(is.null(config)) {
 		perl_code = c(perl_code, qq("use Getopt::Long;"))
 	} else {
-		perl_code = c(perl_code, qq("use Getopt::Long qw(:config @{paste(options('GetoptLong.Config')[[1]], collapse = ' ')});"))
+		perl_code = c(perl_code, qq("use Getopt::Long qw(:config @{paste(config, collapse = ' ')});"))
 	}
 	
 	perl_code = c(perl_code, qq("use JSON;"))
@@ -437,19 +444,33 @@ print_help_msg = function(spec, file = stderr(), help = TRUE, version = TRUE) {
 		spec = rbind(spec, c("version", "Print version information and exit"))
 	}
 	
-	if(!is.null(options("GetoptLong.startingMsg")[[1]])) {
-		cat(options("GetoptLong.startingMsg")[[1]], file = file)
+	startingMsg = NULL
+	if(!is.null(options("GetoptLong.startingMsg"))) {
+		startingMsg = options("GetoptLong.startingMsg")[[1]]
 	} else {
-        script_name = basename(get_scriptname())
-        qqcat("Usage: Rscript @{script_name} [options]\n\n", file = file)
-    }
+		startingMsg = GetoptLong.options("startingMsg")
+	}
 	
+	if(!is.null(startingMsg)) {
+		cat(startingMsg, file = file)
+	}
+	
+    script_name = basename(get_scriptname())
+    qqcat("Usage: Rscript @{script_name} [options]\n\n", file = file)
+    	
 	for(i in seq_len(nrow(spec))) {
 		print_single_option(spec[i, 1], spec[i, 2], file = file)
 	}
 	
-	if(!is.null(options("GetoptLong.endingMsg")[[1]])) {
-		cat(options("GetoptLong.endingMsg")[[1]], file = file)
+	endingMsg = NULL
+	if(!is.null(options("GetoptLong.endingMsg"))) {
+		endingMsg = options("GetoptLong.endingMsg")[[1]]
+	} else {
+		endingMsg = GetoptLong.options("endingMsg")
+	}
+	
+	if(!is.null(endingMsg)) {
+		cat(endingMsg, file = file)
 	}
 }
 

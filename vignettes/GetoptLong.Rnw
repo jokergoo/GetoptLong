@@ -212,17 +212,16 @@ is defined as a function before {\tt GetoptLong} is called, it is treated as und
 will be inferred from user's source code. 
 
 By default, {\tt GetoptLong} only provides descriptions of all specified options. Users can set
-{\tt options('GetoptLong.startingMsg')} and {\tt options('GetoptLong.endingMsg')} to
+{\tt GetoptLong.options('startingMsg')} and {\tt GetoptLong.options('endingMsg')} to
 add informaiton for a complete help message. And version is from {\tt VERSION} variable
 defined in user's environment (Of course, {\tt VERSION} should be defined before {\tt GetoptLong()}).
 
 <<eval = FALSE, echo = TRUE>>==
-options('GetoptLong.startingMsg' = '
-Usage: Rscript test.R [options]
+GetoptLong.options('startingMsg' = '
 An example to show how to use the packages
 ')
 
-options('GetoptLong.endingMsg' = '
+GetoptLong.options('endingMsg' = '
 Please contact author@gmail.com for comments
 ')
 VERSION = "0.0.1"
@@ -234,9 +233,8 @@ Then you can specify {\tt help}:
 <<eval = TRUE, echo = FALSE, include = TRUE>>==
 cat("
 $~\\> Rscript command.R --help
-
-Usage: Rscript test.R [options]
 An example to show how to use the packages
+Usage: Rscript test.R [options]
 
   --tag integer
     this is a description of tag which is long long and very long and extremly
@@ -264,11 +262,11 @@ $~\\> Rscript command.R --version
  
 \section{Configuring {\tt Getopt::Long}}
 
-Configuration of {\tt Getopt::Long} can be set by {\tt options("GetoptLong.Config")}:
+Configuration of {\tt Getopt::Long} can be set by {\tt GetoptLong.options("config")}:
 
 <<eval = FALSE, echo = TRUE, include = FALSE>>==
-options("GetoptLong.Config" = "bundling")
-options("GetoptLong.Config" = c("no_ignore_case", "bundling"))
+GetoptLong.options("config" = "bundling")
+GetoptLong.options("config" = c("no_ignore_case", "bundling"))
 @
 
 With different configuration, it can support more types of option specifications:

@@ -54,40 +54,40 @@ qqcat("region = (@{region[1]}, @{region[2]}), value = @{value}, name = '@{name}'
 @
 
 By the way, another feature of {\tt qqcat} is you can set a global prefix to the message
-printed by {\tt qqcat}. It can be set through {\tt options("cat\_prefix")}, either a string or a function:
+printed by {\tt qqcat}. It can be set through {\tt qq.options("cat\_prefix")}, either a string or a function:
 
 <<eval = TRUE, include = TRUE, echo = TRUE>>==
-options("cat_prefix" = "[INFO] ")
+qq.options("cat_prefix" = "[INFO] ")
 qqcat("This is a message")
 
-options("cat_prefix" = function() format(Sys.time(), "[%Y-%m-%d %H:%M:%S] "))
+qq.options("cat_prefix" = function() format(Sys.time(), "[%Y-%m-%d %H:%M:%S] "))
 qqcat("This is a message")
 
-options("cat_prefix" = NULL)
+qq.options("cat_prefix" = NULL)
 qqcat("This is a message")
 @
 
-You can shut down all messages produced by {\tt qqcat} by {\tt options("cat\_verbose" = FALSE)}. 
+You can shut down all messages produced by {\tt qqcat} by {\tt qq.options("cat\_verbose" = FALSE)}. 
 
 <<eval = TRUE, include = TRUE, echo = TRUE>>==
-options("cat_prefix" = "[INFO] ", "cat_verbose" = FALSE)
+qq.options("cat_prefix" = "[INFO] ", "cat_verbose" = FALSE)
 qqcat("This is a message")
 @
 
 <<eval = TRUE, include = FALSE, echo = FALSE>>==
-options("cat_prefix" = NULL)
+qq.options("cat_prefix" = NULL)
 @
 
 Also you can set a prefix which has local effect. 
 <<eval = TRUE, include = TRUE, echo = TRUE>>==
-options("cat_verbose" = NULL)
-options("cat_prefix" = "[DEBUG] ")
+qq.options("cat_verbose" = NULL)
+qq.options("cat_prefix" = "[DEBUG] ")
 qqcat("This is a message", cat_prefix = "[INFO] ")
 qqcat("This is a message")
 @
 
 <<eval = TRUE, include = FALSE, echo = FALSE>>==
-options("cat_prefix" = NULL)
+qq.options("cat_prefix" = NULL)
 @
 
 You can use {\tt cat\_verbose} together with {\tt GetoptLong()} when you want to run the R script in command line.
@@ -97,12 +97,12 @@ In following example code, if you do not specify {\tt -}{\tt -verbose}, all mess
 GetoptLongc(
     "verbose", "Print message"
 )
-options("cat_verbose" = verbose)
+qq.options("cat_verbose" = verbose)
 qqcat("This is a message")
 @
 
 <<eval = TRUE, include = FALSE, echo = FALSE>>==
-options("cat_verbose" = NULL)
+qq.options("cat_verbose" = NULL)
 @
 
 Not only simple scalars but also pieces of codes can be interpolated:
@@ -136,10 +136,10 @@ x = 1
 qqcat("x = #{x}", code.pattern = "#\\{CODE\\}")
 @
 
-Or set in {\tt options()} as a global setting:
+Or set in {\tt qq.options} as a global setting:
 
 <<eval = FALSE, echo = TRUE>>=
-options("code.pattern" = "#\\{CODE\\}")
+qq.options("code.pattern" = "#\\{CODE\\}")
 @
 
 As you can guess, in {\tt @\textbackslash\textbackslash\{CODE\textbackslash\textbackslash\}}, {\tt CODE} will be replaced with {\tt .*?} to construct a regular
