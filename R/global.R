@@ -40,10 +40,21 @@ GetoptLong.options = setGlobalOptions(
 #
 qq.options = function(..., RESET = FALSE, READ.ONLY = NULL) {}
 qq.options = setGlobalOptions(
-	cat_prefix = "",
+	cat_prefix = list(.value = "",
+		              .length = c(0, 1),
+		              .filter = function(x) {
+		              	if(is.null(x)) {
+		              		return('')
+		              	} else {
+		              		return(x)
+		              	}
+		              }),
 	cat_verbose = list(.value = TRUE,
-	               .class = "logical")
+	                   .class = "logical"),
 	code.pattern = list(.value = "@\\{CODE\\}",
 	                    .length = 1,
 						.class = "character")
 )
+
+qq.options(cat_prefix = function(x) "")
+qq.options(RESET = TRUE)

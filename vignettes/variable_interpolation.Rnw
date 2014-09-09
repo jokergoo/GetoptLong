@@ -53,8 +53,7 @@ Or use the shortcut function {\tt qqcat}:
 qqcat("region = (@{region[1]}, @{region[2]}), value = @{value}, name = '@{name}'")
 @
 
-By the way, another feature of {\tt qqcat} is you can set a global prefix to the message
-printed by {\tt qqcat}. It can be set through {\tt qq.options("cat\_prefix")}, either a string or a function:
+One feature of {\tt qqcat} is you can set a global prefix to the messages. It can be set through {\tt qq.options("cat\_prefix")}, either a string or a function:
 
 <<eval = TRUE, include = TRUE, echo = TRUE>>==
 qq.options("cat_prefix" = "[INFO] ")
@@ -63,7 +62,7 @@ qqcat("This is a message")
 qq.options("cat_prefix" = function() format(Sys.time(), "[%Y-%m-%d %H:%M:%S] "))
 qqcat("This is a message")
 
-qq.options("cat_prefix" = NULL)
+qq.options("cat_prefix" = "")
 qqcat("This is a message")
 @
 
@@ -80,14 +79,14 @@ qq.options("cat_prefix" = NULL)
 
 Also you can set a prefix which has local effect. 
 <<eval = TRUE, include = TRUE, echo = TRUE>>==
-qq.options("cat_verbose" = NULL)
+qq.options(RESET = TRUE)
 qq.options("cat_prefix" = "[DEBUG] ")
 qqcat("This is a message", cat_prefix = "[INFO] ")
 qqcat("This is a message")
 @
 
 <<eval = TRUE, include = FALSE, echo = FALSE>>==
-qq.options("cat_prefix" = NULL)
+qq.options(RESET = TRUE)
 @
 
 You can use {\tt cat\_verbose} together with {\tt GetoptLong()} when you want to run the R script in command line.
@@ -102,7 +101,7 @@ qqcat("This is a message")
 @
 
 <<eval = TRUE, include = FALSE, echo = FALSE>>==
-qq.options("cat_verbose" = NULL)
+qq.options(RESET = TRUE)
 @
 
 Not only simple scalars but also pieces of codes can be interpolated:

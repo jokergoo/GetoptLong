@@ -65,36 +65,34 @@ test_that("simple template", {
 })
 
 test_that("test `cat_prefix`", {
-	options("cat_prefix" = "INFO:")
+	qq.options("cat_prefix" = "INFO:")
 	expect_that(qqcat("a"),
 				prints_text("INFO:a"))
 				
-	options("cat_prefix" = function() "DEBUG:")
+	qq.options("cat_prefix" = function() "DEBUG:")
 	expect_that(qqcat("a"),
 				prints_text("DEBUG:a"))
 				
-	options("cat_prefix" = NULL)
+	qq.options("cat_prefix" = NULL)
 	expect_that(qqcat("a"),
 				prints_text("a"))
 
-	options("cat_prefix" = "INFO:", "cat_verbose" = FALSE)
+	qq.options("cat_prefix" = "INFO:", "cat_verbose" = FALSE)
 	expect_that(qqcat("a"),
 				prints_text(""))
 				
-	options("cat_prefix" = "INFO:", "cat_verbose" = NULL)
-	expect_that(qqcat("a"),
-				prints_text(""))
-				
-	options("cat_prefix" = "INFO:", "cat_verbose" = TRUE)
+	qq.options("cat_prefix" = "INFO:", "cat_verbose" = TRUE)
 	expect_that(qqcat("a"),
 				prints_text("INFO:a"))
-	options("cat_prefix" = NULL)
+	options(RESET = TRUE)
 	
 	expect_that(qqcat("a", cat_prefix = "DEBUG:a"),
 				prints_text("DEBUG:a"))
 				
-	options("cat_prefix" = "INFO:")
+	qq.options("cat_prefix" = "INFO:")
 	expect_that(qqcat("a", cat_prefix = "DEBUG:a"),
 				prints_text("DEBUG:a"))
-	options("cat_prefix" = NULL)
+	expect_that(qqcat("a",),
+				prints_text("INFO:a"))
+	options(RESET = TRUE)
 })

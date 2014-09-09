@@ -326,7 +326,7 @@ generate_perl_script = function(spec, json_file) {
 	perl_code = c(perl_code, qq("use strict;"))
 	
 	config = NULL
-	if(!is.null(options("GetoptLong.Config"))) {
+	if(!is.null(options("GetoptLong.Config")[[1]]) && is.null(GetoptLong.options("config"))) {
 		config = options("GetoptLong.Config")[[1]]
 	} else {
 		config = GetoptLong.options("config")
@@ -445,7 +445,7 @@ print_help_msg = function(spec, file = stderr(), help = TRUE, version = TRUE) {
 	}
 	
 	startingMsg = NULL
-	if(!is.null(options("GetoptLong.startingMsg"))) {
+	if(!is.null(options("GetoptLong.startingMsg")[[1]]) && is.null(GetoptLong.options("startingMsg"))) {
 		startingMsg = options("GetoptLong.startingMsg")[[1]]
 	} else {
 		startingMsg = GetoptLong.options("startingMsg")
@@ -463,7 +463,7 @@ print_help_msg = function(spec, file = stderr(), help = TRUE, version = TRUE) {
 	}
 	
 	endingMsg = NULL
-	if(!is.null(options("GetoptLong.endingMsg"))) {
+	if(!is.null(options("GetoptLong.endingMsg")[[1]]) && is.null(GetoptLong.options("endingMsg"))) {
 		endingMsg = options("GetoptLong.endingMsg")[[1]]
 	} else {
 		endingMsg = GetoptLong.options("endingMsg")

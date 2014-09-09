@@ -211,7 +211,7 @@ is defined as a function before {\tt GetoptLong} is called, it is treated as und
 {\tt help} and {\tt version} are two universal options. By default, these two options
 will be inferred from user's source code. 
 
-By default, {\tt GetoptLong} only provides descriptions of all specified options. Users can set
+By default, {\tt GetoptLong} only provides descriptions of all specified options. Users can set the option by
 {\tt GetoptLong.options('startingMsg')} and {\tt GetoptLong.options('endingMsg')} to
 add informaiton for a complete help message. And version is from {\tt VERSION} variable
 defined in user's environment (Of course, {\tt VERSION} should be defined before {\tt GetoptLong()}).

@@ -18,6 +18,7 @@ qq(text, envir = parent.frame(), code.pattern = NULL, collapse = TRUE)
   \item{envir}{environment where to find those variables. By default it is the environment where \code{\link{qq}} is envoked. It can also be a list in which list element names are the variable names going to be interpolated.}
   \item{code.pattern}{pattern of marks for the variables. By default it is \code{@\\\\{CODE\\\\}} which means you can write your variable as \code{@{variable}}.}
   \item{collapse}{If variables return vector of length larger than one, whether collapse into one string or return a vector}
+
 }
 \details{
   I like variable interpolation in Perl. But in R, if you want to concatenate plain text and variables, you need to use functions such as \code{\link[base]{paste}}. However, if there are so many variables, quotes, braces  in the string you want to construct, it would kill you.  

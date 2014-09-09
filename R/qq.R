@@ -25,7 +25,7 @@
 qq = function(text, envir = parent.frame(), code.pattern = NULL, collapse = TRUE) {
 	
 	if(is.null(code.pattern)) {
-		if(!is.null(options("code.pattern"))) {
+		if(!is.null(options("code.pattern")[[1]])) {
 			code.pattern = options("code.pattern")[[1]]
 		} else {
 			code.pattern = qq.options("code.pattern")
@@ -170,7 +170,7 @@ qqcat = function(text, envir = parent.frame(), code.pattern = NULL, file = "", s
 
 cat = function(... , file = "", sep = " ", fill = FALSE, labels = NULL, append = FALSE, cat_prefix = NULL) {
     
-	if(!is.null(options("cat_verbose"))) {
+	if(!is.null(options("cat_verbose")[[1]])) {
 		if(!options("cat_verbose")[[1]]) {
 			return(invisible(NULL))
 		}
@@ -181,7 +181,7 @@ cat = function(... , file = "", sep = " ", fill = FALSE, labels = NULL, append =
 	}
 	
 	if(is.null(cat_prefix)) {
-		if(!is.null(options("cat_prefix"))) {
+		if(!is.null(options("cat_prefix")[[1]])) {
 			cat_prefix = options("cat_prefix")[[1]]
 		} else {
 			cat_prefix = qq.options("cat_prefix")
