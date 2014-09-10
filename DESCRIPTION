@@ -7,7 +7,7 @@ Author: Zuguang Gu
 Maintainer: Zuguang Gu <z.gu@dkfz.de>
 Depends: R (>= 2.10.0)
 Suggests: testthat (>= 0.3)
-Imports: rjson, GlobalOptions, methods
+Imports: rjson, GlobalOptions
 Description: Parsing command-line arguments by Perl module Getopt::Long.
     It also provides a simple way for variable interpolation in R.
 URL: https://github.com/jokergoo/GetoptLong
