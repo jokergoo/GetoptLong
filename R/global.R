@@ -56,5 +56,3 @@ qq.options = setGlobalOptions(
 						.class = "character")
 )
 
-qq.options(cat_prefix = function(x) "")
-qq.options(RESET = TRUE)

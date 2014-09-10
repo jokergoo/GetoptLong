@@ -109,7 +109,7 @@ qq = function(text, envir = parent.frame(), code.pattern = NULL, collapse = TRUE
             }
         }
 #    }
- 
+ 	
 	return(text)
 }
  
