@@ -206,6 +206,9 @@ which means, it must be a valid R variable name. Any definition of these variabl
 in front of {\tt GetoptLong()} will be treated as default values for corresponding options.
 If options already have default values, they are optional in command-line. If the variable
 is defined as a function before {\tt GetoptLong} is called, it is treated as undefined.
+Please note your option names should not contain the dot {\tt .}. Although it is valid for
+R variables but it is not allowed for {\tt Getopt::Long}.
+
 \section{Help and version options}
 
 {\tt help} and {\tt version} are two universal options. By default, these two options

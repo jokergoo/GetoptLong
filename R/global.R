@@ -42,6 +42,7 @@ qq.options = function(..., RESET = FALSE, READ.ONLY = NULL) {}
 qq.options = setGlobalOptions(
 	cat_prefix = list(.value = "",
 		              .length = c(0, 1),
+					  .class = c("character", "function", "numeric", "NULL"),
 		              .filter = function(x) {
 		              	if(is.null(x)) {
 		              		return('')
