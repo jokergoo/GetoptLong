@@ -53,6 +53,7 @@ qq.options = setGlobalOptions(
 	                   .class = "logical"),
 	code.pattern = list(.value = "@\\{CODE\\}",
 	                    .length = 1,
-						.class = "character")
+						.class = "character"),
+	test = list(.value = 1)
 )
 
