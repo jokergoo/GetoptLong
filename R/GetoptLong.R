@@ -143,10 +143,10 @@ GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(),
 	
 	cmd = qq("\"@{perl_bin}\" \"@{perl_script}\" @{ARGV_string}")
 	res = system(cmd, intern = TRUE)
+	res = as.vector(res)
 	
 	# if you specified wrong arguments
 	if(length(res)) {
-
 		qqcat("@{res}\n", file = OUT)
 		
 		if(.IS_UNDER_COMMAND_LINE) {

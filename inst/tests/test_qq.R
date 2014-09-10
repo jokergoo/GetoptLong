@@ -69,9 +69,17 @@ test_that("test `cat_prefix`", {
 	expect_that(qqcat("a"),
 				prints_text("INFO:a"))
 				
+	qq.options("cat_prefix" = NULL)
+	expect_that(qqcat("a"),
+				prints_text("a"))
+				
 	qq.options("cat_prefix" = function() "DEBUG:")
 	expect_that(qqcat("a"),
 				prints_text("DEBUG:a"))
+				
+	qq.options("cat_prefix" = function() "DEBUG:")
+	expect_that(class(qq.options("cat_prefix")),
+				is_identical_to("function"))
 				
 	qq.options("cat_prefix" = NULL)
 	expect_that(qqcat("a"),
