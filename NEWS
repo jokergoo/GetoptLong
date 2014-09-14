@@ -2,6 +2,7 @@ Change in version 0.0.7
 ------------------------------------------------------------------------------
 
 * use `GlobalOptions` package to take care of the global settings
+* default value can be set to NULL if it is optional
 
 Change in version 0.0.6
 ------------------------------------------------------------------------------

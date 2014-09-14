@@ -234,7 +234,7 @@ GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(),
 			# if option is specified as a list (ss=%)
 			if(grepl("%$", spec[i, 1])) {
 				# if default value is not a list
-				if(! is.list(tmp)) {
+				if(!is.null(tmp) && !is.list(tmp)) {
 					qqcat("@{long_name[i]} is mandatory, and also detect in evoking environment you have already \ndefined `@{long_name[i]}`. Since it is defined as a named option, please\nmake sure default value of `@{long_name[i]}` is a list.\n", file = OUT)
 					if(.IS_UNDER_COMMAND_LINE) {
 						print_help_msg(spec, file = OUT, help = help, version = version)
