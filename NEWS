@@ -3,6 +3,8 @@ Change in version 0.0.7
 
 * use `GlobalOptions` package to take care of the global settings
 * default value can be set to NULL if it is optional
+* if the option is designed as named list and has default value. Elements that are 
+  not specified on command-line will be kept with their default values.
 
 Change in version 0.0.6
 ------------------------------------------------------------------------------

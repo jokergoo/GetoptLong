@@ -115,7 +115,14 @@ test_that("test `tag=i%`", {
 	expect_that({tag = list(1);GetoptLong(spec, argv_str = "--tag name=1")},   prints_text("with names")); rm(tag)
 	tag = list(name = 2)
 	GetoptLong(spec, argv_str = ""); expect_that(tag, is_identical_to(list(name = 2))); rm(tag)
+	tag = list(name = 2)
 	GetoptLong(spec, argv_str = "--tag name=1"); expect_that(tag, is_identical_to(list(name = 1))); rm(tag)
+
+	tag = list(name = 2, eman = 3)
+	GetoptLong(spec, argv_str = "--tag name=1"); expect_that(tag, is_identical_to(list(name = 1, eman = 3))); rm(tag)
+	tag = list(name = 2, eman = 3)
+	GetoptLong(spec, argv_str = "--tag name=1 --tag eman=2 --tag sth=4"); expect_that(tag, is_identical_to(list(name = 1, eman = 2, sth = 4))); rm(tag)
+
 })
 
 test_that("test `tag=i{2}`", {

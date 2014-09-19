@@ -617,7 +617,15 @@ export_parent_env = function(opt, envir = parent.frame()) {
 		if(o == "help" || o == "version") {
 			next
 		}
-		assign(o, opt[[o]], envir = envir)
+
+		# if the options is a named list, those default elements that are not specified on command-line will be retained
+		if(is.list(opt[[o]]) && exists(o, envir = envir)) {
+			ol = get(o, envir = envir)  # default value
+			ol[ names(opt[[o]]) ] = opt[[o]]
+			assign(o, ol, envir = envir)
+		} else {    # for simple vector, just overwrite it
+			assign(o, opt[[o]], envir = envir)
+		}
 	}
 
 	# defined with default values while not specified in command line
