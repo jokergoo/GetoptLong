@@ -188,12 +188,11 @@ cat = function(... , file = "", sep = " ", fill = FALSE, labels = NULL, append =
 			cat_prefix = qq.options("cat_prefix")
 		}		
 	}
-    if(is.null(cat_prefix)) {
-        
-    } else if(is.function(cat_prefix)) {
-        base::cat(cat_prefix(), file = file, sep = sep, fill = fill, labels = labels, append = append)
-    } else {
-        base::cat(cat_prefix, file = file, sep = sep, fill = fill, labels = labels, append = append)
-    }
+    
+	if(is.function(cat_prefix)) {
+		cat_prefix = cat_prefix()
+	}
+	
+    base::cat(cat_prefix, file = file, sep = sep, fill = fill, labels = labels, append = append)
     base::cat(... , file = file, sep = sep, fill = fill, labels = labels, append = append)
 }
