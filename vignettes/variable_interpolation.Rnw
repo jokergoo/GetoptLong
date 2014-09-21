@@ -53,7 +53,7 @@ Or use the shortcut function {\tt qqcat}:
 qqcat("region = (@{region[1]}, @{region[2]}), value = @{value}, name = '@{name}'")
 @
 
-One feature of {\tt qqcat} is you can set a global prefix to the messages. It can be set through {\tt qq.options("cat\_prefix")}, either a string or a function:
+One feature of {\tt qqcat} is you can set a global prefix to the messages by {\tt qq.options("cat\_prefix")}, either a string or a function:
 
 <<eval = TRUE, include = TRUE, echo = TRUE>>==
 qq.options("cat_prefix" = "[INFO] ")
@@ -61,6 +61,8 @@ qqcat("This is a message")
 
 qq.options("cat_prefix" = function() format(Sys.time(), "[%Y-%m-%d %H:%M:%S] "))
 qqcat("This is a message")
+Sys.sleep(2)
+qqcat("This is a message after 2 seconds")
 
 qq.options("cat_prefix" = "")
 qqcat("This is a message")
