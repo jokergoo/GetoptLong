@@ -17,9 +17,9 @@
 GetoptLong.options = function(..., RESET = FALSE, READ.ONLY = NULL) {}
 GetoptLong.options = setGlobalOptions(
 	startingMsg = list(.value = NULL,
-	                   .length = 1),
+					   .length = 1),
 	endingMsg = list(.value = NULL,
-	                 .length = 1),
+					 .length = 1),
 	config = NULL
 )
 
@@ -41,19 +41,18 @@ GetoptLong.options = setGlobalOptions(
 qq.options = function(..., RESET = FALSE, READ.ONLY = NULL) {}
 qq.options = setGlobalOptions(
 	cat_prefix = list(.value = function() "",
-		              .length = c(0, 1),
+					  .length = c(0, 1),
 					  .class = c("character", "numeric", "NULL"),
-		              .filter = function(x) {
-		              	if(is.null(x)) {
-		              		return('')
-		              	} else {
-		              		return(x)
-		              	}
-		              }),
+					  .filter = function(x) {
+						if(is.null(x)) {
+							return('')
+						} else {
+							return(x)
+						}
+					  }),
 	cat_verbose = list(.value = TRUE,
-	                   .class = "logical"),
+					   .class = "logical"),
 	code.pattern = list(.value = "@\\{CODE\\}",
-	                    .length = 1,
+						.length = 1,
 						.class = "character")
 )
-
