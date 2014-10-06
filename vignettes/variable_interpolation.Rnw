@@ -2,6 +2,8 @@
 % \VignetteDepends{GetoptLong}
 % \VignetteKeywords{variable interpolation}
 % \VignettePackage{GetoptLong}
+%\VignetteCompiler{knitr}
+%\VignetteEngine{knitr::knitr}
 
 \documentclass{article}
 
