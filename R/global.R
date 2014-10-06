@@ -16,9 +16,9 @@
 #
 GetoptLong.options = function(..., RESET = FALSE, READ.ONLY = NULL) {}
 GetoptLong.options = setGlobalOptions(
-	startingMsg = list(.value = NULL,
+	startingMsg = list(.value = "",
 					   .length = 1),
-	endingMsg = list(.value = NULL,
+	endingMsg = list(.value = "",
 					 .length = 1),
 	config = NULL
 )

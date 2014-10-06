@@ -7,6 +7,6 @@ export(
 	qqcat
 )
 
-importFrom("GlobalOptions", setGlobalOptions)
 importFrom("rjson", fromJSON)
+importFrom("GlobalOptions", setGlobalOptions)
 
