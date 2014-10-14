@@ -22,7 +22,7 @@ There are several ways to construct strings in {\it R} such as {\tt paste}. Howe
 when the string which is going to be constructed is so complicated, using {\tt paste}
 will be a nightmare. For example, we want to put some parameters as title in a plot.
 
-<<eval = TRUE, include = TRUE, echo = TRUE>>==
+<<eval = TRUE, results = 'makeup', echo = TRUE>>==
 region = c(1, 2)
 value = 4
 name = "name"
@@ -42,7 +42,7 @@ replace with their values. The function here is {\tt qq} which is named from the
 subroutine with the same name in {\it Perl} (It stands for double quote). Using variable interpolation, above
 example can be written as:
 
-<<eval = TRUE, include = TRUE, echo = TRUE>>==
+<<eval = TRUE, results = 'makeup', echo = TRUE>>==
 library(GetoptLong)
 
 str = qq("region = (@{region[1]}, @{region[2]}), value = @{value}, name = '@{name}'")
@@ -51,13 +51,13 @@ cat(str)
 
 Or use the shortcut function {\tt qqcat}:
 
-<<eval = TRUE, include = TRUE, echo = TRUE>>==
+<<eval = TRUE, results = 'makeup', echo = TRUE>>==
 qqcat("region = (@{region[1]}, @{region[2]}), value = @{value}, name = '@{name}'")
 @
 
 One feature of {\tt qqcat} is you can set a global prefix to the messages by {\tt qq.options("cat\_prefix")}, either a string or a function:
 
-<<eval = TRUE, include = TRUE, echo = TRUE>>==
+<<eval = TRUE, results = 'makeup', echo = TRUE>>==
 qq.options("cat_prefix" = "[INFO] ")
 qqcat("This is a message")
 
@@ -72,31 +72,31 @@ qqcat("This is a message")
 
 You can shut down all messages produced by {\tt qqcat} by {\tt qq.options("cat\_verbose" = FALSE)}. 
 
-<<eval = TRUE, include = TRUE, echo = TRUE>>==
+<<eval = TRUE, results = 'makeup', echo = TRUE>>==
 qq.options("cat_prefix" = "[INFO] ", "cat_verbose" = FALSE)
 qqcat("This is a message")
 @
 
-<<eval = TRUE, include = FALSE, echo = FALSE>>==
+<<eval = TRUE, results = 'hide', echo = FALSE>>==
 qq.options("cat_prefix" = NULL)
 @
 
 Also you can set a prefix which has local effect. 
-<<eval = TRUE, include = TRUE, echo = TRUE>>==
+<<eval = TRUE, results = 'makeup', echo = TRUE>>==
 qq.options(RESET = TRUE)
 qq.options("cat_prefix" = "[DEBUG] ")
 qqcat("This is a message", cat_prefix = "[INFO] ")
 qqcat("This is a message")
 @
 
-<<eval = TRUE, include = FALSE, echo = FALSE>>==
+<<eval = TRUE, results = 'hide', echo = FALSE>>==
 qq.options(RESET = TRUE)
 @
 
 You can use {\tt cat\_verbose} together with {\tt GetoptLong()} when you want to run the R script in command line.
 In following example code, if you do not specify {\tt -}{\tt -verbose}, all messages will be shut down.
 
-<<eval = FALSE, include = FALSE, echo = TRUE>>==
+<<eval = FALSE, results = 'hide', echo = TRUE>>==
 GetoptLongc(
     "verbose", "Print message"
 )
@@ -104,13 +104,13 @@ qq.options("cat_verbose" = verbose)
 qqcat("This is a message")
 @
 
-<<eval = TRUE, include = FALSE, echo = FALSE>>==
+<<eval = TRUE, results = 'hide', echo = FALSE>>==
 qq.options(RESET = TRUE)
 @
 
 Not only simple scalars but also pieces of codes can be interpolated:
 
-<<eval = TRUE, include = TRUE, echo = TRUE>>==
+<<eval = TRUE, results = 'makeup', echo = TRUE>>==
 n = 1
 qqcat("There @{ifelse(n == 1, 'is', 'are')} @{n} dog@{ifelse(n == 1, '', 's')}.\n")
 n = 2
@@ -121,7 +121,7 @@ qqcat("There @{ifelse(n == 1, 'is', 'are')} @{n} dog@{ifelse(n == 1, '', 's')}.\
 (E.g., in {\tt lattice}, there is a homonymic function) and if so, you may enforce
 {\tt qq} in your working environment as the function in {\tt GetoptLong} by:
 
-<<eval = FALSE, include = FALSE, echo = TRUE>>==
+<<eval = FALSE, results = 'hide', echo = TRUE>>==
 qq = GetoptLong::qq
 @
 
@@ -134,7 +134,7 @@ from other part in the string. You can set your code pattern as an argument in {
 is {\tt @\textbackslash\textbackslash\{CODE\textbackslash\textbackslash\}} because  we only permit {\tt CODE}
 to return simple vectors and {\tt @} is a sigil representing array in {\it Perl}.
 
-<<eval = TRUE, include = TRUE, echo = TRUE>>==
+<<eval = TRUE, results = 'makeup', echo = TRUE>>==
 x = 1
 qqcat("x = #{x}", code.pattern = "#\\{CODE\\}")
 @
@@ -182,7 +182,7 @@ code.pattern = "`CODE`"
 It will first look up in the envoking environment, then through searching path. Users can also pass values of variables
 as a list like:
 
-<<eval = TRUE, include = TRUE, echo = TRUE>>==
+<<eval = TRUE, results = 'makeup', echo = TRUE>>==
 x = 1
 y = 2
 qqcat("x = @{x}, y = @{y}", envir = list(x = "a", y = "b"))
@@ -195,7 +195,7 @@ If variables are passed through list, {\tt qq} only looks up in the specified li
 {\tt qq} only allows variables to return vectors. The whole string will be interpolated repeatedly according to longest vectors,
 and finally concatenated into a single long string.
 
-<<eval = TRUE, include = TRUE, echo = TRUE>>==
+<<eval = TRUE, results = 'makeup', echo = TRUE>>==
 x = 1:6
 qqcat("@{x} is an @{ifelse(x %% 2, 'odd', 'even')} number.\n")
 
@@ -207,14 +207,14 @@ qqcat("@{x}, @{y}, @{z}\n")
 
 This feature is especially useful if you want to generate a report such as formatted in a HTML table:
 
-<<eval = TRUE, include = TRUE, echo = TRUE>>==
+<<eval = TRUE, results = 'makeup', echo = TRUE>>==
 name = letters[1:4]
 value = 1:4
 qqcat("<tr><td>@{name}</td><td>@{value}</td><tr>\n")
 @
 
 The returned value can also be a vector while not collapsed into one string:
-<<eval = TRUE, include = TRUE, echo = TRUE>>==
+<<eval = TRUE, results = 'makeup', echo = TRUE>>==
 str = qq("@{x}, @{y}, @{z}", collapse = FALSE)
 length(str)
 str
@@ -228,7 +228,7 @@ to explicitly specify the return value in the chunk.
 
 Following example is another way to contruct a HTML table in which the first row is assigned with class name.
 
-<<eval = TRUE, include = TRUE, echo = TRUE>>==
+<<eval = TRUE, results = 'makeup', echo = TRUE>>==
 name = letters[1:4]
 value = 1:4
 str = qq("`
@@ -253,7 +253,7 @@ In the template, {\it R} codes are marked by {\tt [\%} and {\tt \%]}. Again, if 
 the template, you should use different code pattern instead of pattern in the template. That's why we use
 a complicated code pattern ({\tt \textbackslash\textbackslash[\%CODE\%]\textbackslash\textbackslash\}}) in the template.
 
-<<eval = TRUE, echo = FALSE, include = TRUE>>==
+<<eval = TRUE, echo = FALSE, results = 'makeup'>>==
 html = "<html>
 <body>
 <h2>Report for [% report_name %]</h2>
@@ -283,7 +283,7 @@ writeLines(html, con = "report.html")
 
 You will get a report like:
 
-<<eval = TRUE, echo = FALSE, include = TRUE>>==
+<<eval = TRUE, echo = FALSE, results = 'makeup'>>==
 report_name = "test"
 name = letters[1:4]
 value = 1:4
