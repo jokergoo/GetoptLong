@@ -1,4 +1,9 @@
-Change in version 0.0.7
+Changes in version 0.0.8
+-----------------------------------------------------------------------------
+
+* check atomic vector in `qq`
+
+Changes in version 0.0.7
 ------------------------------------------------------------------------------
 
 * vignettes are rendered by knitr
@@ -7,12 +12,12 @@ Change in version 0.0.7
 * if the option is designed as named list and has default value. Elements that are 
   not specified on command-line will be kept with their default values.
 
-Change in version 0.0.6
+Changes in version 0.0.6
 ------------------------------------------------------------------------------
 
 * default value can be set as a list if the option is specified as opt=[sifo]%
 
-Change in version 0.0.5
+Changes in version 0.0.5
 ------------------------------------------------------------------------------
 
 * use a global variable which is a flag of whether it is under command-line or not.
@@ -20,7 +25,7 @@ Change in version 0.0.5
   throw error instead.
 
 
-Change in version 0.0.4
+Changes in version 0.0.4
 ------------------------------------------------------------------------------
 
 * add `cat_prefix` argument in `qqcat` which is prior than `options('cat_prefix')`
