@@ -40,7 +40,7 @@ GetoptLong.options = setGlobalOptions(
 #
 qq.options = function(..., RESET = FALSE, READ.ONLY = NULL) {}
 qq.options = setGlobalOptions(
-	cat_prefix = list(.value = function() "",
+	cat_prefix = list(.value = "",
 					  .length = c(0, 1),
 					  .class = c("character", "numeric", "NULL"),
 					  .filter = function(x) {
