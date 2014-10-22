@@ -12,7 +12,6 @@
 \author{Zuguang Gu {\tt <z.gu@dkfz.de>}}
 \usepackage[margin=1in, a4paper]{geometry}
 
-\usepackage{Sweave}
 \usepackage{hyperref}
 \begin{document}
 
