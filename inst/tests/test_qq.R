@@ -88,7 +88,7 @@ test_that("test `cat_prefix`", {
 	qq.options("cat_prefix" = "INFO:", "cat_verbose" = TRUE)
 	expect_that(qqcat("a"),
 				prints_text("INFO:a"))
-	options(RESET = TRUE)
+	qq.options(RESET = TRUE)
 	
 	expect_that(qqcat("a", cat_prefix = "DEBUG:a"),
 				prints_text("DEBUG:a"))
@@ -100,5 +100,13 @@ test_that("test `cat_prefix`", {
 				prints_text("DEBUG:a"))
 	expect_that(qqcat("a",),
 				prints_text("INFO:a"))
-	options(RESET = TRUE)
+	qq.options(RESET = TRUE)
+	
+	op = qq.options(READ.ONLY = FALSE)
+	qq.options(op)
+	expect_that(qq.options("cat_prefix"), equals(""))
+	qq.options(cat_prefix = function() "INFO:")
+	op = qq.options(READ.ONLY = FALSE)
+	qq.options(op)
+	expect_that(is.function(attr(qq.options("cat_prefix"), "FUN")), equals(TRUE))
 })
