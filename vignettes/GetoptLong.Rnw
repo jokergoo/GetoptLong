@@ -30,7 +30,7 @@ is always your best reference.
 
 \begin{figure}[h!]
 \centering
-\includegraphics{workflow.png}
+\includegraphics[width=0.8\textwidth]{workflow.png}
 \caption{Workflow of wrapping}
 \label{fig:workflow}
 \end{figure}
