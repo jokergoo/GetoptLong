@@ -58,8 +58,8 @@ qq = function(text, envir = parent.frame(), code.pattern = NULL, collapse = TRUE
             # replace the code with its value
             return_value = lapply(code, function(c) {
 				x = eval(parse(text = c), envir = e)
-                                if(is.null(x)) {
-                                    return("")
+                if(is.null(x)) {
+                    return("")
 				} else if(length(x) == 0) {
 					return("")
 				} else {
