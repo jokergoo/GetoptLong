@@ -68,7 +68,7 @@ of option names and the second column is the description of corresponding option
 
 Save the code as {\tt test.R} and we can execute the R script as:
 
-<<eval = FALSE, echo = TRUE, results = 'makeup', engine = 'sh'>>==
+<<eval = FALSE, echo = TRUE, results = 'makeup', highlight = FALSE>>==
 ~\> Rscript test.R --number 4 --cutoff 0.01 --verbose
 ~\> Rscript test.R -n 4 -c 0.01 -v
 ~\> Rscript test.R -n 4 --verbose
@@ -83,7 +83,7 @@ command-line argument.
 \section{Customize your options}
 Each specifier in options consists of two parts: the name specification and the argument specification:
 
-<<eval = FALSE, echo = TRUE, results = 'makeup', engine = 'sh'>>==
+<<eval = FALSE, echo = TRUE, results = 'makeup', highlight = FALSE>>==
 length|size|l=i@
 @
 
@@ -95,7 +95,7 @@ front of the option name. Sometimes you even don't need to specify complete opti
 sure the partial name match is unique. If the partial match is not uniqe, it will throw an error. For above example,
 we can specify the argument like:
 
-<<eval = FALSE, echo = TRUE, results = 'makeup', engine = 'sh'>>==
+<<eval = FALSE, echo = TRUE, results = 'makeup', highlight = FALSE>>==
 ~\> Rscript foo.R --length 1
 ~\> Rscript foo.R -len 1
 ~\> Rscript foo.R --size 1
@@ -235,7 +235,7 @@ GetoptLong(...)
 
 Then you can specify {\tt help}:
 
-<<eval = FALSE, echo = TRUE, results = 'makeup', engine = 'sh'>>==
+<<eval = FALSE, echo = TRUE, results = 'makeup', highlight = FALSE>>==
 ~\> Rscript command.R --help
 An example to show how to use the packages
 Usage: Rscript test.R [options]
@@ -256,7 +256,7 @@ Please contact author@gmail.com for comments
 
 Or print version of your script:
 
-<<eval = FALSE, echo = TRUE, results = 'makeup', engine = 'sh'>>==
+<<eval = FALSE, echo = TRUE, results = 'makeup', highlight = FALSE>>==
 ~\> Rscript command.R --version
 0.0.1
 @
@@ -272,7 +272,7 @@ GetoptLong.options("config" = c("no_ignore_case", "bundling"))
 
 With different configuration, it can support more types of option specifications:
 
-<<eval = FALSE, echo = TRUE, results = 'makeup', engine = 'sh'>>==
+<<eval = FALSE, echo = TRUE, results = 'makeup', highlight = FALSE>>==
 -a -b -c  -abc
 -s 24 -s24 -s=24
 @
@@ -284,7 +284,7 @@ for more information.
 In some conditions that path of binary {\it Perl} is not in your {\tt PATH} environment variable and you do not
 have permission to modify {\tt PATH}. You can specify your {\it Perl} path from command line like:
 
-<<eval = FALSE, echo = TRUE, results = 'makeup', engine = 'sh'>>==
+<<eval = FALSE, echo = TRUE, results = 'makeup', highlight = FALSE>>==
 ~\> Rscript test.R -a -b -c -- /your/perl/bin/perl
 @
 

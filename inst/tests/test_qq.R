@@ -108,5 +108,4 @@ test_that("test `cat_prefix`", {
 	qq.options(cat_prefix = function() "INFO:")
 	op = qq.options(READ.ONLY = FALSE)
 	qq.options(op)
-	expect_that(is.function(attr(qq.options("cat_prefix"), "FUN")), equals(TRUE))
 })
