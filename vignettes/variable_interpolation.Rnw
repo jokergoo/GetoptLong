@@ -92,9 +92,9 @@ You can use {\tt cat\_verbose} together with {\tt GetoptLong()} when you want to
 In following example code, if you do not specify {\tt -}{\tt -verbose}, all messages will be shut down.
 
 <<eval = FALSE>>==
-GetoptLongc(
+GetoptLong(c(
     "verbose", "Print message"
-)
+))
 qq.options("cat_verbose" = verbose)
 qqcat("This is a message")
 @

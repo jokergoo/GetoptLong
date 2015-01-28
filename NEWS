@@ -1,6 +1,11 @@
 Changes in version 0.0.8
 -----------------------------------------------------------------------------
 
+* modified tests according to changes of `GlobalOptions` package
+
+Changes in version 0.0.8
+-----------------------------------------------------------------------------
+
 * check atomic vector in `qq`
 * If the interpolated variable is equal to NULL, it will be converted to "".
 
