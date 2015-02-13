@@ -12,7 +12,30 @@
 # -argv_str command-line arguments, only for testing purpose
 #
 # == details
-# please see vignette.
+# Following shows a simple example. Put following code at the beginning of your script (e.g. ``foo.R``):
+#
+#     library(GetoptLong)
+#     cutoff = 0.05
+#     GetoptLong(c(
+#         "number=i", "Number of items, integer, mandatory option",
+#         "cutoff=f", "cutoff to filter results, optional, default (0.05)",
+#         "verbose",  "print messages"
+#     ))
+#
+# Then you can call the script from command line either by:
+#
+#     ~\> Rscript foo.R --number 4 --cutoff 0.01 --verbose
+#     ~\> Rscript foo.R -n 4 -c 0.01 -v
+#     ~\> Rscript foo.R -n 4 --verbose
+#
+# In above example, ``number`` is a mandatory option and should only be integer mode. ``cutoff``
+# is optional and already has a default value. ``verbose`` is a logical option. If parsing is
+# successful, two variables with name ``number`` and ``verbose`` will be imported into the working
+# environment with specified values, and value for ``cutoff`` will be updated if it is specified in
+# command-line argument.
+#
+# For advanced use of this function, please go to the vignette.
+#
 GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(), argv_str = NULL) {
 	
 	if(get_scriptname() == "foo.R") {
