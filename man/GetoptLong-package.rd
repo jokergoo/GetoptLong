@@ -1,18 +1,19 @@
 \name{GetoptLong-package}
-\alias{GetoptLong-package}
 \docType{package}
+\alias{GetoptLong-package}
 \title{
-  Wrapper of the Perl module \code{Getopt::Long} in R  
+Wrapper of the Perl module \code{Getopt::Long} in R  
 
 
 }
 \description{
-  Wrapper of the Perl module \code{Getopt::Long} in R  
+Wrapper of the Perl module \code{Getopt::Long} in R  
 
 
 }
+\docType{package}
 \details{
-  Please see the vignette  
+Please see the vignette  
 
 
 }

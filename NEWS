@@ -1,4 +1,9 @@
-Changes in version 0.0.8
+Changes in version 0.1.0
+-----------------------------------------------------------------------------
+
+* add `GetOptions` which is the same as `GetoptLong`
+
+Changes in version 0.0.9
 -----------------------------------------------------------------------------
 
 * modified tests according to changes of `GlobalOptions` package

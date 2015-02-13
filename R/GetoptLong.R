@@ -301,6 +301,18 @@ GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(),
 	return(invisible(opt))
 }
 
+# == title
+# Wrapper of the Perl module ``Getopt::Long`` in R
+#
+# == param
+# -... pass to `GetoptLong`
+#
+# == details
+# This function is the same as `GetoptLong`. Just to make it consistent as the ``GetOptions`` 
+# subroutine in ``Getopt::Long`` module in Perl.
+#
+GetOptions = function(...) GetoptLong(...)
+
 is_simple_vector = function(obj) {
 	mode(obj) %in% c("numeric", "character", "NULL", "logical", "complex")
 }
