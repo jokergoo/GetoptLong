@@ -5,10 +5,10 @@ Version: 0.1.0
 Date: 2015-1-28
 Author: Zuguang Gu
 Maintainer: Zuguang Gu <z.gu@dkfz.de>
-Depends: R (>= 2.10.0), methods
+Depends: R (>= 2.10.0)
 Suggests: testthat (>= 0.3), knitr
 VignetteBuilder: knitr
-Imports: rjson, GlobalOptions (>= 0.0.6)
+Imports: rjson, methods, GlobalOptions (>= 0.0.6)
 Description: Parsing command-line arguments by Perl module Getopt::Long.
     It also provides a simple way for variable interpolation in R.
 URL: https://github.com/jokergoo/GetoptLong
