@@ -1,6 +1,7 @@
 Changes in version 0.1.0
 -----------------------------------------------------------------------------
 
+* depends on `methods` package
 * add `GetOptions` which is the same as `GetoptLong`
 
 Changes in version 0.0.9
