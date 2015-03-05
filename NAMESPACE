@@ -9,4 +9,5 @@ export(
 
 importFrom("rjson", fromJSON)
 importFrom("GlobalOptions", setGlobalOptions)
+import(methods)
 
