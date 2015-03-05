@@ -8,4 +8,4 @@ export(qqcat)
 
 importFrom("rjson", fromJSON)
 importFrom("GlobalOptions", setGlobalOptions)
-
+import("methods")
