@@ -1,12 +1,12 @@
 \name{GetoptLong}
 \alias{GetoptLong}
 \title{
-Wrapper of the Perl module \code{Getopt::Long} in R  
+Wrapper of the Perl module \code{Getopt::Long} in R  
 
 
 }
 \description{
-Wrapper of the Perl module \code{Getopt::Long} in R  
+Wrapper of the Perl module \code{Getopt::Long} in R  
 
 
 }
@@ -15,15 +15,15 @@ GetoptLong(spec, help = TRUE, version = TRUE, envir = parent.frame(), argv_str =
 }
 \arguments{
 
-  \item{spec}{specification of options. A two-column matrix in which the first column is the setting for option names and the second column is the description of options. It is can also be a vector having even number of elements and it will be converted to the two-column matrix}
-  \item{help}{whether to add help option}
-  \item{version}{whether to add version option}
-  \item{envir}{user's enrivonment where \code{\link{GetoptLong}} will look for default values and export variables}
-  \item{argv_str}{command-line arguments, only for testing purpose}
+  \item{spec}{specification of options. A two-column matrix in which the first column is the setting for option names and the second column is the description of options. It is can also be a vector having even number of elements and it will be converted to the two-column matrix}
+  \item{help}{whether to add help option}
+  \item{version}{whether to add version option}
+  \item{envir}{user's enrivonment where \code{\link{GetoptLong}} will look for default values and export variables}
+  \item{argv_str}{command-line arguments, only for testing purpose}
 
 }
 \details{
-Following shows a simple example. Put following code at the beginning of your script (e.g. \code{foo.R}):  
+Following shows a simple example. Put following code at the beginning of your script (e.g. \code{foo.R}):  
 
   \preformatted{
     library(GetoptLong)
@@ -35,7 +35,7 @@ Following shows a simple example. Put following code at the beginning of your sc
     ))
   }
 
-Then you can call the script from command line either by:  
+Then you can call the script from command line either by:  
 
   \preformatted{
     ~\> Rscript foo.R --number 4 --cutoff 0.01 --verbose
@@ -43,9 +43,9 @@ Then you can call the script from command line either by:
     ~\> Rscript foo.R -n 4 --verbose
   }
 
-In above example, \code{number} is a mandatory option and should only be integer mode. \code{cutoff} is optional and already has a default value. \code{verbose} is a logical option. If parsing is successful, two variables with name \code{number} and \code{verbose} will be imported into the working environment with specified values, and value for \code{cutoff} will be updated if it is specified in command-line argument.  
+In above example, \code{number} is a mandatory option and should only be integer mode. \code{cutoff} is optional and already has a default value. \code{verbose} is a logical option. If parsing is successful, two variables with name \code{number} and \code{verbose} will be imported into the working environment with specified values, and value for \code{cutoff} will be updated if it is specified in command-line argument.  
 
-For advanced use of this function, please go to the vignette.  
+For advanced use of this function, please go to the vignette.  
 
 
 }
