@@ -2,18 +2,19 @@ Package: GetoptLong
 Type: Package
 Title: Parsing Command-Line Arguments and Variable Interpolation
 Version: 0.1.0
-Date: 2015-1-28
+Date: 2015-3-8
 Author: Zuguang Gu
 Maintainer: Zuguang Gu <z.gu@dkfz.de>
 Depends: R (>= 2.10.0)
 Suggests: testthat (>= 0.3), knitr
 VignetteBuilder: knitr
 Imports: rjson, methods, GlobalOptions (>= 0.0.6)
-Description: Parsing command-line arguments by Perl module Getopt::Long.
-    It also provides a simple way for variable interpolation in R.
+Description: This is yet another command-line argument parser which wraps the 
+    powerful Perl module Getopt::Long and with some adaptation for easier use
+	in R. It also provides a simple way for variable interpolation in R.
 URL: https://github.com/jokergoo/GetoptLong
 SystemRequirements: Perl, Getopt::Long
 License: GPL (>= 2)
-Packaged: 2015-1-28 00:00:00 UTC; Administrator
+Packaged: 2015-3-8 00:00:00 UTC; Administrator
 Repository: CRAN
-Date/Publication: 2015-1-28 00:00:00
+Date/Publication: 2015-3-8 00:00:00
