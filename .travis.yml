@@ -10,3 +10,5 @@ r-packages:
 - rjson
 - testthat
 - knitr
+
+r_check_args: --no-build-vignettes --no-vignettes
