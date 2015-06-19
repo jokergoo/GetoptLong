@@ -1,5 +1,7 @@
 [![Build Status](https://travis-ci.org/jokergoo/GetoptLong.svg)](https://travis-ci.org/jokergoo/GetoptLong)
 
+## The package
+
 This package wraps the powerful Perl module `Getopt::Long` and keeps almost all
 features of it. The syntax of option specification is as same as `Getopt::Long`.
 So if you are coming from Perl and you know `Getopt::Long`, it would be no
