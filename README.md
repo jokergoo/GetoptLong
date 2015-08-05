@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/jokergoo/GetoptLong.svg)](https://travis-ci.org/jokergoo/GetoptLong)
 
-## The package
+## Control command line options
 
 This package wraps the powerful Perl module `Getopt::Long` and keeps almost all
 features of it. The syntax of option specification is as same as `Getopt::Long`.
@@ -55,6 +55,8 @@ variables even you are in an interactive R session:
 ```r
 source("foo.R", argv = "--cutoff 0.01 --input file=foo.txt --verbose")
 ```
+
+## Variable interpolation
 
 This package also supports simple variable interpolation in R, which means you
 can embed variables into texts directly, just like in Perl.
