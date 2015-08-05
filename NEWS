@@ -1,3 +1,8 @@
+Changes in version 0.1.1
+-----------------------------------------------------------------------------
+
+* add `source` which also allow specifying arguments in interactive session.
+
 Changes in version 0.1.0
 -----------------------------------------------------------------------------
 

@@ -20,7 +20,11 @@ GetoptLong.options = setGlobalOptions(
 					   .length = 1),
 	endingMsg = list(.value = "",
 					 .length = 1),
-	config = NULL
+	config = NULL,
+	"__argv_str__" = list(.value = NULL,
+		.length = c(0, 1),
+		.private = TRUE,
+		.visible = FALSE)
 )
 
 # == title

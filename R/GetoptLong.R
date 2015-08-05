@@ -44,6 +44,11 @@ GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(),
 		.IS_UNDER_COMMAND_LINE = TRUE
 	}
 
+	if(is.null(argv_str)) {
+		argv_str = GetoptLong.options("__argv_str__")
+	}
+	on.exit(GetoptLong.options("__argv_str__" = NULL))
+
 	# to test whether the script is run under command-line or in R interactive environment
 	if(.IS_UNDER_COMMAND_LINE || is.null(argv_str)) {
 		OUT = stderr()
@@ -765,5 +770,21 @@ check_perl = function(module = NULL, inc = NULL, perl_bin = "perl") {
 
 is.dir = function(dir) {
 	sapply(dir, function(x) file.exists(x) && file.info(x)[1, "isdir"])
+}
+
+# == title
+# read R source code
+#
+# == param
+# -... pass to `base::source`
+# -argv a string which contains command line arguments
+#
+# == details
+# This function insert an ``argv`` argument into the base `base::source`,
+# so that when sourcing an R script, command line options can also be specfied
+#
+source = function(..., argv = NULL) {
+	GetoptLong.options("__argv_str__" = argv)
+	base::source(...)
 }
 
