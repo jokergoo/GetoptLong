@@ -1,0 +1,14 @@
+language: r
+
+sudo: required
+
+# Be strict when checking our package
+warnings_are_errors: true
+
+r-packages:
+- GlobalOptions
+- rjson
+- testthat
+- knitr
+
+r_check_args: --no-build-vignettes --no-vignettes
