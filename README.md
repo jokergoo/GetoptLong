@@ -49,6 +49,13 @@ Usage: Rscript foo.R [options]
     Print version information and exit
 ```
 
+Also, arguments can be set when calling `source()`, so it would be convinient to control
+variables even you are in an interactive R session:
+
+```r
+source("foo.R", argv = "--cutoff 0.01 --input file=foo.txt --verbose")
+```
+
 This package also supports simple variable interpolation in R, which means you
 can embed variables into texts directly, just like in Perl.
 
