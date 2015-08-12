@@ -25,6 +25,4 @@ so that when sourcing an R script, command line options can also be specfied
 source("test.R", argv = "--number 4 --cutoff 0.01 --verbose")
 }
 
-...
-
 }

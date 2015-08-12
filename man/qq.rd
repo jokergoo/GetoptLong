@@ -21,8 +21,10 @@ qq(text, envir = parent.frame(), code.pattern = NULL, collapse = TRUE)
 I like variable interpolation in Perl. But in R, if you want to concatenate plain text and variables,
 you need to use functions such as \code{\link[base]{paste}}. However, if there are so many variables, quotes, braces 
 in the string you want to construct, it would kill you.
+
 This function allows you to construct strings as in Perl style. Variables are
 marked in the text with certain rule. \code{\link{qq}} will look up these variables in user's
 environment and replace the variable marks with their real values.
+
 For more explaination of this function, please refer to vignette.
 }

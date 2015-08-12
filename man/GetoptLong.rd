@@ -20,6 +20,7 @@ GetoptLong(spec, help = TRUE, version = TRUE, envir = parent.frame(), argv_str =
 }
 \details{
 Following shows a simple example. Put following code at the beginning of your script (e.g. \code{foo.R}):
+
   \preformatted{
 library(GetoptLong)
     cutoff = 0.05
@@ -30,6 +31,7 @@ library(GetoptLong)
     ))  }
 
 Then you can call the script from command line either by:
+
   \preformatted{
 ~\> Rscript foo.R --number 4 --cutoff 0.01 --verbose
     ~\> Rscript foo.R -n 4 -c 0.01 -v
@@ -40,5 +42,6 @@ is optional and already has a default value. \code{verbose} is a logical option.
 successful, two variables with name \code{number} and \code{verbose} will be imported into the working
 environment with specified values, and value for \code{cutoff} will be updated if it is specified in
 command-line argument.
+
 For advanced use of this function, please go to the vignette.
 }

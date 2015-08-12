@@ -25,16 +25,19 @@ qqcat(text, envir = parent.frame(), code.pattern = NULL, file = "",
 }
 \details{
 This function is a shortcut of
+
   \preformatted{
 cat(qq(text, envir, code.pattern))  }
 
 Additionally, you can add global prefix when using \code{\link{qqcat}}
+
   \preformatted{
 qq.options("cat_prefix" = "[INFO] ")
     qq.options("cat_prefix" = function(x) format(Sys.time(), "[\%Y-\%m-\%d \%H:\%M:\%S] "))
     qq.options("cat_prefix" = NULL)  }
 
 You can also add local prefix by specifying \code{cat_prefix} in \code{\link{qqcat}}.
+
   \preformatted{
 qqcat(text, cat_prefix = "[INFO] ")  }
 

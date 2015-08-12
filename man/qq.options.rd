@@ -18,6 +18,7 @@ qq.options(..., RESET = FALSE, READ.ONLY = NULL)
 }
 \details{
 Supported options are following:
+
 \describe{
   \item{cat_prefix}{prefix of the string which is printed by \code{\link{qqcat}}}
   \item{cat_verbose}{whether to print text by \code{\link{qqcat}}}

@@ -18,6 +18,7 @@ GetoptLong.options(..., RESET = FALSE, READ.ONLY = NULL)
 }
 \details{
 Supported options are following:
+
 \describe{
   \item{startingMsg}{message that will be printed before the helping message when running \code{Rscript foo.R --help}}
   \item{endingMsg}{message that will be printed after the helping message when running \code{Rscript foo.R --help}}
