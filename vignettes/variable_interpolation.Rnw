@@ -7,6 +7,14 @@
 
 \documentclass{article}
 
+
+\usepackage[T1]{fontenc}
+\usepackage[sc]{mathpazo}
+\renewcommand{\sfdefault}{lmss}
+\renewcommand{\ttdefault}{lmtt}
+
+\setcounter{tocdepth}{2}
+
 \title{Simple variable interpolation in R}
 
 \author{Zuguang Gu {\tt <z.gu@dkfz.de>}}
@@ -22,7 +30,7 @@ suppressPackageStartupMessages(library(GetoptLong))
 @
 
 There are several ways to construct strings in {\it R} such as {\tt paste}. However,
-when the string which is going to be constructed is so complicated, using {\tt paste}
+when the string which is going to be constructed is so complicated, using {\tt paste()}
 will be a nightmare. For example, we want to put some parameters as title in a plot.
 
 <<>>==
@@ -41,7 +49,7 @@ In {\it Perl}, we always use variable interpolation to construct complicated str
 which variables are started with special marks (sigil), and variables will be replaced with
 their real values. In this package, we aim to implement variable interpolation in {\it R}.
 The idea is rather simple: use special marks to identify variables and then
-replace with their values. The function here is {\tt qq} which is named from the
+replace with their values. The function here is {\tt qq()} which is named from the
 subroutine with the same name in {\it Perl} (It stands for double quote). Using variable interpolation, above
 example can be written as:
 
@@ -52,13 +60,15 @@ str = qq("region = (@{region[1]}, @{region[2]}), value = @{value}, name = '@{nam
 cat(str)
 @
 
-Or use the shortcut function {\tt qqcat}:
+Or use the shortcut function {\tt qqcat()}:
 
 <<>>==
 qqcat("region = (@{region[1]}, @{region[2]}), value = @{value}, name = '@{name}'")
 @
 
-One feature of {\tt qqcat} is you can set a global prefix to the messages by {\tt qq.options("cat\_prefix")}, either a string or a function:
+One feature of {\tt qqcat()} is you can set a global prefix to the messages by {\tt qq.options("cat\_prefix")}, 
+either a string or a function. If it is set as a function, the value will be generated at real time
+by executing the function.
 
 <<>>==
 qq.options("cat_prefix" = "[INFO] ")
@@ -73,7 +83,7 @@ qq.options("cat_prefix" = "")
 qqcat("This is a message")
 @
 
-You can shut down all messages produced by {\tt qqcat} by {\tt qq.options("cat\_verbose" = FALSE)}. 
+You can shut down all messages produced by {\tt qqcat()} by {\tt qq.options("cat\_verbose" = FALSE)}. 
 
 <<>>==
 qq.options("cat_prefix" = "[INFO] ", "cat_verbose" = FALSE)
@@ -88,7 +98,21 @@ qqcat("This is a message", cat_prefix = "[INFO] ")
 qqcat("This is a message")
 @
 
-<<eval = TRUE, results = 'hide', echo = FALSE>>==
+From version 1.1.2, {\tt qq.options()} can work in a local mode in which
+the copy of the options only work in a local chunk.
+
+<<>>==
+qq.options(LOCAL = TRUE)
+qq.options("cat_prefix" = "[INFO] ")
+qqcat("This is the first message")
+qqcat("This is the second message")
+qq.options(LOCAL = FALSE)
+qqcat("This is the third message")
+@
+
+Reset the options so that it does not affect example code in following part of the vignette.
+
+<<eval = TRUE, results = 'hide', echo = TRUE>>==
 qq.options(RESET = TRUE)
 @
 
@@ -96,6 +120,7 @@ You can use {\tt cat\_verbose} together with {\tt GetoptLong()} when you want to
 In following example code, if you do not specify {\tt -}{\tt -verbose}, all messages will be shut down.
 
 <<eval = FALSE>>==
+library(GetoptLong)
 GetoptLong(c(
     "verbose", "Print message"
 ))
@@ -117,8 +142,8 @@ qqcat("There @{ifelse(n == 1, 'is', 'are')} @{n} dog@{ifelse(n == 1, '', 's')}.\
 @
 
 {\bf NOTE:} Since {\tt qq} as the function name is very easy to be used by other packages
-(E.g., in {\tt lattice}, there is a homonymic function) and if so, you may enforce
-{\tt qq} in your working environment as the function in {\tt GetoptLong} by:
+(E.g., in {\bf lattice}, there is also a {\tt qq()} function as well) and if so, you may enforce
+{\tt qq()} in your working environment as the function in {\bf GetoptLong} by:
 
 <<eval = FALSE>>==
 qq = GetoptLong::qq
@@ -129,7 +154,7 @@ In above exmaple, {\tt @\{\}} is used to mark variables. Later, variable names w
 and replaced with their real values.
 
 The marking code pattern can be any type. But you should make sure it is easy to tell the difference
-from other part in the string. You can set your code pattern as an argument in {\tt qq}. The default pattern
+from other part in the string. You can set your code pattern as an argument in {\tt qq()}. The default pattern
 is {\tt @\textbackslash\textbackslash\{CODE\textbackslash\textbackslash\}} because  we only permit {\tt CODE}
 to return simple vectors and {\tt @} is a sigil representing array in {\it Perl}.
 
@@ -138,7 +163,7 @@ x = 1
 qqcat("x = #{x}", code.pattern = "#\\{CODE\\}")
 @
 
-Or set in {\tt qq.options} as a global setting:
+Or set in {\tt qq.options()} as a global setting:
 
 <<eval = FALSE>>=
 qq.options("code.pattern" = "#\\{CODE\\}")
@@ -187,11 +212,11 @@ y = 2
 qqcat("x = @{x}, y = @{y}", envir = list(x = "a", y = "b"))
 @
 
-If variables are passed through list, {\tt qq} only looks up in the specified list.
+If variables are passed through list, {\tt qq()} only looks up in the specified list.
 
 \section{Variables should only return vectors}
 
-{\tt qq} only allows variables to return vectors. The whole string will be interpolated repeatedly according to longest vectors,
+{\tt qq()} only allows variables to return vectors. The whole string will be interpolated repeatedly according to longest vectors,
 and finally concatenated into a single long string.
 
 <<>>==
@@ -222,7 +247,7 @@ str
 \section{You can also interpolate more complicated codes}
 
 Besides simple variables, you can also put chunk of codes in the string. 
-Since {\tt qq} takes value of the last variable in the chunk as final returning value, you need 
+Since {\tt qq()} takes value of the last variable in the chunk as final returning value, you need 
 to explicitly specify the return value in the chunk.
 
 Following example is another way to contruct a HTML table in which the first row is assigned with class name.
@@ -246,7 +271,7 @@ text
 cat(str)
 @
 
-In above example, the string also contains a {\tt qq} function, so please use different code patterns for them.
+In above example, the string also contains a {\tt qq()} function, so please use different code patterns for them.
 
 \section{Simple template system}
 More advanced, you can make a simple template system. E.g., put following code in {\tt template.html}.
