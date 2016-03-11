@@ -1,6 +1,10 @@
 
 context("Test `GetoptLong`")
 
+test_that("test simple", {
+	GetoptLong("tag=i", "tag", argv_str = "--tag 1");         expect_that(tag, equals(1)); rm(tag)
+})
+
 test_that("test `tag=i`", {
 	spec = c(
 		"tag=i", "this is a description of tag which is long long and very long and extremly long..."

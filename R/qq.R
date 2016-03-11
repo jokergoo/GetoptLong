@@ -3,9 +3,9 @@
 #
 # == param
 # -text         text string in which variables are marked with certain rules
-# -envir          environment where to find those variables. By default it is the environment
-#               where `qq` is envoked. It can also be a list in which list element names are
-#               the variable names going to be interpolated.
+# -envir        environment where to look for variables. By default it is the environment
+#               where `qq` is envoked. It can also be a list in which element names are
+#               the variable names to be interpolated.
 # -code.pattern pattern of marks for the variables. By default it is ``@\\\\{CODE\\\\}`` which means
 #               you can write your variable as ``@{variable}``.
 # -collapse     If variables return vector of length larger than one, whether collapse into one string
@@ -14,13 +14,28 @@
 # == details
 # I like variable interpolation in Perl. But in R, if you want to concatenate plain text and variables,
 # you need to use functions such as `base::paste`. However, if there are so many variables, quotes, braces 
-# in the string you want to construct, it would kill you.
+# in the string you want to construct, it would be painful.
 #   
 # This function allows you to construct strings as in Perl style. Variables are
 # marked in the text with certain rule. `qq` will look up these variables in user's
 # environment and replace the variable marks with their real values.
 #
 # For more explaination of this function, please refer to vignette.
+#
+# == author
+# Zuguang Gu <z.gu@dkfz.de>
+#
+# == example
+# a = 1
+# b = "text"
+# qq("a = @{a}, b = '@{b}'")
+#
+# a = 1:2
+# qq("a = @{a}, b = '@{b}'")
+# qq("a = @{a}, b = '@{b}'", collapse = FALSE)
+#
+# a = 1
+# qq("a = `a`, b = '`b`'", code.pattern = "`CODE`")
 #
 qq = function(text, envir = parent.frame(), code.pattern = NULL, collapse = TRUE) {
 	
@@ -140,7 +155,7 @@ find_code = function(m, text) {
 #
 # == param
 # -text         text string in which variables are marked with certain rules
-# -envir          environment where to find those variables
+# -envir          environment where to look for those variables
 # -code.pattern pattern of marks for the variables
 # -file        pass to `base::cat`
 # -sep         pass to `base::cat`
@@ -152,9 +167,9 @@ find_code = function(m, text) {
 # == details
 # This function is a shortcut of
 #
-#     cat(qq(text, envir, code.pattern))
+#     cat(qq(text, envir, code.pattern), ...)
 #
-# Additionally, you can add global prefix when using `qqcat`
+# Additionally, you can add global prefix:
 #
 #     qq.options("cat_prefix" = "[INFO] ")
 #     qq.options("cat_prefix" = function(x) format(Sys.time(), "[\%Y-\%m-\%d \%H:\%M:\%S] "))
@@ -166,6 +181,20 @@ find_code = function(m, text) {
 #
 # Please refer to `qq` to find more details.
 #
+# == author
+# Zuguang Gu <z.gu@dkfz.de>
+#
+# == example
+# a = 1
+# b = "text"
+# qqcat("a = @{a}, b = '@{b}'\n")
+# qqcat("a = `a`, b = '`b`'\n", code.pattern = "`CODE`")
+#
+# qq.options("cat_prefix" = function(x) format(Sys.time(), "[\%Y-\%m-\%d \%H:\%M:\%S] "))
+# qqcat("a = @{a}, b = '@{b}'\n")
+# Sys.sleep(2)
+# qqcat("a = @{a}, b = '@{b}'\n")
+# qq.options(RESET = TRUE)
 qqcat = function(text, envir = parent.frame(), code.pattern = NULL, file = "",
     sep = " ", fill = FALSE, labels = NULL, append = FALSE, cat_prefix = NULL) {
 	cat(qq(text, envir, code.pattern), file = file, sep = sep, fill = fill, labels = labels, append = append, cat_prefix = cat_prefix)

@@ -7,6 +7,13 @@
 
 \documentclass{article}
 
+\usepackage[T1]{fontenc}
+\usepackage[sc]{mathpazo}
+\renewcommand{\sfdefault}{lmss}
+\renewcommand{\ttdefault}{lmtt}
+
+\setcounter{tocdepth}{2}
+
 \title{Parsing command-line arguments by {\tt Getopt::Long}}
 
 \author{Zuguang Gu {\tt <z.gu@dkfz.de>}}
@@ -19,14 +26,17 @@
 \maketitle 
 
 There are already several R packages to parse command-line arguments such as {\tt getopt}
-or {\it Python}-style {\tt optparse}. Here {\tt GetoptLong} is another command-line argument
-parser which wraps the powerful {\it Perl} module \href{http://search.cpan.org/perldoc?Getopt%3A%3ALong}{{\tt Getopt::Long}}.
+or {\it Python}-style {\tt optparse}. Here {\bf GetoptLong} is another command-line argument
+parser which wraps the powerful {\it Perl} module {\tt Getopt::Long} (\url{http://search.cpan.org/perldoc?Getopt%3A%3ALong}),
+also provides some adaptation for easier use in R.
 
-{\bf Note:} A large part of this vignette is copied or modified from {\tt Getopt::Long} doc page on CPAN. And I cannot guarantee all
-my understanding on {\tt Getopt::Long} is right. So the original website of \href{http://search.cpan.org/perldoc?Getopt%3A%3ALong}{{\tt Getopt::Long}}
+Using {\bf GetoptLong} is simple especially for {\it Perl} users because the specification is almost the same as in {\it Perl}.
+The original website of \href{http://search.cpan.org/perldoc?Getopt%3A%3ALong}{{\tt Getopt::Long}}
 is always your best reference.
 
 \section{Workflow of the wrapping}
+
+Figure \ref{fig:workflow} shows how the R package works for parsing the command-line arguments.
 
 \begin{figure}[h!]
 \centering
@@ -36,35 +46,20 @@ is always your best reference.
 \end{figure}
 
 \section{First example}
-Using {\tt GetoptLong} is simple especially for {\it Perl} users because the specification is quite similar as in {\it Perl}.
 
 <<eval = FALSE, echo = TRUE>>==
 library(GetoptLong)
 
 cutoff = 0.05
-GetoptLong(matrix(c(
+GetoptLong(
     "number=i", "Number of items, integer, mandatory option",
     "cutoff=f", "cutoff to filter results, optional, default (0.05)",
     "verbose",  "print messages"
-), ncol = 2, byrow = TRUE))
+)
 @
 
-Or more simply:
-
-<<eval = FALSE, echo = TRUE>>==
-library(GetoptLong)
-
-cutoff = 0.05
-GetoptLong(c(
-    "number=i", "Number of items, integer, mandatory option",
-    "cutoff=f", "cutoff to filter results, optional, default (0.05)",
-    "verbose",  "print messages"
-))
-@
-
-The first argument in {\tt GetoptLong} is either a two-column matrix or a simple vector. If it is a simple vector, it should have
-even number of elements and will be transformed into the two-column matrix by rows internally. In the matrix, the first column is the specification
-of option names and the second column is the description of corresponding options.
+The number of arguments in {\tt GetoptLong()} should be even number and the specification and description
+should always be paried.
 
 Save the code as {\tt test.R} and we can execute the R script as:
 
@@ -81,6 +76,7 @@ environment with specified values, and value for {\tt cutoff} will be updated if
 command-line argument.
 
 \section{Customize your options}
+
 Each specifier in options consists of two parts: the name specification and the argument specification:
 
 <<eval = FALSE, echo = TRUE, results = 'makeup', highlight = FALSE>>==
@@ -90,7 +86,7 @@ length|size|l=i@
 Here {\tt length|size|l} is a list of alternative names seperated by {\tt |}. The remaining part is argument
 specification which defines the mode and amount of arguments. The argument specification is optional.
 
-Specify any one of alternative option namefrom command-line is OK and it doesn't matter whether using one or two slash in
+Specify any one of alternative option name from command-line is OK and it doesn't matter whether using one or two slash in
 front of the option name. Sometimes you even don't need to specify complete option names, you only need to make
 sure the partial name match is unique. If the partial match is not uniqe, it will throw an error. For above example,
 we can specify the argument like:
@@ -108,11 +104,11 @@ Options for argument specification are:
 	\item{no argument specification}: taking no argument. Options are logical.
 	\item{{\tt !}}: taking no argument. Options are logical. You can set its oposite value by prefixing it with {\tt no} or {\tt no-}. E.g. {\tt foo!} allows {\tt -}{\tt -foo} as well as {\tt -}{\tt -nofoo} and {\tt -}{\tt -no-foo}.
 	\item{{\tt =type[desttype][repeat]}}:
-		options should have arguments. 
+		options should have arguments. Only either {\tt desttype} or {\tt repeat} can be used.
 \end{itemize}
 
-Please note ``{\tt :[type][desttype]}'' is not supported here. We use another way to define
-mandatory options and optional options. See following sections.
+Please note ``{\tt :[type][desttype]}'' is not supported here (If you don't know what it is, just ignore it). We use another way to define
+mandatory options and optional options. 
 
 Available {\tt type} options are:
 \begin{itemize}
@@ -207,27 +203,27 @@ The first option name in option alternative names will be taken as variable name
 which means, it must be a valid R variable name. Any definition of these variables
 in front of {\tt GetoptLong()} will be treated as default values for corresponding options.
 If options already have default values, they are optional in command-line. If the variable
-is defined as a function before {\tt GetoptLong} is called, it is treated as undefined.
-Please note your option names should not contain the dot {\tt .}. Although it is valid for
-R variables but it is not allowed for {\tt Getopt::Long}.
+is defined as a function before {\tt GetoptLong()} is called, it is treated as undefined.
+Please note your option names should not start with the dot. Although it is valid for
+R variables but it is not allowed for {\tt Getopt::Long} module.
 
 \section{Help and version options}
 
 {\tt help} and {\tt version} are two universal options. By default, these two options
 will be inferred from user's source code. 
 
-By default, {\tt GetoptLong} only provides descriptions of all specified options. Users can set the option by
+By default, {\tt GetoptLong()} only provides descriptions of all specified options. Users can set the option by
 {\tt GetoptLong.options('startingMsg')} and {\tt GetoptLong.options('endingMsg')} to
 add informaiton for a complete help message. And version is from {\tt VERSION} variable
 defined in user's environment (Of course, {\tt VERSION} should be defined before {\tt GetoptLong()}).
 
 <<eval = FALSE, echo = TRUE>>==
-GetoptLong.options('startingMsg' = '
-An example to show how to use the packages
+GetoptLong.options('startingMsg' = 
+'An example to show how to use the packages
 ')
 
-GetoptLong.options('endingMsg' = '
-Please contact author@gmail.com for comments
+GetoptLong.options('endingMsg' = 
+'Please contact author@gmail.com for comments
 ')
 VERSION = "0.0.1"
 GetoptLong(...)
@@ -249,7 +245,6 @@ Usage: Rscript test.R [options]
 
   --version
     Print version information and exit
-
 
 Please contact author@gmail.com for comments
 @
@@ -277,7 +272,7 @@ With different configuration, it can support more types of option specifications
 -s 24 -s24 -s=24
 @
 
-Please refer to website of \href{http://search.cpan.org/perldoc?Getopt%3A%3ALong#Configuring_Getopt%3A%3ALong}{{\tt Getopt::Long}}
+Please refer to website of {\tt Getopt::Long}(\url{http://search.cpan.org/perldoc?Getopt%3A%3ALong#Configuring_Getopt%3A%3ALong})
 for more information.
 
 \section{Specify path of {\it Perl} in command line}

@@ -2,10 +2,7 @@
 # Wrapper of the Perl module ``Getopt::Long`` in R
 #
 # == param
-# -spec     specification of options. A two-column matrix in which the first column
-#           is the setting for option names and the second column is the description
-#           of options. It is can also be a vector having even number of elements and it
-#           will be converted to the two-column matrix
+# -...     specification of options. The value should be a vector having even number of elements.
 # -help     whether to add help option
 # -version  whether to add version option
 # -envir    user's enrivonment where `GetoptLong` will look for default values and export variables
@@ -16,11 +13,11 @@
 #
 #     library(GetoptLong)
 #     cutoff = 0.05
-#     GetoptLong(c(
+#     GetoptLong(
 #         "number=i", "Number of items, integer, mandatory option",
 #         "cutoff=f", "cutoff to filter results, optional, default (0.05)",
 #         "verbose",  "print messages"
-#     ))
+#     )
 #
 # Then you can call the script from command line either by:
 #
@@ -36,9 +33,21 @@
 #
 # For advanced use of this function, please go to the vignette.
 #
-GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(), argv_str = NULL) {
+# == author
+# Zuguang Gu <z.gu@dkfz.de>
+#
+GetoptLong = function(..., help = TRUE, version = TRUE, envir = parent.frame(), argv_str = NULL) {
 	
-	if(get_scriptname() == "foo.R") {
+	spec = list(...)
+
+	# a vector or a two-column matrix
+	if(length(spec) == 1) {
+		spec = spec[[1]]
+	} else {
+		spec = unlist(spec)
+	}
+
+	if(is.null(get_scriptname())) {
 		.IS_UNDER_COMMAND_LINE = FALSE
 	} else {
 		.IS_UNDER_COMMAND_LINE = TRUE
@@ -102,17 +111,17 @@ GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(),
 	# it should be a matrix with two columns or a vector with even number of elements
 	if(is.matrix(spec)) {
 		if(ncol(spec) != 2) {
-			stop("`spec` should be a two-column matrix.\n")
+			stop("If your specification is a matrix, it should be a two-column matrix.\n")
 		}
 	} else {
 		if(is.vector(spec)) {
 			if(length(spec) %% 2) {
-				stop("Since `spec` is a vector, it should have even number of elements.\n")
+				stop("Since your specification is a vector, it should have even number of elements.\n")
 			} else {
 				spec = matrix(spec, ncol = 2, byrow = TRUE)
 			}
 		} else {
-			stop("Wrong `spec` class.\n")
+			stop("Wrong specification class.\n")
 		}
 	}
 	
@@ -336,8 +345,11 @@ GetoptLong = function(spec, help = TRUE, version = TRUE, envir = parent.frame(),
 # -... pass to `GetoptLong`
 #
 # == details
-# This function is the same as `GetoptLong`. Just to make it consistent as the ``GetOptions`` 
+# This function is the same as `GetoptLong`. It is just to make it consistent as the ``GetOptions()`` 
 # subroutine in ``Getopt::Long`` module in Perl.
+#
+# == author
+# Zuguang Gu <z.gu@dkfz.de>
 #
 GetOptions = function(...) GetoptLong(...)
 
@@ -499,7 +511,12 @@ print_help_msg = function(spec, file = stderr(), help = TRUE, version = TRUE) {
 		cat(startingMsg, file = file)
 	}
 	
-    script_name = basename(get_scriptname())
+    script_name = get_scriptname()
+    if(is.null(script_name)) {
+    	script_name = "foo.R"
+    } else {
+    	script_name = basename(script_name)
+    }
     qqcat("Usage: Rscript @{script_name} [options]\n\n", file = file)
     	
 	for(i in seq_len(nrow(spec))) {
@@ -677,30 +694,33 @@ export_parent_env = function(opt, envir = parent.frame()) {
 }
 
 # == title
-# full path of current script
+# Full path of current script
 #
-# == details
-# if not run under command-line, return ``foo.R``
+# == value
+# If the R script is not run under command-line, it return ``NULL``.
+#
+# == author
+# Zuguang Gu <z.gu@dkfz.de>
+#
 get_scriptname = function() {
-		args = commandArgs()
-		
-		if(length(args) == 1) {
-			return("foo.R")
-		}
-		i_arg = which(args == "--args")
-		if(length(i_arg) == 0) {
-			return("foo.R")
-		}
-		i_arg = i_arg[1]
-		args = args[seq_len(i_arg)]
-        f = grep("^--file=", args, value = TRUE)
-        if(length(f)) {
-        	f = gsub("^--file=(.*)$", "\\1", f[1])
-        	return(f)	
-        } else {
-        	return("foo.R")
-        }
-        
+	args = commandArgs()
+	
+	if(length(args) == 1) {
+		return(NULL)
+	}
+	i_arg = which(args == "--args")
+	if(length(i_arg) == 0) {
+		return(NULL)
+	}
+	i_arg = i_arg[1]
+	args = args[seq_len(i_arg)]
+    f = grep("^--file=", args, value = TRUE)
+    if(length(f)) {
+    	f = gsub("^--file=(.*)$", "\\1", f[1])
+    	return(f)	
+    } else {
+    	return(NULL)
+    }  
 }
 
 # find path of binary perl
@@ -773,18 +793,23 @@ is.dir = function(dir) {
 }
 
 # == title
-# read R source code
+# Read R source code with arguments
 #
 # == param
 # -... pass to `base::source`
 # -argv a string which contains command line arguments
 #
 # == details
-# This function insert an ``argv`` argument into the base `base::source`,
-# so that when sourcing an R script, command line options can also be specfied
+# This function overwrites the default base::`base::source`.
+#
+# Command-line arguments can be used when sourcing an R file, just like running R script in the command-line.
+#
+# == author
+# Zuguang Gu <z.gu@dkfz.de>
 #
 source = function(..., argv = NULL) {
 	GetoptLong.options("__argv_str__" = argv)
 	base::source(...)
+	GetoptLong.options("__argv_str__" = NULL)
 }
 

@@ -7,11 +7,11 @@ Wrapper of the Perl module \code{Getopt::Long} in R
 Wrapper of the Perl module \code{Getopt::Long} in R
 }
 \usage{
-GetoptLong(spec, help = TRUE, version = TRUE, envir = parent.frame(), argv_str = NULL)
+GetoptLong(..., help = TRUE, version = TRUE, envir = parent.frame(), argv_str = NULL)
 }
 \arguments{
 
-  \item{spec}{specification of options. A two-column matrix in which the first columnis the setting for option names and the second column is the descriptionof options. It is can also be a vector having even number of elements and itwill be converted to the two-column matrix}
+  \item{...}{specification of options. The value should be a vector having even number of elements.}
   \item{help}{whether to add help option}
   \item{version}{whether to add version option}
   \item{envir}{user's enrivonment where \code{\link{GetoptLong}} will look for default values and export variables}
@@ -22,18 +22,18 @@ GetoptLong(spec, help = TRUE, version = TRUE, envir = parent.frame(), argv_str =
 Following shows a simple example. Put following code at the beginning of your script (e.g. \code{foo.R}):
 
   \preformatted{
-library(GetoptLong)
+    library(GetoptLong)
     cutoff = 0.05
-    GetoptLong(c(
+    GetoptLong(
         "number=i", "Number of items, integer, mandatory option",
         "cutoff=f", "cutoff to filter results, optional, default (0.05)",
         "verbose",  "print messages"
-    ))  }
+    )  }
 
 Then you can call the script from command line either by:
 
   \preformatted{
-~\> Rscript foo.R --number 4 --cutoff 0.01 --verbose
+    ~\> Rscript foo.R --number 4 --cutoff 0.01 --verbose
     ~\> Rscript foo.R -n 4 -c 0.01 -v
     ~\> Rscript foo.R -n 4 --verbose  }
 
@@ -44,4 +44,12 @@ environment with specified values, and value for \code{cutoff} will be updated i
 command-line argument.
 
 For advanced use of this function, please go to the vignette.
+}
+\author{
+Zuguang Gu <z.gu@dkfz.de>
+}
+\examples{
+# There is no example
+NULL
+
 }

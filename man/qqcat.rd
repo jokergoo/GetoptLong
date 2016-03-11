@@ -13,7 +13,7 @@ qqcat(text, envir = parent.frame(), code.pattern = NULL, file = "",
 \arguments{
 
   \item{text}{text string in which variables are marked with certain rules}
-  \item{envir}{environment where to find those variables}
+  \item{envir}{environment where to look for those variables}
   \item{code.pattern}{pattern of marks for the variables}
   \item{file}{pass to \code{\link[base]{cat}}}
   \item{sep}{pass to \code{\link[base]{cat}}}
@@ -27,19 +27,34 @@ qqcat(text, envir = parent.frame(), code.pattern = NULL, file = "",
 This function is a shortcut of
 
   \preformatted{
-cat(qq(text, envir, code.pattern))  }
+    cat(qq(text, envir, code.pattern), ...)  }
 
-Additionally, you can add global prefix when using \code{\link{qqcat}}
+Additionally, you can add global prefix:
 
   \preformatted{
-qq.options("cat_prefix" = "[INFO] ")
+    qq.options("cat_prefix" = "[INFO] ")
     qq.options("cat_prefix" = function(x) format(Sys.time(), "[\%Y-\%m-\%d \%H:\%M:\%S] "))
     qq.options("cat_prefix" = NULL)  }
 
 You can also add local prefix by specifying \code{cat_prefix} in \code{\link{qqcat}}.
 
   \preformatted{
-qqcat(text, cat_prefix = "[INFO] ")  }
+    qqcat(text, cat_prefix = "[INFO] ")  }
 
 Please refer to \code{\link{qq}} to find more details.
+}
+\author{
+Zuguang Gu <z.gu@dkfz.de>
+}
+\examples{
+a = 1
+b = "text"
+qqcat("a = @{a}, b = '@{b}'\n")
+qqcat("a = `a`, b = '`b`'\n", code.pattern = "`CODE`")
+
+qq.options("cat_prefix" = function(x) format(Sys.time(), "[\%Y-\%m-\%d \%H:\%M:\%S] "))
+qqcat("a = @{a}, b = '@{b}'\n")
+Sys.sleep(2)
+qqcat("a = @{a}, b = '@{b}'\n")
+qq.options("cat_prefix" = NULL)
 }
