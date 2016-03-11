@@ -77,6 +77,8 @@ r = c(1, 2)
 value = 4
 name = "name"
 qq("region = (@{r[1]}, @{r[2]}), value = @{value}, name = '@{name}'")
+
+## [1] "region = (1, 2), value = 4, name = 'name'"
 ```
 
 So it would be much easier for you to construct complicated texts instead of

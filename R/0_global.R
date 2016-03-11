@@ -62,6 +62,7 @@ GetoptLong.options = setGlobalOptions(
 # qq.options(RESET = TRUE)
 # qq.options(code.pattern = "`CODE`")
 # qqcat("a = `a`\n")
+# qq.options(RESET = TRUE)
 qq.options = function(..., RESET = FALSE, READ.ONLY = NULL, LOCAL = FALSE) {}
 qq.options = setGlobalOptions(
 	cat_prefix = list(.value = "",

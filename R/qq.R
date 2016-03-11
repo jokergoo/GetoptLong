@@ -194,7 +194,7 @@ find_code = function(m, text) {
 # qqcat("a = @{a}, b = '@{b}'\n")
 # Sys.sleep(2)
 # qqcat("a = @{a}, b = '@{b}'\n")
-# qq.options("cat_prefix" = NULL)
+# qq.options(RESET = TRUE)
 qqcat = function(text, envir = parent.frame(), code.pattern = NULL, file = "",
     sep = " ", fill = FALSE, labels = NULL, append = FALSE, cat_prefix = NULL) {
 	cat(qq(text, envir, code.pattern), file = file, sep = sep, fill = fill, labels = labels, append = append, cat_prefix = cat_prefix)

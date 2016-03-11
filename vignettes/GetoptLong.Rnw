@@ -55,11 +55,11 @@ Or more simply:
 library(GetoptLong)
 
 cutoff = 0.05
-GetoptLong(c(
+GetoptLong(
     "number=i", "Number of items, integer, mandatory option",
     "cutoff=f", "cutoff to filter results, optional, default (0.05)",
     "verbose",  "print messages"
-))
+)
 @
 
 The first argument in {\tt GetoptLong} is either a two-column matrix or a simple vector. If it is a simple vector, it should have
