@@ -17,6 +17,10 @@
 
 \maketitle 
 
+<<echo = FALSE>>=
+suppressPackageStartupMessages(library(GetoptLong))
+@
+
 There are several ways to construct strings in {\it R} such as {\tt paste}. However,
 when the string which is going to be constructed is so complicated, using {\tt paste}
 will be a nightmare. For example, we want to put some parameters as title in a plot.

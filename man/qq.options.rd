@@ -1,19 +1,20 @@
 \name{qq.options}
 \alias{qq.options}
 \title{
-Global options for \code{qq} related functions
+Global options for qq() related functions
 }
 \description{
-Global options for \code{qq} related functions
+Global options for qq() related functions
 }
 \usage{
-qq.options(..., RESET = FALSE, READ.ONLY = NULL)
+qq.options(..., RESET = FALSE, READ.ONLY = NULL, LOCAL = FALSE)
 }
 \arguments{
 
   \item{...}{options, see 'details' section}
   \item{RESET}{Whether to reset options to their default values}
   \item{READ.ONLY}{only return read-only options?}
+  \item{LOCAL}{switch local mode}
 
 }
 \details{
@@ -24,4 +25,17 @@ Supported options are following:
   \item{cat_verbose}{whether to print text by \code{\link{qqcat}}}
   \item{code.pattern}{code pattern for variable interpolation}
 }
+}
+\author{
+Zuguang Gu <z.gu@dkfz.de>
+}
+\examples{
+a = 1
+qq.options(cat_prefix = "[INFO] ")
+qqcat("a = @{a}\n")
+qq.options(cat_verbose = FALSE)
+qqcat("a = @{a}\n")
+qq.options(RESET = TRUE)
+qq.options(code.pattern = "`CODE`")
+qqcat("a = `a`\n")
 }

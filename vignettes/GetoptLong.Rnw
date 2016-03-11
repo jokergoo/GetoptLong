@@ -277,7 +277,7 @@ With different configuration, it can support more types of option specifications
 -s 24 -s24 -s=24
 @
 
-Please refer to website of \href{http://search.cpan.org/perldoc?Getopt%3A%3ALong#Configuring_Getopt%3A%3ALong}{{\tt Getopt::Long}}
+Please refer to website of {\tt Getopt::Long}(\href{http://search.cpan.org/perldoc?Getopt%3A%3ALong#Configuring_Getopt%3A%3ALong})
 for more information.
 
 \section{Specify path of {\it Perl} in command line}
