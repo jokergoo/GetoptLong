@@ -792,7 +792,7 @@ is.dir = function(dir) {
 	sapply(dir, function(x) file.exists(x) && file.info(x)[1, "isdir"])
 }
 
-# == title
+#  title
 # Read R source code with arguments
 #
 # == param
