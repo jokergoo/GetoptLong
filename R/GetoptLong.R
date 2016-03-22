@@ -813,6 +813,6 @@ source = function(..., argv = NULL) {
 	GetoptLong.options("__argv_str__" = NULL)
 }
 
-stop = function(msg) {
-	base::stop(strwrap(msg), call. = FALSE)
-}
+# stop = function(msg) {
+# 	base::stop(strwrap(msg), call. = FALSE)
+# }
