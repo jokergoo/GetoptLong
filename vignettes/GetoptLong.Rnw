@@ -286,13 +286,4 @@ have permission to modify {\tt PATH}. You can specify your {\it Perl} path from 
 Since arguments following after {\tt -}{\tt -} will be ignored by {\tt Getopt::Long}, we 
 take the first argument next to {\tt -}{\tt -} as the path of user-specified {\it Perl} path.
 
-\section{Set command line arguments within {\tt source}}
-
-You can add command line arguments when sourcing an R script so that you can control the options
-even when you are in an R interactive session.
-
-<<eval = FALSE, echo = TRUE>>==
-source("test.R", argv = "--number 4 --cutoff 0.01 --verbose")
-@
-
 \end{document}
