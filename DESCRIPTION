@@ -2,7 +2,7 @@ Package: GetoptLong
 Type: Package
 Title: Parsing Command-Line Arguments and Variable Interpolation
 Version: 0.1.2
-Date: 2016-3-11
+Date: 2016-3-25
 Author: Zuguang Gu
 Maintainer: Zuguang Gu <z.gu@dkfz.de>
 Depends: R (>= 2.10.0), methods
@@ -15,6 +15,6 @@ Description: This is yet another command-line argument parser which wraps the
 URL: https://github.com/jokergoo/GetoptLong
 SystemRequirements: Perl, Getopt::Long
 License: GPL (>= 2)
-Packaged: 2016-3-11 00:00:00 UTC; Administrator
+Packaged: 2016-3-25 00:00:00 UTC; Administrator
 Repository: CRAN
-Date/Publication: 2016-3-11 00:00:00
+Date/Publication: 2016-3-25 00:00:00
