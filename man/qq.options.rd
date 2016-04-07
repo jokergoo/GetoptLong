@@ -38,4 +38,5 @@ qqcat("a = @{a}\n")
 qq.options(RESET = TRUE)
 qq.options(code.pattern = "`CODE`")
 qqcat("a = `a`\n")
+qq.options(RESET = TRUE)
 }

@@ -31,7 +31,10 @@ GetoptLong.options = setGlobalOptions(
 	"__argv_str__" = list(.value = NULL,
 						.length = c(0, 1),
 						.private = TRUE,
-						.visible = FALSE)
+						.visible = FALSE),
+	"__script_name__" = list(.value = NULL,
+		                    .private = TRUE,
+		                    .visible = FALSE)
 )
 
 # == title

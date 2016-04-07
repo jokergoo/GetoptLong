@@ -56,5 +56,5 @@ qq.options("cat_prefix" = function(x) format(Sys.time(), "[\%Y-\%m-\%d \%H:\%M:\
 qqcat("a = @{a}, b = '@{b}'\n")
 Sys.sleep(2)
 qqcat("a = @{a}, b = '@{b}'\n")
-qq.options("cat_prefix" = NULL)
+qq.options(RESET = TRUE)
 }
