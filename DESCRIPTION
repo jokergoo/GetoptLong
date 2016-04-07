@@ -1,7 +1,7 @@
 Package: GetoptLong
 Type: Package
 Title: Parsing Command-Line Arguments and Variable Interpolation
-Version: 0.1.2
+Version: 0.1.3
 Date: 2016-3-25
 Author: Zuguang Gu
 Maintainer: Zuguang Gu <z.gu@dkfz.de>

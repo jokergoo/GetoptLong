@@ -47,7 +47,7 @@ GetoptLong = function(..., help = TRUE, version = TRUE, envir = parent.frame(), 
 		spec = unlist(spec)
 	}
 
-	if(is.null(get_scriptname())) {
+	if(interactive()) {
 		.IS_UNDER_COMMAND_LINE = FALSE
 	} else {
 		.IS_UNDER_COMMAND_LINE = TRUE
