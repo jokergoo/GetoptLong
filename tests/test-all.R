@@ -7,10 +7,8 @@ is.solaris = function()
 
 if(!is.solaris()) {
 	if(Sys.which("perl") != "") {
-		test_package("GetoptLong", filter = "qq|GetoptLong")
+		test_check("GetoptLong", filter = "qq|GetoptLong")
 	} else {
-		test_package("GetoptLong", filter = "qq")
+		test_check("GetoptLong", filter = "qq")
 	}
 }
-
-test_check("GetoptLong")
