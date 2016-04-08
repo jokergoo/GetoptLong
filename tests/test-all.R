@@ -12,3 +12,5 @@ if(!is.solaris()) {
 		test_package("GetoptLong", filter = "qq")
 	}
 }
+
+test_check("GetoptLong")
