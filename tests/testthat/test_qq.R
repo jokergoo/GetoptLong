@@ -82,8 +82,7 @@ test_that("test `cat_prefix`", {
 				prints_text("a"))
 
 	qq.options("cat_prefix" = "INFO:", "cat_verbose" = FALSE)
-	expect_that(qqcat("a"),
-				prints_text(""))
+	expect_silent(qqcat("a"))
 				
 	qq.options("cat_prefix" = "INFO:", "cat_verbose" = TRUE)
 	expect_that(qqcat("a"),

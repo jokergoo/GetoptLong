@@ -1,6 +1,7 @@
 Changes in version 0.1.3
 
 * use `interactive()` to test whether under command-line mode
+* update according to testthat 1.0.0
 
 ----------------------------------------------------------------------------
 
