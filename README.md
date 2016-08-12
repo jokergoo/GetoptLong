@@ -1,6 +1,7 @@
 [![Build Status](https://travis-ci.org/jokergoo/GetoptLong.svg)](https://travis-ci.org/jokergoo/GetoptLong) [![CRAN](http://www.r-pkg.org/badges/version/GetoptLong)](https://cran.r-project.org/web/packages/GetoptLong/index.html) [![codecov](https://img.shields.io/codecov/c/github/jokergoo/GetoptLong.svg)](https://codecov.io/github/jokergoo/GetoptLong) 
 
-## GetoptLong
+GetoptLong
+============
 
 This is yet another command-line argument parser which wraps the 
 powerful Perl module [`Getopt::Long`](http://perldoc.perl.org/Getopt/Long.html) and with some adaptation for easier use
@@ -11,12 +12,14 @@ There are two vignettes in the package which explain in more detail:
 1. [Parsing command-line arguments by Getopt::Long](https://cran.r-project.org/web/packages/GetoptLong/vignettes/GetoptLong.pdf)
 2. [Simple variable interpolation in R](https://cran.r-project.org/web/packages/GetoptLong/vignettes/variable_interpolation.pdf)
 
-### Control command line options
+## Control command line options
 
 This package wraps the powerful Perl module [`Getopt::Long`](http://perldoc.perl.org/Getopt/Long.html) and keeps almost all
 features of it. The syntax of option specification is as same as `Getopt::Long`.
 So if you are coming from Perl and you know `Getopt::Long`, there would be no
-difficulty with using it. This package supports default values, imports option
+difficulty with using it. 
+
+Also, this package supports default values, imports option
 names into working environment, and automatically generates help messages.
 The usage is very simple:
 
@@ -67,7 +70,7 @@ variables even you are in an interactive R session:
 GetoptLong:::source("foo.R", argv = "--cutoff 0.01 --input file=foo.txt --verbose")
 ```
 
-### Variable interpolation
+## Variable interpolation
 
 This package also supports simple variable interpolation in R, which means you
 can embed variables into texts directly, just like in Perl.
