@@ -88,6 +88,6 @@ So it would be much easier for you to construct complicated texts instead of
 using `paste`.
 
 
-### License
+## License
 
 GPL (>= 2)
