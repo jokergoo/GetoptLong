@@ -515,7 +515,7 @@ print_help_msg = function(spec, file = stderr(), help = TRUE, version = TRUE, he
 	}
 	
 	if(!is.null(startingMsg)) {
-		if(grepl("\\n$", startingMsg)) {
+		if(!grepl("\\n$", startingMsg)) {
 			startingMsg = paste0(startingMsg, "\n")
 		}
 		cat(startingMsg, file = file)
@@ -545,7 +545,7 @@ print_help_msg = function(spec, file = stderr(), help = TRUE, version = TRUE, he
 	}
 	
 	if(!is.null(endingMsg)) {
-		if(grepl("\\n$", endingMsg)) {
+		if(!grepl("\\n$", endingMsg)) {
 			endingMsg = paste0(endingMsg, "\n")
 		}
 		cat(endingMsg, file = file)
@@ -712,6 +712,9 @@ export_parent_env = function(opt, envir = parent.frame()) {
 
 # == title
 # Full path of current script
+#
+# == details
+# ...
 #
 # == value
 # If the R script is not run under command-line, it return ``NULL``.

@@ -9,6 +9,9 @@ Full path of current script
 \usage{
 get_scriptname()
 }
+\details{
+...
+}
 \value{
 If the R script is not run under command-line, it return \code{NULL}.
 }
