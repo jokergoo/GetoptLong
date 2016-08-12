@@ -7,6 +7,8 @@
 # -version  whether to add version option
 # -envir    user's enrivonment where `GetoptLong` will look for default values and export variables
 # -argv_str command-line arguments, only for testing purpose
+# -head head of the message when invoking ``Rscript foo.R --help"
+# -foot foot of the message when invoking ``Rscript foo.R --help"
 #
 # == details
 # Following shows a simple example. Put following code at the beginning of your script (e.g. ``foo.R``):

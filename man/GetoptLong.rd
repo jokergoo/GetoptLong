@@ -17,6 +17,8 @@ GetoptLong(..., help = TRUE, version = TRUE, envir = parent.frame(), argv_str = 
   \item{version}{whether to add version option}
   \item{envir}{user's enrivonment where \code{\link{GetoptLong}} will look for default values and export variables}
   \item{argv_str}{command-line arguments, only for testing purpose}
+  \item{head}{head of the message when invoking \code{\link{}}Rscript foo.R --help"}
+  \item{foot}{foot of the message when invoking \code{\link{}}Rscript foo.R --help"}
 
 }
 \details{
