@@ -11,8 +11,8 @@
 # == detail
 # Supported options are following:
 #
-# -startingMsg message that will be printed before the helping message when running ``Rscript foo.R --help``
-# -endingMsg message that will be printed after the helping message when running ``Rscript foo.R --help``
+# -startingMsg message that will be printed before the helping message when running ``Rscript foo.R --help``. Ignored if ``head`` is set in `GetoptLong`
+# -endingMsg message that will be printed after the helping message when running ``Rscript foo.R --help``. Ignored if ``foot`` is set in `GetoptLong`
 # -config configuration of ``Getopt::Long``, check http://perldoc.perl.org/Getopt/Long.html#Configuring-Getopt\%3a\%3aLong
 #
 # ``GetoptLong.options(...)`` should be put before calling `GetoptLong` function.

@@ -213,20 +213,16 @@ R variables but it is not allowed for {\tt Getopt::Long} module.
 will be inferred from user's source code. 
 
 By default, {\tt GetoptLong()} only provides descriptions of all specified options. Users can set the option by
-{\tt GetoptLong.options('startingMsg')} and {\tt GetoptLong.options('endingMsg')} to
+{\tt head} and {\tt foot} arguments to
 add informaiton for a complete help message. And version is from {\tt VERSION} variable
 defined in user's environment (Of course, {\tt VERSION} should be defined before {\tt GetoptLong()}).
 
 <<eval = FALSE, echo = TRUE>>==
-GetoptLong.options('startingMsg' = 
-'An example to show how to use the packages
-')
-
-GetoptLong.options('endingMsg' = 
-'Please contact author@gmail.com for comments
-')
 VERSION = "0.0.1"
-GetoptLong(...)
+GetoptLong(..., 
+	head = 'An example to show how to use the packages',
+	foot = 'Please contact author@gmail.com for comments'
+)
 @
 
 Then you can specify {\tt help}:
@@ -285,5 +281,14 @@ have permission to modify {\tt PATH}. You can specify your {\it Perl} path from 
 
 Since arguments following after {\tt -}{\tt -} will be ignored by {\tt Getopt::Long}, we 
 take the first argument next to {\tt -}{\tt -} as the path of user-specified {\it Perl} path.
+
+\section{Specify command-line options within R session}
+
+When in an interactive R session, arguments can be set when calling `GetoptLong:::source()`, so it would be convinient to control
+variables even you are in an interactive R session:
+
+<<eval = FALSE, echo = TRUE>>==
+GetoptLong:::source("foo.R", argv = "--cutoff 0.01 --input file=foo.txt --verbose")
+@
 
 \end{document}

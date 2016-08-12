@@ -7,8 +7,10 @@ export(get_scriptname)
 export(GetOptions)
 
 
+
 importFrom("rjson", fromJSON)
 importFrom("GlobalOptions", setGlobalOptions)
 import("methods")
+
 
 

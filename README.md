@@ -60,11 +60,11 @@ Usage: Rscript foo.R [options]
     Print version information and exit
 ```
 
-Also, arguments can be set when calling `source()`, so it would be convinient to control
+Also, arguments can be set when calling `GetoptLong:::source()`, so it would be convinient to control
 variables even you are in an interactive R session:
 
 ```r
-source("foo.R", argv = "--cutoff 0.01 --input file=foo.txt --verbose")
+GetoptLong:::source("foo.R", argv = "--cutoff 0.01 --input file=foo.txt --verbose")
 ```
 
 ### Variable interpolation

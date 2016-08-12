@@ -7,7 +7,8 @@ Wrapper of the Perl module \code{Getopt::Long} in R
 Wrapper of the Perl module \code{Getopt::Long} in R
 }
 \usage{
-GetoptLong(..., help = TRUE, version = TRUE, envir = parent.frame(), argv_str = NULL)
+GetoptLong(..., help = TRUE, version = TRUE, envir = parent.frame(), argv_str = NULL,
+    head = NULL, foot = NULL)
 }
 \arguments{
 
