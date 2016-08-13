@@ -245,6 +245,9 @@ Report bugs to xxx@xx.xx
 ")
 	expect_that(GetoptLong(spec, argv_str = "--help"), prints_text("Report bugs"))
 	expect_that(GetoptLong(spec, argv_str = "--help", help = FALSE), prints_text("Unknown"))
+
+	expect_that(GetoptLong(spec, argv_str = "--help", foot = "this is a foot"), prints_text("foot"))
+	expect_that(GetoptLong(spec, argv_str = "--help", head = "this is a head"), prints_text("head"))
 })
 
 perl_bin = Sys.which("perl")

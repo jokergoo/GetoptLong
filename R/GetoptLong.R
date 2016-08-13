@@ -7,6 +7,8 @@
 # -version  whether to add version option
 # -envir    user's enrivonment where `GetoptLong` will look for default values and export variables
 # -argv_str command-line arguments, only for testing purpose
+# -head head of the message when invoking ``Rscript foo.R --help``
+# -foot foot of the message when invoking ``Rscript foo.R --help``
 #
 # == details
 # Following shows a simple example. Put following code at the beginning of your script (e.g. ``foo.R``):
@@ -36,7 +38,8 @@
 # == author
 # Zuguang Gu <z.gu@dkfz.de>
 #
-GetoptLong = function(..., help = TRUE, version = TRUE, envir = parent.frame(), argv_str = NULL) {
+GetoptLong = function(..., help = TRUE, version = TRUE, envir = parent.frame(), argv_str = NULL,
+	head = NULL, foot = NULL) {
 	
 	spec = list(...)
 
@@ -187,7 +190,7 @@ GetoptLong = function(..., help = TRUE, version = TRUE, envir = parent.frame(), 
 		qqcat("@{res}\n", file = OUT)
 		
 		if(.IS_UNDER_COMMAND_LINE) {
-			print_help_msg(spec, file = OUT, help = TRUE, version = TRUE)
+			print_help_msg(spec, file = OUT, help = TRUE, version = TRUE, head = head, foot = foot)
 		}
 
 		ow = options("warn")[[1]]
@@ -213,7 +216,7 @@ GetoptLong = function(..., help = TRUE, version = TRUE, envir = parent.frame(), 
 	# if detect user has specified --help or --version
 	# basically, !is.null(opt$help) measn opt$help == 1
 	if(!is.null(opt$help) && opt$help) {
-		print_help_msg(spec, file = OUT, help = help, version = version)
+		print_help_msg(spec, file = OUT, help = help, version = version, head = head, foot = foot)
 		
 		if(.IS_UNDER_COMMAND_LINE) {
 			q(save = "no", status = 127)
@@ -245,7 +248,7 @@ GetoptLong = function(..., help = TRUE, version = TRUE, envir = parent.frame(), 
 		   (!exists(long_name[i], envir = envir) || class(get(long_name[i], envir = envir)) == "function")) {
 			qqcat("@{long_name[i]} is mandatory, please specify it.\n", file = OUT)
 			if(.IS_UNDER_COMMAND_LINE) {
-				print_help_msg(spec, file = OUT, help = help, version = version)
+				print_help_msg(spec, file = OUT, help = help, version = version, head = head, foot = foot)
 			}
 
 			if(.IS_UNDER_COMMAND_LINE) {
@@ -278,7 +281,7 @@ GetoptLong = function(..., help = TRUE, version = TRUE, envir = parent.frame(), 
 				if(!is.list(tmp)) {
 					qqcat("@{long_name[i]} is mandatory, and also detect in evoking environment you have already \ndefined `@{long_name[i]}`. Since it is defined as a named option, please\nmake sure default value of `@{long_name[i]}` is a list.\n", file = OUT)
 					if(.IS_UNDER_COMMAND_LINE) {
-						print_help_msg(spec, file = OUT, help = help, version = version)
+						print_help_msg(spec, file = OUT, help = help, version = version, head = head, foot = foot)
 					}
 
 					if(.IS_UNDER_COMMAND_LINE) {
@@ -291,7 +294,7 @@ GetoptLong = function(..., help = TRUE, version = TRUE, envir = parent.frame(), 
 				} else if(is.null(names(tmp))) {
 					qqcat("@{long_name[i]} is mandatory, and also detect in evoking environment you have already \ndefined `@{long_name[i]}`. Since it is defined as a named option, please\nmake sure default value of `@{long_name[i]}` is a list with names.\n", file = OUT)
 					if(.IS_UNDER_COMMAND_LINE) {
-						print_help_msg(spec, file = OUT, help = help, version = version)
+						print_help_msg(spec, file = OUT, help = help, version = version, head = head, foot = foot)
 					}
 
 					if(.IS_UNDER_COMMAND_LINE) {
@@ -304,7 +307,7 @@ GetoptLong = function(..., help = TRUE, version = TRUE, envir = parent.frame(), 
 				} else if(!(all(sapply(tmp, is_simple_vector)))) {
 					qqcat("@{long_name[i]} is mandatory, and also detect in evoking environment you have already \ndefined `@{long_name[i]}`. Since it is defined as a named option, please\nmake sure default value of `@{long_name[i]}` is a list containing simple vectors.\n", file = OUT)
 					if(.IS_UNDER_COMMAND_LINE) {
-						print_help_msg(spec, file = OUT, help = help, version = version)
+						print_help_msg(spec, file = OUT, help = help, version = version, head = head, foot = foot)
 					}
 
 					if(.IS_UNDER_COMMAND_LINE) {
@@ -318,7 +321,7 @@ GetoptLong = function(..., help = TRUE, version = TRUE, envir = parent.frame(), 
 			} else if(! is_simple_vector(tmp)) {
 				qqcat("@{long_name[i]} is mandatory, and also detect in evoking environment you have already \ndefined `@{long_name[i]}`. Please make sure default value of `@{long_name[i]}` should only be a simple vector or NULL.\n", file = OUT)
 				if(.IS_UNDER_COMMAND_LINE) {
-					print_help_msg(spec, file = OUT, help = help, version = version)
+					print_help_msg(spec, file = OUT, help = help, version = version, head = head, foot = foot)
 				}
 
 				if(.IS_UNDER_COMMAND_LINE) {
@@ -490,7 +493,7 @@ perl_sigil = function(type) {
 	}
 }
 
-print_help_msg = function(spec, file = stderr(), help = TRUE, version = TRUE) {
+print_help_msg = function(spec, file = stderr(), help = TRUE, version = TRUE, head = NULL, foot = NULL) {
 	
 	# add help and version options in `spec`
 	if(help) {
@@ -501,13 +504,20 @@ print_help_msg = function(spec, file = stderr(), help = TRUE, version = TRUE) {
 	}
 	
 	startingMsg = NULL
-	if(!is.null(options("GetoptLong.startingMsg")[[1]]) && is.null(GetoptLong.options("startingMsg"))) {
-		startingMsg = options("GetoptLong.startingMsg")[[1]]
+	if(is.null(head)) {
+		if(!is.null(options("GetoptLong.startingMsg")[[1]]) && is.null(GetoptLong.options("startingMsg"))) {
+			startingMsg = options("GetoptLong.startingMsg")[[1]]
+		} else {
+			startingMsg = GetoptLong.options("startingMsg")
+		}
 	} else {
-		startingMsg = GetoptLong.options("startingMsg")
+		startingMsg = head
 	}
 	
 	if(!is.null(startingMsg)) {
+		if(!grepl("\\n$", startingMsg)) {
+			startingMsg = paste0(startingMsg, "\n")
+		}
 		cat(startingMsg, file = file)
 	}
 	
@@ -524,13 +534,20 @@ print_help_msg = function(spec, file = stderr(), help = TRUE, version = TRUE) {
 	}
 	
 	endingMsg = NULL
-	if(!is.null(options("GetoptLong.endingMsg")[[1]]) && is.null(GetoptLong.options("endingMsg"))) {
-		endingMsg = options("GetoptLong.endingMsg")[[1]]
+	if(is.null(foot)) {
+		if(!is.null(options("GetoptLong.endingMsg")[[1]]) && is.null(GetoptLong.options("endingMsg"))) {
+			endingMsg = options("GetoptLong.endingMsg")[[1]]
+		} else {
+			endingMsg = GetoptLong.options("endingMsg")
+		}
 	} else {
-		endingMsg = GetoptLong.options("endingMsg")
+		endingMsg = foot
 	}
 	
 	if(!is.null(endingMsg)) {
+		if(!grepl("\\n$", endingMsg)) {
+			endingMsg = paste0(endingMsg, "\n")
+		}
 		cat(endingMsg, file = file)
 	}
 }
@@ -695,6 +712,9 @@ export_parent_env = function(opt, envir = parent.frame()) {
 
 # == title
 # Full path of current script
+#
+# == details
+# ...
 #
 # == value
 # If the R script is not run under command-line, it return ``NULL``.
