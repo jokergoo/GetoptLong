@@ -5,8 +5,8 @@ Version: 0.1.4
 Date: 2016-8-12
 Author: Zuguang Gu
 Maintainer: Zuguang Gu <z.gu@dkfz.de>
-Depends: R (>= 2.10.0), methods
-Suggests: testthat (>= 1.0.0), knitr
+Depends: R (>= 2.10.0)
+Suggests: testthat (>= 1.0.0), knitr, methods
 VignetteBuilder: knitr
 Imports: rjson, GlobalOptions (>= 0.0.10)
 Description: This is yet another command-line argument parser which wraps the 
