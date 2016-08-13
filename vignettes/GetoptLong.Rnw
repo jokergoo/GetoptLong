@@ -284,7 +284,7 @@ take the first argument next to {\tt -}{\tt -} as the path of user-specified {\i
 
 \section{Specify command-line options within R session}
 
-When in an interactive R session, arguments can be set when calling `GetoptLong:::source()`, so it would be convinient to control
+When in an interactive R session, arguments can be set when calling {\tt GetoptLong:::source()}, so it would be convinient to control
 variables even you are in an interactive R session:
 
 <<eval = FALSE, echo = TRUE>>==
