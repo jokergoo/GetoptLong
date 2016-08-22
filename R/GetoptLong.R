@@ -518,7 +518,7 @@ print_help_msg = function(spec, file = stderr(), help = TRUE, version = TRUE, he
 		if(!grepl("\\n$", startingMsg)) {
 			startingMsg = paste0(startingMsg, "\n")
 		}
-		cat_format_line(startingMsg, prefix = "    ", file = file)
+		cat_format_line(startingMsg, file = file)
 	}
 	
     script_name = get_scriptname()
@@ -548,7 +548,7 @@ print_help_msg = function(spec, file = stderr(), help = TRUE, version = TRUE, he
 		if(!grepl("\\n$", endingMsg)) {
 			endingMsg = paste0(endingMsg, "\n")
 		}
-		cat_format_line(endingMsg, prefix = "    ", file = file)
+		cat_format_line(endingMsg, file = file)
 	}
 }
 
