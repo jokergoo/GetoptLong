@@ -1,7 +1,14 @@
+Changes in version 0.1.5
+
+* head and foot of the message are properly wrapped.
+
+---------------------------------------------------------------------------
+
 Changes in version 0.1.4
 
 * add `head` and `foot` arguments in `GetoptLong()` which set the head and foot
   of the help message
+* change vignette format to Rmd
 
 ----------------------------------------------------------------------------
 
