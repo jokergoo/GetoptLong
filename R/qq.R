@@ -157,6 +157,7 @@ find_code = function(m, text) {
 # -text         text string in which variables are marked with certain rules
 # -envir          environment where to look for those variables
 # -code.pattern pattern of marks for the variables
+# -strwrap     whether call `base::strwrap` to wrap the string
 # -file        pass to `base::cat`
 # -sep         pass to `base::cat`
 # -fill        pass to `base::cat`
@@ -195,9 +196,13 @@ find_code = function(m, text) {
 # Sys.sleep(2)
 # qqcat("a = @{a}, b = '@{b}'\n")
 # qq.options(RESET = TRUE)
-qqcat = function(text, envir = parent.frame(), code.pattern = NULL, file = "",
+qqcat = function(text, envir = parent.frame(), code.pattern = NULL, strwrap = TRUE, file = "",
     sep = " ", fill = FALSE, labels = NULL, append = FALSE, cat_prefix = NULL) {
-	cat(qq(text, envir, code.pattern), file = file, sep = sep, fill = fill, labels = labels, append = append, cat_prefix = cat_prefix)
+	text = qq(text, envir, code.pattern)
+	if(strwrap) {
+		text = paste(strwrap(text), collapse = "\n")
+	}
+	cat(text, file = file, sep = sep, fill = fill, labels = labels, append = append, cat_prefix = cat_prefix)
 }
 
 cat = function(... , file = "", sep = " ", fill = FALSE, labels = NULL, append = FALSE, cat_prefix = NULL) {
