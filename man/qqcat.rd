@@ -8,7 +8,8 @@ Print a string which has been intepolated with variables
 }
 \usage{
 qqcat(text, envir = parent.frame(), code.pattern = NULL, file = "",
-    sep = " ", fill = FALSE, labels = NULL, append = FALSE, cat_prefix = NULL)
+    sep = " ", fill = FALSE, labels = NULL, append = FALSE, cat_prefix = NULL,
+    strwrap = TRUE, strwrap_param = list())
 }
 \arguments{
 
@@ -21,6 +22,8 @@ qqcat(text, envir = parent.frame(), code.pattern = NULL, file = "",
   \item{labels}{pass to \code{\link[base]{cat}}}
   \item{append}{pass to \code{\link[base]{cat}}}
   \item{cat_prefix}{prefix string. It is prior than \code{qq.options(cat_prefix)}.}
+  \item{strwrap}{whether call \code{\link[base]{strwrap}} to wrap the string}
+  \item{strwrap_param}{parameters sent to \code{\link[base]{strwrap}}, must be a list}
 
 }
 \details{

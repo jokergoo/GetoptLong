@@ -1,17 +1,12 @@
-export(qqcat)
-export(qq)
+export(GetOptions)
 export(GetoptLong)
 export(GetoptLong.options)
-export(qq.options)
 export(get_scriptname)
-export(GetOptions)
+export(qq)
+export(qq.options)
+export(qqcat)
 
-importFrom("rjson", fromJSON)
-importFrom("GlobalOptions", setGlobalOptions)
 import("methods")
-
-
-
-
-
+importFrom("GlobalOptions", setGlobalOptions)
+importFrom("rjson", fromJSON)
 

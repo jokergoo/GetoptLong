@@ -141,6 +141,12 @@ n = 2
 qqcat("There @{ifelse(n == 1, 'is', 'are')} @{n} dog@{ifelse(n == 1, '', 's')}.\n")
 ```
 
+If the text is too long, by default, it will be wrapped into lines.
+
+```{r}
+qqcat("one, two, three, four, five, six, seven, eight, nine, ten, eleven, twelve, thirteen, fourteen, fifteen, sixteen, seventeen, eighteen, nineteen, twenty.")
+```
+
 **NOTE:** Since `qq` as the function name is very easy to be used by other packages
 (E.g., in **lattice**, there is also a `qq()` function as well) and if so, you can enforce
 `qq()` in your working environment as the function in **GetoptLong** by:
