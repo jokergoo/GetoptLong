@@ -9,7 +9,7 @@ Print a string which has been intepolated with variables
 \usage{
 qqcat(text, envir = parent.frame(), code.pattern = NULL, file = "",
     sep = " ", fill = FALSE, labels = NULL, append = FALSE, cat_prefix = NULL,
-    strwrap = TRUE, strwrap_param = list())
+    strwrap = FALSE, strwrap_param = list())
 }
 \arguments{
 
