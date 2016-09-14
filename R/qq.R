@@ -199,13 +199,19 @@ find_code = function(m, text) {
 # qq.options(RESET = TRUE)
 qqcat = function(text, envir = parent.frame(), code.pattern = NULL, file = "",
     sep = " ", fill = FALSE, labels = NULL, append = FALSE, cat_prefix = NULL,
-    strwrap = TRUE, strwrap_param = list()) {
+    strwrap = FALSE, strwrap_param = list()) {
 	text = qq(text, envir, code.pattern)
 	if(strwrap) {
 		if(!inherits(strwrap_param, "list")) {
 			stop("`strwrap_param` must be a list.")
 		}
-		text = paste(do.call("strwrap", c(strwrap_param, list(x = text))), collapse = "\n")
+		if(grepl("\n$", text)) {
+			text = paste(do.call("strwrap", c(strwrap_param, list(x = text))), collapse = "\n")
+			text = paste0(text, "\n")
+		} else {
+			text = paste(do.call("strwrap", c(strwrap_param, list(x = text))), collapse = "\n")
+		}
+		
 	}
 	cat(text, file = file, sep = sep, fill = fill, labels = labels, append = append, cat_prefix = cat_prefix)
 }
