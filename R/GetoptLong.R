@@ -596,23 +596,28 @@ print_version_msg = function(envir, file = stderr()) {
 }
 
 cat_format_line = function(text, prefix = "", max.width = 70, file = stderr()) {
-	words = strsplit(text, "\\s+")[[1]]
+	lines = strsplit(text, "\\n")[[1]]
 	
-	i_width = nchar(prefix)
-	cat(prefix, file = file)
-	for(i in seq_along(words)) {
-		if(i_width + 1 + nchar(words[i]) > max.width) {
-			cat("\n", file = file)
-			cat(prefix, file = file)
-			cat(words[i], file = file)
-			i_width = nchar(prefix) + nchar(words[i])
-		} else {
-			cat(ifelse(i == 1, "", " "), file = file)
-			qqcat("@{words[i]}", file = file)
-			i_width = i_width + nchar(prefix)
+	for(i in seq_along(lines)) {
+		words = strsplit(lines[i], "\\s+")[[1]]
+		
+		i_width = nchar(prefix)
+		cat(prefix, file = file)
+		for(i in seq_along(words)) {
+			if(i_width + 1 + nchar(words[i]) > max.width) {
+				cat("\n", file = file)
+				cat(prefix, file = file)
+				cat(words[i], file = file)
+				i_width = nchar(prefix) + nchar(words[i])
+			} else {
+				cat(ifelse(i == 1, "", " "), file = file)
+				qqcat("@{words[i]}", file = file)
+				i_width = i_width + nchar(prefix)
+			}
 		}
+		cat("\n", file = file)
 	}
-	cat("\n\n", file = file)
+	cat("\n", file = file)
 }
 
 detect_var_type = function(opt) {
