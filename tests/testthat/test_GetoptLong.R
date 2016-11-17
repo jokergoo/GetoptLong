@@ -84,6 +84,14 @@ test_that("test `tag`", {
 	GetoptLong(spec, argv_str = "--tag");     expect_that(tag, is_identical_to(TRUE)); rm(tag)
 	GetoptLong(spec, argv_str = "");          expect_that(tag, is_identical_to(FALSE)); rm(tag)
 	expect_that(GetoptLong(spec, argv_str = "--no-tag"), prints_text("Unknown"))
+
+	tag = FALSE
+	GetoptLong(spec, argv_str = ""); expect_that(tag, equals(FALSE)); rm(tag)
+	tag = FALSE
+	GetoptLong(spec, argv_str = "--tag"); expect_that(tag, equals(TRUE)); rm(tag)
+	tag = TRUE
+	GetoptLong(spec, argv_str = ""); expect_that(tag, equals(TRUE)); rm(tag)
+
 })
 
 test_that("test `tag=i@`", {
@@ -189,6 +197,13 @@ test_that("test `verbose!`", {
 	GetoptLong(spec, argv_str = "--verbose");    expect_that(verbose, is_identical_to(TRUE)); rm(verbose)
 	GetoptLong(spec, argv_str = "--no-verbose"); expect_that(verbose, is_identical_to(FALSE)); rm(verbose)
 	GetoptLong(spec, argv_str = "--noverbose"); expect_that(verbose, is_identical_to(FALSE)); rm(verbose)
+
+	verbose = FALSE
+	GetoptLong(spec, argv_str = ""); expect_that(verbose, equals(FALSE)); rm(verbose)
+	verbose = FALSE
+	GetoptLong(spec, argv_str = "--verbose"); expect_that(verbose, equals(TRUE)); rm(verbose)
+	verbose = TRUE
+	GetoptLong(spec, argv_str = "--no-verbose"); expect_that(verbose, equals(FALSE)); rm(verbose)
 })
 
 test_that("test other configurations", {

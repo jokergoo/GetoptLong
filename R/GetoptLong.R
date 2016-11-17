@@ -179,12 +179,30 @@ GetoptLong = function(..., help = TRUE, version = TRUE, envir = parent.frame(), 
 	if(version) {
 		spec2 = rbind(spec2, c("version", ""))
 	}
-	perl_script = generate_perl_script(spec2, json_file)
+	logical_var_with_default = NULL
+	logical_var_name = long_name[spec[, 1] == long_name | spec[, 1] == paste0(long_name, "!")]
+	if(length(logical_var_name)) {
+		l = sapply(logical_var_name, exists, envir = envir)
+		logical_var_name = logical_var_name[l]
+		if(length(logical_var_name)) {
+			logical_var_with_default = sapply(logical_var_name, function(x) {
+					x = get(x, envir = envir)
+					if(is.function(x)) {
+						return(FALSE)
+					} else {
+						res = as.logical(x)[1]
+						return(res)
+					}
+				})
+			names(logical_var_with_default) = logical_var_name
+		}
+	}
+	perl_script = generate_perl_script(spec2, json_file, logical_var_with_default)
 	
 	cmd = qq("\"@{perl_bin}\" \"@{perl_script}\" @{ARGV_string}")
 	res = system(cmd, intern = TRUE)
 	res = as.vector(res)
-	
+
 	# if you specified wrong arguments
 	if(length(res)) {
 		qqcat("@{res}\n", file = OUT)
@@ -366,7 +384,7 @@ combine_and_escape_ARGV = function(ARGV) {
 	paste(ARGV, collapse = " ") 
 }
 
-generate_perl_script = function(spec, json_file) {
+generate_perl_script = function(spec, json_file, logical_var_with_default = NULL) {
 	perl_script = tempfile(fileext = ".pl")
 	#perl_script = "tmp.pl"
 	
@@ -399,12 +417,15 @@ generate_perl_script = function(spec, json_file) {
 	perl_code = c(perl_code, qq("use JSON;"))
 	perl_code = c(perl_code, qq("use Data::Dumper;"))
 	perl_code = c(perl_code, qq(""))
-	
+
 	# declare variables according to variable types
 	for (i in seq_len(nrow(spec))) {
-	
-		perl_code = c(perl_code, qq("my @{perl_sigil(var_type[i])}opt_@{i};    # var_type = @{var_type[i]}, opt_type = @{opt_type[i]}"))
 		
+		if(long_name[i] %in% names(logical_var_with_default)) {
+			perl_code = c(perl_code, qq("my @{perl_sigil(var_type[i])}opt_@{i} = @{ifelse(logical_var_with_default[long_name[i]], 1, 0)};    # var_type = @{var_type[i]}, opt_type = @{opt_type[i]}"))
+		} else {
+			perl_code = c(perl_code, qq("my @{perl_sigil(var_type[i])}opt_@{i};    # var_type = @{var_type[i]}, opt_type = @{opt_type[i]}"))
+		}
 	}
 	
 	perl_code = c(perl_code, qq("*STDERR = *STDOUT;")) # all write to STDOUT
@@ -475,7 +496,7 @@ generate_perl_script = function(spec, json_file) {
 	perl_code = c(perl_code, qq("open JSON, '>@{json_file}' or die 'Cannot create temp file: @{json_file}\\n';"))
 	perl_code = c(perl_code, qq("print JSON to_json($all_opt, {pretty => 1});"))
 	perl_code = c(perl_code, qq("close JSON;"))
-	#perl_code = c(perl_code, qq("print Dumper $all_opt;"))
+	# perl_code = c(perl_code, qq("print STDERR Dumper $all_opt;"))
 	
 	writeLines(perl_code, perl_script)
 	return(perl_script)
