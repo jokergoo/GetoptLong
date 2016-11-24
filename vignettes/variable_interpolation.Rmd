@@ -141,9 +141,10 @@ n = 2
 qqcat("There @{ifelse(n == 1, 'is', 'are')} @{n} dog@{ifelse(n == 1, '', 's')}.\n")
 ```
 
-If the text is too long, by default, it will be wrapped into lines.
+If the text is too long, it can be wrapped into lines.
 
 ```{r}
+qq.options("cat_strwrap" = TRUE)
 qqcat("one, two, three, four, five, six, seven, eight, nine, ten, eleven, twelve, thirteen, fourteen, fifteen, sixteen, seventeen, eighteen, nineteen, twenty.")
 ```
 

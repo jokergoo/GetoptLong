@@ -1,6 +1,7 @@
 Changes in version 0.1.6
 
 * logical options can have default values.
+* add `cat_strwrap` option in `qq.options()`
 
 --------------------------------------------------------------------------
 

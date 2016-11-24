@@ -51,6 +51,7 @@ GetoptLong.options = setGlobalOptions(
 #
 # -cat_prefix prefix of the string which is printed by `qqcat`
 # -cat_verbose whether to print text by `qqcat`
+# -cat_strwrap whether call `base::strwrap` to wrap the string
 # -code.pattern code pattern for variable interpolation
 #
 # == author
@@ -79,6 +80,8 @@ qq.options = setGlobalOptions(
 						}
 					  }),
 	cat_verbose = list(.value = TRUE,
+					   .class = "logical"),
+	cat_strwrap = list(.value = FALSE,
 					   .class = "logical"),
 	code.pattern = list(.value = "@\\{CODE\\}",
 						.length = 1,

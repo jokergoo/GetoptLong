@@ -199,7 +199,7 @@ find_code = function(m, text) {
 # qq.options(RESET = TRUE)
 qqcat = function(text, envir = parent.frame(), code.pattern = NULL, file = "",
     sep = " ", fill = FALSE, labels = NULL, append = FALSE, cat_prefix = NULL,
-    strwrap = FALSE, strwrap_param = list()) {
+    strwrap = qq.options("cat_strwrap"), strwrap_param = list()) {
 	text = qq(text, envir, code.pattern)
 	if(strwrap) {
 		if(!inherits(strwrap_param, "list")) {
