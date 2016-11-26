@@ -743,7 +743,7 @@ export_parent_env = function(opt, envir = parent.frame()) {
 # ...
 #
 # == value
-# If the R script is not run under command-line, it return ``NULL``.
+# If the R script is not run under command-line, it returns ``NULL``.
 #
 # == author
 # Zuguang Gu <z.gu@dkfz.de>

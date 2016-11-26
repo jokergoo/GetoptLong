@@ -13,7 +13,7 @@ get_scriptname()
 ...
 }
 \value{
-If the R script is not run under command-line, it return \code{NULL}.
+If the R script is not run under command-line, it returns \code{NULL}.
 }
 \author{
 Zuguang Gu <z.gu@dkfz.de>
