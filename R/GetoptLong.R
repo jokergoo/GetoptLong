@@ -625,6 +625,9 @@ cat_format_line = function(text, prefix = "", max.width = 70, file = stderr()) {
 		paste(sapply(strsplit(t, "\\n")[[1]], function(x) gsub("^\\s+|\\s+$", "", x)), collapse = " ")
 	})
 	names(lines) = NULL
+	if(identical(lines, "")) {
+		return(NULL)
+	}
 	for(i in seq_along(lines)) {
 		words = strsplit(lines[i], "\\s+")[[1]]
 
