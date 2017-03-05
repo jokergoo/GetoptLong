@@ -519,10 +519,10 @@ print_help_msg = function(spec, file = stderr(), help = TRUE, version = TRUE, he
 	
 	# add help and version options in `spec`
 	if(help) {
-		spec = rbind(spec, c("help", "Print help message and exit"))
+		spec = rbind(spec, c("help", "Print help message and exit."))
 	}
 	if(version) {
-		spec = rbind(spec, c("version", "Print version information and exit"))
+		spec = rbind(spec, c("version", "Print version information and exit."))
 	}
 	
 	startingMsg = NULL
