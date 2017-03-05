@@ -3,7 +3,7 @@
 #
 # == param
 # -...     specification of options. The value should be a vector having even number of elements.
-# -help     whether to add help option
+# -help     whether to add help option. The help message is automatically generated according to user's specification of arguments.
 # -version  whether to add version option
 # -envir    user's enrivonment where `GetoptLong` will look for default values and export variables
 # -argv_str command-line arguments, only for testing purpose
@@ -618,10 +618,10 @@ print_version_msg = function(envir, file = stderr()) {
 
 cat_format_line = function(text, prefix = "", max.width = 70, file = stderr()) {
 	lines = strsplit(text, "\\n")[[1]]
-	
+
 	for(i in seq_along(lines)) {
 		words = strsplit(lines[i], "\\s+")[[1]]
-		
+
 		i_width = nchar(prefix)
 		cat(prefix, file = file)
 		for(i in seq_along(words)) {
@@ -633,7 +633,7 @@ cat_format_line = function(text, prefix = "", max.width = 70, file = stderr()) {
 			} else {
 				cat(ifelse(i == 1, "", " "), file = file)
 				qqcat("@{words[i]}", file = file)
-				i_width = i_width + nchar(prefix)
+				i_width = i_width + nchar(words[i])
 			}
 		}
 		cat("\n", file = file)
@@ -743,7 +743,7 @@ export_parent_env = function(opt, envir = parent.frame()) {
 # ...
 #
 # == value
-# If the R script is not run under command-line, it returns ``NULL``.
+# If the R script is not run from the command-line, it returns ``NULL``.
 #
 # == author
 # Zuguang Gu <z.gu@dkfz.de>
