@@ -620,26 +620,33 @@ print_version_msg = function(envir, file = stderr()) {
 }
 
 cat_format_line = function(text, prefix = "", max.width = 70, file = stderr()) {
-	lines = strsplit(text, "\\n")[[1]]
-
+	lines = strsplit(text, "\\n{2,}")[[1]]
+	lines = sapply(lines, function(t) {
+		paste(sapply(strsplit(t, "\\n")[[1]], function(x) gsub("^\\s+|\\s+$", "", x)), collapse = " ")
+	})
+	names(lines) = NULL
 	for(i in seq_along(lines)) {
 		words = strsplit(lines[i], "\\s+")[[1]]
 
 		i_width = nchar(prefix)
 		cat(prefix, file = file)
-		for(i in seq_along(words)) {
-			if(i_width + 1 + nchar(words[i]) > max.width) {
+		for(j in seq_along(words)) {
+			if(i_width + 1 + nchar(words[j]) > max.width) {
 				cat("\n", file = file)
 				cat(prefix, file = file)
-				cat(words[i], file = file)
-				i_width = nchar(prefix) + nchar(words[i])
+				cat(words[j], file = file)
+				i_width = nchar(prefix) + nchar(words[j])
 			} else {
-				cat(ifelse(i == 1, "", " "), file = file)
-				qqcat("@{words[i]}", file = file)
-				i_width = i_width + nchar(words[i])
+				cat(ifelse(j == 1, "", " "), file = file)
+				qqcat("@{words[j]}", file = file)
+				i_width = i_width + nchar(words[j])
 			}
 		}
-		cat("\n", file = file)
+		if(i == length(lines)) {
+			cat("\n", file = file)
+		} else {
+			cat("\n\n", file = file)
+		}
 	}
 	cat("\n", file = file)
 }
