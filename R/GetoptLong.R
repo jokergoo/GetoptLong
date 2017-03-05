@@ -9,6 +9,7 @@
 # -argv_str command-line arguments, only for testing purpose
 # -head head of the message when invoking ``Rscript foo.R --help``
 # -foot foot of the message when invoking ``Rscript foo.R --help``
+# -script_name alternative script name, internal use
 #
 # == details
 # Following shows a simple example. Put following code at the beginning of your script (e.g. ``foo.R``):
@@ -39,7 +40,7 @@
 # Zuguang Gu <z.gu@dkfz.de>
 #
 GetoptLong = function(..., help = TRUE, version = TRUE, envir = parent.frame(), argv_str = NULL,
-	head = NULL, foot = NULL) {
+	head = NULL, foot = NULL, script_name = NULL) {
 	
 	spec = list(...)
 
@@ -208,7 +209,7 @@ GetoptLong = function(..., help = TRUE, version = TRUE, envir = parent.frame(), 
 		qqcat("@{res}\n", file = OUT)
 		
 		if(.IS_UNDER_COMMAND_LINE) {
-			print_help_msg(spec, file = OUT, help = TRUE, version = TRUE, head = head, foot = foot)
+			print_help_msg(spec, file = OUT, help = TRUE, version = TRUE, head = head, foot = foot, script_name = script_name)
 		}
 
 		ow = options("warn")[[1]]
@@ -234,7 +235,7 @@ GetoptLong = function(..., help = TRUE, version = TRUE, envir = parent.frame(), 
 	# if detect user has specified --help or --version
 	# basically, !is.null(opt$help) measn opt$help == 1
 	if(!is.null(opt$help) && opt$help) {
-		print_help_msg(spec, file = OUT, help = help, version = version, head = head, foot = foot)
+		print_help_msg(spec, file = OUT, help = help, version = version, head = head, foot = foot, script_name = script_name)
 		
 		if(.IS_UNDER_COMMAND_LINE) {
 			q(save = "no", status = 127)
@@ -266,7 +267,7 @@ GetoptLong = function(..., help = TRUE, version = TRUE, envir = parent.frame(), 
 		   (!exists(long_name[i], envir = envir) || class(get(long_name[i], envir = envir)) == "function")) {
 			qqcat("@{long_name[i]} is mandatory, please specify it.\n", file = OUT)
 			if(.IS_UNDER_COMMAND_LINE) {
-				print_help_msg(spec, file = OUT, help = help, version = version, head = head, foot = foot)
+				print_help_msg(spec, file = OUT, help = help, version = version, head = head, foot = foot, script_name = script_name)
 			}
 
 			if(.IS_UNDER_COMMAND_LINE) {
@@ -299,7 +300,7 @@ GetoptLong = function(..., help = TRUE, version = TRUE, envir = parent.frame(), 
 				if(!is.list(tmp)) {
 					qqcat("@{long_name[i]} is mandatory, and also detect in evoking environment you have already \ndefined `@{long_name[i]}`. Since it is defined as a named option, please\nmake sure default value of `@{long_name[i]}` is a list.\n", file = OUT)
 					if(.IS_UNDER_COMMAND_LINE) {
-						print_help_msg(spec, file = OUT, help = help, version = version, head = head, foot = foot)
+						print_help_msg(spec, file = OUT, help = help, version = version, head = head, foot = foot, script_name = script_name)
 					}
 
 					if(.IS_UNDER_COMMAND_LINE) {
@@ -312,7 +313,7 @@ GetoptLong = function(..., help = TRUE, version = TRUE, envir = parent.frame(), 
 				} else if(is.null(names(tmp))) {
 					qqcat("@{long_name[i]} is mandatory, and also detect in evoking environment you have already \ndefined `@{long_name[i]}`. Since it is defined as a named option, please\nmake sure default value of `@{long_name[i]}` is a list with names.\n", file = OUT)
 					if(.IS_UNDER_COMMAND_LINE) {
-						print_help_msg(spec, file = OUT, help = help, version = version, head = head, foot = foot)
+						print_help_msg(spec, file = OUT, help = help, version = version, head = head, foot = foot, script_name = script_name)
 					}
 
 					if(.IS_UNDER_COMMAND_LINE) {
@@ -339,7 +340,7 @@ GetoptLong = function(..., help = TRUE, version = TRUE, envir = parent.frame(), 
 			} else if(! is_simple_vector(tmp)) {
 				qqcat("@{long_name[i]} is mandatory, and also detect in evoking environment you have already \ndefined `@{long_name[i]}`. Please make sure default value of `@{long_name[i]}` should only be a simple vector or NULL.\n", file = OUT)
 				if(.IS_UNDER_COMMAND_LINE) {
-					print_help_msg(spec, file = OUT, help = help, version = version, head = head, foot = foot)
+					print_help_msg(spec, file = OUT, help = help, version = version, head = head, foot = foot, script_name = script_name)
 				}
 
 				if(.IS_UNDER_COMMAND_LINE) {
@@ -514,7 +515,7 @@ perl_sigil = function(type) {
 	}
 }
 
-print_help_msg = function(spec, file = stderr(), help = TRUE, version = TRUE, head = NULL, foot = NULL) {
+print_help_msg = function(spec, file = stderr(), help = TRUE, version = TRUE, head = NULL, foot = NULL, script_name = NULL) {
 	
 	# add help and version options in `spec`
 	if(help) {
@@ -542,12 +543,14 @@ print_help_msg = function(spec, file = stderr(), help = TRUE, version = TRUE, he
 		cat_format_line(startingMsg, file = file)
 	}
 	
-    script_name = get_scriptname()
-    if(is.null(script_name)) {
-    	script_name = "foo.R"
-    } else {
-    	script_name = basename(script_name)
-    }
+	if(is.null(script_name)) {
+    	script_name = get_scriptname()
+	    if(is.null(script_name)) {
+	    	script_name = "foo.R"
+	    } else {
+	    	script_name = basename(script_name)
+	    }
+	}
     qqcat("Usage: Rscript @{script_name} [options]\n\n", file = file)
     	
 	for(i in seq_len(nrow(spec))) {

@@ -1,9 +1,9 @@
+export('GetoptLong.options')
+export('qq.options')
 export(GetOptions)
 export(GetoptLong)
-export(GetoptLong.options)
 export(get_scriptname)
 export(qq)
-export(qq.options)
 export(qqcat)
 
 import("methods")
