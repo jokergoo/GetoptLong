@@ -9,8 +9,8 @@ in R. It also provides a simple way for variable interpolation in R.
 
 There are two vignettes in the package which explain in more detail:
 
-1. [Parsing command-line arguments by Getopt::Long](https://cran.r-project.org/web/packages/GetoptLong/vignettes/GetoptLong.pdf)
-2. [Simple variable interpolation in R](https://cran.r-project.org/web/packages/GetoptLong/vignettes/variable_interpolation.pdf)
+1. [Parsing command-line arguments by Getopt::Long](https://cran.r-project.org/web/packages/GetoptLong/vignettes/GetoptLong.html)
+2. [Simple variable interpolation in R](https://cran.r-project.org/web/packages/GetoptLong/vignettes/variable_interpolation.html)
 
 ## Control command line options
 
