@@ -21,10 +21,10 @@ qq.options(..., RESET = FALSE, READ.ONLY = NULL, LOCAL = FALSE)
 Supported options are following:
 
 \describe{
-  \item{cat_prefix}{prefix of the string which is printed by \code{\link{qqcat}}}
-  \item{cat_verbose}{whether to print text by \code{\link{qqcat}}}
-  \item{cat_strwrap}{whether call \code{\link[base]{strwrap}} to wrap the string}
-  \item{code.pattern}{code pattern for variable interpolation}
+  \item{\code{cat_prefix}}{prefix of the string which is printed by \code{\link{qqcat}}}
+  \item{\code{cat_verbose}}{whether to print text by \code{\link{qqcat}}}
+  \item{\code{cat_strwrap}}{whether call \code{\link[base]{strwrap}} to wrap the string}
+  \item{\code{code.pattern}}{code pattern for variable interpolation}
 }
 }
 \author{

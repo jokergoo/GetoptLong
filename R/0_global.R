@@ -11,9 +11,9 @@
 # == detail
 # Supported options are following:
 #
-# -startingMsg message that will be printed before the helping message when running ``Rscript foo.R --help``. Ignored if ``head`` is set in `GetoptLong`
-# -endingMsg message that will be printed after the helping message when running ``Rscript foo.R --help``. Ignored if ``foot`` is set in `GetoptLong`
-# -config configuration of ``Getopt::Long``, check http://perldoc.perl.org/Getopt/Long.html#Configuring-Getopt\%3a\%3aLong
+# -``startingMsg`` message that will be printed before the helping message when running ``Rscript foo.R --help``. Ignored if ``head`` is set in `GetoptLong`
+# -``endingMsg`` message that will be printed after the helping message when running ``Rscript foo.R --help``. Ignored if ``foot`` is set in `GetoptLong`
+# -``config`` configuration of ``Getopt::Long``, check http://perldoc.perl.org/Getopt/Long.html#Configuring-Getopt\%3a\%3aLong
 #
 # ``GetoptLong.options(...)`` should be put before calling `GetoptLong` function.
 #
@@ -49,10 +49,10 @@ GetoptLong.options = setGlobalOptions(
 # == detail
 # Supported options are following:
 #
-# -cat_prefix prefix of the string which is printed by `qqcat`
-# -cat_verbose whether to print text by `qqcat`
-# -cat_strwrap whether call `base::strwrap` to wrap the string
-# -code.pattern code pattern for variable interpolation
+# -``cat_prefix`` prefix of the string which is printed by `qqcat`
+# -``cat_verbose`` whether to print text by `qqcat`
+# -``cat_strwrap`` whether call `base::strwrap` to wrap the string
+# -``code.pattern`` code pattern for variable interpolation
 #
 # == author
 # Zuguang Gu <z.gu@dkfz.de>
