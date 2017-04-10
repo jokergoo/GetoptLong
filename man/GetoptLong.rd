@@ -8,17 +8,18 @@ Wrapper of the Perl module \code{Getopt::Long} in R
 }
 \usage{
 GetoptLong(..., help = TRUE, version = TRUE, envir = parent.frame(), argv_str = NULL,
-    head = NULL, foot = NULL)
+    head = NULL, foot = NULL, script_name = NULL)
 }
 \arguments{
 
   \item{...}{specification of options. The value should be a vector having even number of elements.}
-  \item{help}{whether to add help option}
+  \item{help}{whether to add help option. The help message is automatically generated according to user's specification of arguments.}
   \item{version}{whether to add version option}
   \item{envir}{user's enrivonment where \code{\link{GetoptLong}} will look for default values and export variables}
   \item{argv_str}{command-line arguments, only for testing purpose}
   \item{head}{head of the message when invoking \code{Rscript foo.R --help}}
   \item{foot}{foot of the message when invoking \code{Rscript foo.R --help}}
+  \item{script_name}{alternative script name, internal use}
 
 }
 \details{

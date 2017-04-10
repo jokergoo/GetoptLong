@@ -1,7 +1,15 @@
+Changes in version 0.1.7
+
+* cat_format_line(): first wrap text into a variable then print it out
+
+--------------------------------------------------------------------------
+
 Changes in version 0.1.6
 
 * logical options can have default values.
 * add `cat_strwrap` option in `qq.options()`
+* text are properly wrapped for the command message
+* add `script_name` option to set alternative script name
 
 --------------------------------------------------------------------------
 

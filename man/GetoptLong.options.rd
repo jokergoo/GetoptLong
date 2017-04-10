@@ -21,9 +21,9 @@ GetoptLong.options(..., RESET = FALSE, READ.ONLY = NULL, LOCAL = FALSE)
 Supported options are following:
 
 \describe{
-  \item{startingMsg}{message that will be printed before the helping message when running \code{Rscript foo.R --help}. Ignored if \code{head} is set in \code{\link{GetoptLong}}}
-  \item{endingMsg}{message that will be printed after the helping message when running \code{Rscript foo.R --help}. Ignored if \code{foot} is set in \code{\link{GetoptLong}}}
-  \item{config}{configuration of \code{Getopt::Long}, check \url{http://perldoc.perl.org/Getopt/Long.html#Configuring-Getopt\%3a\%3aLong}}
+  \item{\code{startingMsg}}{message that will be printed before the helping message when running \code{Rscript foo.R --help}. Ignored if \code{head} is set in \code{\link{GetoptLong}}}
+  \item{\code{endingMsg}}{message that will be printed after the helping message when running \code{Rscript foo.R --help}. Ignored if \code{foot} is set in \code{\link{GetoptLong}}}
+  \item{\code{config}}{configuration of \code{Getopt::Long}, check \url{http://perldoc.perl.org/Getopt/Long.html#Configuring-Getopt\%3a\%3aLong}}
 }
 
 \code{GetoptLong.options(...)} should be put before calling \code{\link{GetoptLong}} function.
