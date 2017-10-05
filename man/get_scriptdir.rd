@@ -1,13 +1,13 @@
-\name{get_scriptname}
-\alias{get_scriptname}
+\name{get_scriptdir}
+\alias{get_scriptdir}
 \title{
-File name of current script
+Directory of current script
 }
 \description{
-File name of current script
+Directory of current script
 }
 \usage{
-get_scriptname()
+get_scriptdir()
 }
 \details{
 ...
@@ -21,5 +21,4 @@ Zuguang Gu <z.gu@dkfz.de>
 \examples{
 # There is no example
 NULL
-
 }

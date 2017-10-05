@@ -753,7 +753,7 @@ export_parent_env = function(opt, envir = parent.frame()) {
 }
 
 # == title
-# Full path of current script
+# File name of current script
 #
 # == details
 # ...
@@ -783,6 +783,39 @@ get_scriptname = function() {
     } else {
     	return(GetoptLong.options("__script_name__"))
     }  
+}
+
+# == title
+# Directory of current script
+#
+# == details
+# ...
+#
+# == value
+# If the R script is not run from the command-line, it returns ``NULL``.
+#
+# == author
+# Zuguang Gu <z.gu@dkfz.de>
+#
+get_scriptdir = function() {
+	args = commandArgs()
+	
+	if(length(args) == 1) {
+		return(NULL)
+	}
+	i_arg = which(args == "--args")
+	if(length(i_arg) == 0) {
+		return(NULL)
+	}
+	i_arg = i_arg[1]
+	args = args[seq_len(i_arg)]
+    f = grep("^--file=", args, value = TRUE)
+    if(length(f)) {
+    	f = gsub("^--file=(.*)$", "\\1", f[1])
+    	return(normalizePath(f))	
+    } else {
+    	return(NULL)
+    }
 }
 
 # find path of binary perl

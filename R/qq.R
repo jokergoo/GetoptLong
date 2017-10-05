@@ -7,7 +7,8 @@
 #               where `qq` is envoked. It can also be a list in which element names are
 #               the variable names to be interpolated.
 # -code.pattern pattern of marks for the variables. By default it is ``@\\\\{CODE\\\\}`` which means
-#               you can write your variable as ``@{variable}``.
+#               you can write your variable as ``@{variable}``. This value can be a vector that all 
+#               patterns are searched.
 # -collapse     If variables return vector of length larger than one, whether collapse into one string
 #               or return a vector
 #
@@ -64,9 +65,13 @@ qq = function(text, envir = parent.frame(), code.pattern = NULL, collapse = TRUE
 #    for (i in 1:length(text)) {
  
         # check wether there are code replacements
-        fc = find_code(code.pattern, text)
-        template = fc[[1]]
-        code = fc[[2]]
+    	template = NULL
+    	code = NULL
+    	for(i in seq_along(code.pattern)) {
+	        fc = find_code(code.pattern[i], text)
+	        template = c(template, fc[[1]])
+	        code = c(code, fc[[2]])
+	    }
  
         if(length(template)) {   # if there is code replacement
            
