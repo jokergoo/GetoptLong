@@ -14,7 +14,7 @@ Description: This is yet another command-line argument parser which wraps the
 	in R. It also provides a simple way for variable interpolation in R.
 URL: https://github.com/jokergoo/GetoptLong
 SystemRequirements: Perl, Getopt::Long
-License: MIT
+License: MIT + file LICENSE
 Packaged: 2017-9-27 00:00:00 UTC; Administrator
 Repository: CRAN
 Date/Publication: 2017-9-27 00:00:00
