@@ -7,7 +7,7 @@ Global options for qq() related functions
 Global options for qq() related functions
 }
 \usage{
-qq.options(..., RESET = FALSE, READ.ONLY = NULL, LOCAL = FALSE)
+qq.options(..., RESET = FALSE, READ.ONLY = NULL, LOCAL = FALSE, ADD = FALSE)
 }
 \arguments{
 
@@ -15,7 +15,7 @@ qq.options(..., RESET = FALSE, READ.ONLY = NULL, LOCAL = FALSE)
   \item{RESET}{Whether to reset options to their default values}
   \item{READ.ONLY}{only return read-only options?}
   \item{LOCAL}{switch local mode}
-
+  \item{ADD}{add new options}
 }
 \details{
 Supported options are following:

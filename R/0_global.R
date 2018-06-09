@@ -7,6 +7,7 @@
 # -RESET Whether to reset options to their default values
 # -READ.ONLY only return read-only options?
 # -LOCAL switch local mode
+# -ADD add new options
 #
 # == detail
 # Supported options are following:
@@ -20,7 +21,7 @@
 # == author
 # Zuguang Gu <z.gu@dkfz.de>
 #
-GetoptLong.options = function(..., RESET = FALSE, READ.ONLY = NULL, LOCAL = FALSE) {}
+GetoptLong.options = function(..., RESET = FALSE, READ.ONLY = NULL, LOCAL = FALSE, ADD = FALSE) {}
 GetoptLong.options = setGlobalOptions(
 	startingMsg = list(.value = "",
 					   .length = 1),
@@ -45,6 +46,7 @@ GetoptLong.options = setGlobalOptions(
 # -RESET Whether to reset options to their default values
 # -READ.ONLY only return read-only options?
 # -LOCAL switch local mode
+# -ADD add new options
 #
 # == detail
 # Supported options are following:
@@ -67,7 +69,7 @@ GetoptLong.options = setGlobalOptions(
 # qq.options(code.pattern = "`CODE`")
 # qqcat("a = `a`\n")
 # qq.options(RESET = TRUE)
-qq.options = function(..., RESET = FALSE, READ.ONLY = NULL, LOCAL = FALSE) {}
+qq.options = function(..., RESET = FALSE, READ.ONLY = NULL, LOCAL = FALSE, ADD = FALSE) {}
 qq.options = setGlobalOptions(
 	cat_prefix = list(.value = "",
 					  .length = c(0, 1),
