@@ -90,4 +90,4 @@ using `paste`.
 
 ## License
 
-GPL (>= 2)
+MIT @ Zuguang Gu
