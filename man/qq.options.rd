@@ -16,6 +16,7 @@ qq.options(..., RESET = FALSE, READ.ONLY = NULL, LOCAL = FALSE, ADD = FALSE)
   \item{READ.ONLY}{only return read-only options?}
   \item{LOCAL}{switch local mode}
   \item{ADD}{add new options}
+
 }
 \details{
 Supported options are following:

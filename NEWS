@@ -1,18 +1,8 @@
-Changes in version 0.1.9
-
-* update dependency of GlobalOptions package
-
--------------------------------------------------------------------------
-
-Changes in version 0.1.8
-
-* `code.pattern` can be a vector that all patterns are searched.
-* add `get_scriptdir()`
-
---------------------------------------------------------------------------
-
 Changes in version 0.1.7
 
+* update dependency of GlobalOptions package
+* `code.pattern` can be a vector that all patterns are searched.
+* add `get_scriptdir()`
 * cat_format_line(): first wrap text into a variable then print it out
 
 --------------------------------------------------------------------------

@@ -4,3 +4,7 @@ TODO
 check.bat
 test_run_command/
 .travis.yml
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+build_pkg_site.R

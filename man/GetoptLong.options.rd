@@ -16,6 +16,7 @@ GetoptLong.options(..., RESET = FALSE, READ.ONLY = NULL, LOCAL = FALSE, ADD = FA
   \item{READ.ONLY}{only return read-only options?}
   \item{LOCAL}{switch local mode}
   \item{ADD}{add new options}
+
 }
 \details{
 Supported options are following:
@@ -34,5 +35,4 @@ Zuguang Gu <z.gu@dkfz.de>
 \examples{
 # There is no example
 NULL
-
 }
