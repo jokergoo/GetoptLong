@@ -148,6 +148,16 @@ qq.options("cat_strwrap" = TRUE)
 qqcat("one, two, three, four, five, six, seven, eight, nine, ten, eleven, twelve, thirteen, fourteen, fifteen, sixteen, seventeen, eighteen, nineteen, twenty.")
 ```
 
+There can be multiple templates:
+
+```{r}
+a = 1; b = 2; c = 3
+txt = qq("command -a @{a}",
+         "        -b @{b}",
+         "        -c @{c}\n", sep = " \\\n")
+cat(txt)
+```
+
 **NOTE:** Since `qq` as the function name is very easy to be used by other packages
 (E.g., in **lattice**, there is also a `qq()` function as well) and if so, you can enforce
 `qq()` in your working environment as the function in **GetoptLong** by:

@@ -1,3 +1,9 @@
+Changes in version 0.1.8
+
+* `qq()`/`qqcat()`: multiple text templates can be specified.
+
+--------------------------------------------------------------------------
+
 Changes in version 0.1.7
 
 * update dependency of GlobalOptions package

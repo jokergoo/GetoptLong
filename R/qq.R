@@ -2,7 +2,7 @@
 # Simple variable interpolation in texts
 #
 # == param
-# -text         text string in which variables are marked with certain rules
+# -...          text string in which variables are marked with certain rules
 # -envir        environment where to look for variables. By default it is the environment
 #               where `qq` is envoked. It can also be a list in which element names are
 #               the variable names to be interpolated.
@@ -11,6 +11,7 @@
 #               patterns are searched.
 # -collapse     If variables return vector of length larger than one, whether collapse into one string
 #               or return a vector
+# -sep          Separation character when there are multiple templates.
 #
 # == details
 # I like variable interpolation in Perl. But in R, if you want to concatenate plain text and variables,
@@ -38,7 +39,15 @@
 # a = 1
 # qq("a = `a`, b = '`b`'", code.pattern = "`CODE`")
 #
-qq = function(text, envir = parent.frame(), code.pattern = NULL, collapse = TRUE) {
+qq = function(..., envir = parent.frame(), code.pattern = NULL, collapse = TRUE, sep = "") {
+
+	lt = list(...)
+
+	if(length(lt) == 1) {
+		text = lt[[1]]
+	} else {
+		text = paste(unlist(lt), collapse = sep)
+	}
 	
 	if(is.null(code.pattern)) {
 		if(!is.null(options("code.pattern")[[1]])) {
@@ -159,7 +168,7 @@ find_code = function(m, text) {
 # Print a string which has been intepolated with variables
 #
 # == param
-# -text         text string in which variables are marked with certain rules
+# -...         text string in which variables are marked with certain rules
 # -envir          environment where to look for those variables
 # -code.pattern pattern of marks for the variables
 # -file        pass to `base::cat`
@@ -170,6 +179,7 @@ find_code = function(m, text) {
 # -cat_prefix  prefix string. It is prior than ``qq.options(cat_prefix)``.
 # -strwrap     whether call `base::strwrap` to wrap the string
 # -strwrap_param parameters sent to `base::strwrap`, must be a list
+# -sep2          Separation character when there are multiple templates.
 #
 # == details
 # This function is a shortcut of
@@ -202,10 +212,18 @@ find_code = function(m, text) {
 # Sys.sleep(2)
 # qqcat("a = @{a}, b = '@{b}'\n")
 # qq.options(RESET = TRUE)
-qqcat = function(text, envir = parent.frame(), code.pattern = NULL, file = "",
+qqcat = function(..., envir = parent.frame(), code.pattern = NULL, file = "",
     sep = " ", fill = FALSE, labels = NULL, append = FALSE, cat_prefix = NULL,
-    strwrap = qq.options("cat_strwrap"), strwrap_param = list()) {
-	text = qq(text, envir, code.pattern)
+    strwrap = qq.options("cat_strwrap"), strwrap_param = list(), sep2 = "") {
+
+	lt = list(...)
+	if(length(lt) == 1) {
+		text = lt[[1]]
+	} else {
+		text = paste(unlist(lt), collapse = sep2)
+	}
+
+	text = qq(text, envir = envir, code.pattern = code.pattern)
 	if(strwrap) {
 		if(!inherits(strwrap_param, "list")) {
 			stop("`strwrap_param` must be a list.")

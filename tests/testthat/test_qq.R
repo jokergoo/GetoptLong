@@ -108,3 +108,12 @@ test_that("test `cat_prefix`", {
 	op = qq.options(READ.ONLY = FALSE)
 	qq.options(op)
 })
+
+
+
+test_that("multiple template", {
+	a = 1
+	b = 2
+	expect_that(qq("a = @{a};", "b = @{b}"), equals("a = 1;b = 2"))
+	expect_that(qq("a = @{a};", "b = @{b}", sep = "\n"), equals("a = 1;\nb = 2"))
+})
