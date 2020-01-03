@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">GetoptLong</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.8</span>
       </span>
     </div>
 
@@ -100,120 +100,129 @@
 <h1 class="hasAnchor">
 <a href="#simple-variable-interpolation-in-r" class="anchor"></a>Simple variable interpolation in R</h1>
 <p><strong>Author</strong>: Zuguang Gu ( <a href="mailto:z.gu@dkfz.de">z.gu@dkfz.de</a> )</p>
-<p><strong>Date</strong>: 2019-09-29</p>
+<p><strong>Date</strong>: 2020-01-03</p>
 <hr>
 <p>There are several ways to construct strings in <strong>R</strong> such as <code><a href="https://rdrr.io/r/base/paste.html">paste()</a></code>. However, when the string which is going to be constructed is too complex, using <code><a href="https://rdrr.io/r/base/paste.html">paste()</a></code> can be a pain. For example, we want to put some parameters as title in a plot.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">region =<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">1</span>, <span class="dv">2</span>)
-value =<span class="st"> </span><span class="dv">4</span>
-name =<span class="st"> "name"</span>
-str =<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(<span class="st">"region = ("</span>, region[<span class="dv">1</span>], <span class="st">", "</span>, region[<span class="dv">2</span>], <span class="st">"), value = "</span>, value, 
-            <span class="st">", name = '"</span>, name, <span class="st">"'"</span>, <span class="dt">sep =</span> <span class="st">""</span>)
-<span class="kw"><a href="https://rdrr.io/r/base/cat.html">cat</a></span>(str)</code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">region =<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">1</span>, <span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2">value =<span class="st"> </span><span class="dv">4</span></a>
+<a class="sourceLine" id="cb1-3" data-line-number="3">name =<span class="st"> "name"</span></a>
+<a class="sourceLine" id="cb1-4" data-line-number="4">str =<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(<span class="st">"region = ("</span>, region[<span class="dv">1</span>], <span class="st">", "</span>, region[<span class="dv">2</span>], <span class="st">"), value = "</span>, value, </a>
+<a class="sourceLine" id="cb1-5" data-line-number="5">            <span class="st">", name = '"</span>, name, <span class="st">"'"</span>, <span class="dt">sep =</span> <span class="st">""</span>)</a>
+<a class="sourceLine" id="cb1-6" data-line-number="6"><span class="kw"><a href="https://rdrr.io/r/base/cat.html">cat</a></span>(str)</a></code></pre></div>
 <pre><code>## region = (1, 2), value = 4, name = 'name'</code></pre>
 <p>As you can see, it is hard to read and very easy to make mistakes. (Syntax highlighting may be helpful to match quotes, but it is still quite annoying to see so many commas and quotes.)</p>
 <p>In <strong>Perl</strong>, we always use variable interpolation to construct complex strings in which variables are started with special marks (sigil), and variables will be replaced with their real values. In this package, we aim to implement variable interpolation in <em>R</em>. The idea is rather simple: use special marks to identify variables and then replace with their values. The function here is <code><a href="../reference/qq.html">qq()</a></code> which is named from the subroutine with the same name in <strong>Perl</strong> (It stands for double quote). Using variable interpolation, above example can be written as:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(GetoptLong)
-
-str =<span class="st"> </span><span class="kw"><a href="../reference/qq.html">qq</a></span>(<span class="st">"region = (@{region[1]}, @{region[2]}), value = @{value}, name = '@{name}'"</span>)
-<span class="kw"><a href="https://rdrr.io/r/base/cat.html">cat</a></span>(str)</code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(GetoptLong)</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb3-3" data-line-number="3">str =<span class="st"> </span><span class="kw"><a href="../reference/qq.html">qq</a></span>(<span class="st">"region = (@{region[1]}, @{region[2]}), value = @{value}, name = '@{name}'"</span>)</a>
+<a class="sourceLine" id="cb3-4" data-line-number="4"><span class="kw"><a href="https://rdrr.io/r/base/cat.html">cat</a></span>(str)</a></code></pre></div>
 <pre><code>## region = (1, 2), value = 4, name = 'name'</code></pre>
 <p>Or use the shortcut function <code><a href="../reference/qqcat.html">qqcat()</a></code>:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/qqcat.html">qqcat</a></span>(<span class="st">"region = (@{region[1]}, @{region[2]}), value = @{value}, name = '@{name}'"</span>)</code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw"><a href="../reference/qqcat.html">qqcat</a></span>(<span class="st">"region = (@{region[1]}, @{region[2]}), value = @{value}, name = '@{name}'"</span>)</a></code></pre></div>
 <pre><code>## region = (1, 2), value = 4, name = 'name'</code></pre>
 <p>One feature of <code><a href="../reference/qqcat.html">qqcat()</a></code> is you can set a global prefix to the messages by <code><a href="../reference/qq.options.html">qq.options("cat_prefix")</a></code>, either a string or a function. If it is set as a function, the value will be generated at real time by executing the function.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/qq.options.html">qq.options</a></span>(<span class="st">"cat_prefix"</span> =<span class="st"> "[INFO] "</span>)
-<span class="kw"><a href="../reference/qqcat.html">qqcat</a></span>(<span class="st">"This is a message"</span>)</code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw"><a href="../reference/qq.options.html">qq.options</a></span>(<span class="st">"cat_prefix"</span> =<span class="st"> "[INFO] "</span>)</a>
+<a class="sourceLine" id="cb7-2" data-line-number="2"><span class="kw"><a href="../reference/qqcat.html">qqcat</a></span>(<span class="st">"This is a message"</span>)</a></code></pre></div>
 <pre><code>## [INFO] This is a message</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/qq.options.html">qq.options</a></span>(<span class="st">"cat_prefix"</span> =<span class="st"> </span><span class="cf">function</span>() <span class="kw"><a href="https://rdrr.io/r/base/format.html">format</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.time</a></span>(), <span class="st">"[%Y-%m-%d %H:%M:%S] "</span>))
-<span class="kw"><a href="../reference/qqcat.html">qqcat</a></span>(<span class="st">"This is a message"</span>)</code></pre></div>
-<pre><code>## [2019-09-29 20:50:47] This is a message</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://rdrr.io/r/base/Sys.sleep.html">Sys.sleep</a></span>(<span class="dv">2</span>)
-<span class="kw"><a href="../reference/qqcat.html">qqcat</a></span>(<span class="st">"This is a message after 2 seconds"</span>)</code></pre></div>
-<pre><code>## [2019-09-29 20:50:49] This is a message after 2 seconds</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/qq.options.html">qq.options</a></span>(<span class="st">"cat_prefix"</span> =<span class="st"> ""</span>)
-<span class="kw"><a href="../reference/qqcat.html">qqcat</a></span>(<span class="st">"This is a message"</span>)</code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw"><a href="../reference/qq.options.html">qq.options</a></span>(<span class="st">"cat_prefix"</span> =<span class="st"> </span><span class="cf">function</span>() <span class="kw"><a href="https://rdrr.io/r/base/format.html">format</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.time</a></span>(), <span class="st">"[%Y-%m-%d %H:%M:%S] "</span>))</a>
+<a class="sourceLine" id="cb9-2" data-line-number="2"><span class="kw"><a href="../reference/qqcat.html">qqcat</a></span>(<span class="st">"This is a message"</span>)</a></code></pre></div>
+<pre><code>## [2020-01-03 09:50:31] This is a message</code></pre>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/Sys.sleep.html">Sys.sleep</a></span>(<span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb11-2" data-line-number="2"><span class="kw"><a href="../reference/qqcat.html">qqcat</a></span>(<span class="st">"This is a message after 2 seconds"</span>)</a></code></pre></div>
+<pre><code>## [2020-01-03 09:50:33] This is a message after 2 seconds</code></pre>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="kw"><a href="../reference/qq.options.html">qq.options</a></span>(<span class="st">"cat_prefix"</span> =<span class="st"> ""</span>)</a>
+<a class="sourceLine" id="cb13-2" data-line-number="2"><span class="kw"><a href="../reference/qqcat.html">qqcat</a></span>(<span class="st">"This is a message"</span>)</a></code></pre></div>
 <pre><code>## This is a message</code></pre>
 <p>You can shut down all messages produced by <code><a href="../reference/qqcat.html">qqcat()</a></code> by <code><a href="../reference/qq.options.html">qq.options("cat_verbose" = FALSE)</a></code>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/qq.options.html">qq.options</a></span>(<span class="st">"cat_prefix"</span> =<span class="st"> "[INFO] "</span>, <span class="st">"cat_verbose"</span> =<span class="st"> </span><span class="ot">FALSE</span>)
-<span class="kw"><a href="../reference/qqcat.html">qqcat</a></span>(<span class="st">"This is a message"</span>)</code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="kw"><a href="../reference/qq.options.html">qq.options</a></span>(<span class="st">"cat_prefix"</span> =<span class="st"> "[INFO] "</span>, <span class="st">"cat_verbose"</span> =<span class="st"> </span><span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb15-2" data-line-number="2"><span class="kw"><a href="../reference/qqcat.html">qqcat</a></span>(<span class="st">"This is a message"</span>)</a></code></pre></div>
 <p>Also you can set a prefix which has local effect.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/qq.options.html">qq.options</a></span>(<span class="dt">RESET =</span> <span class="ot">TRUE</span>)
-<span class="kw"><a href="../reference/qq.options.html">qq.options</a></span>(<span class="st">"cat_prefix"</span> =<span class="st"> "[DEBUG] "</span>)
-<span class="kw"><a href="../reference/qqcat.html">qqcat</a></span>(<span class="st">"This is a message"</span>, <span class="dt">cat_prefix =</span> <span class="st">"[INFO] "</span>)</code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="kw"><a href="../reference/qq.options.html">qq.options</a></span>(<span class="dt">RESET =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb16-2" data-line-number="2"><span class="kw"><a href="../reference/qq.options.html">qq.options</a></span>(<span class="st">"cat_prefix"</span> =<span class="st"> "[DEBUG] "</span>)</a>
+<a class="sourceLine" id="cb16-3" data-line-number="3"><span class="kw"><a href="../reference/qqcat.html">qqcat</a></span>(<span class="st">"This is a message"</span>, <span class="dt">cat_prefix =</span> <span class="st">"[INFO] "</span>)</a></code></pre></div>
 <pre><code>## [INFO] This is a message</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/qqcat.html">qqcat</a></span>(<span class="st">"This is a message"</span>)</code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1"><span class="kw"><a href="../reference/qqcat.html">qqcat</a></span>(<span class="st">"This is a message"</span>)</a></code></pre></div>
 <pre><code>## [DEBUG] This is a message</code></pre>
 <p>From version 1.1.2, <code><a href="../reference/qq.options.html">qq.options()</a></code> can work in a local mode in which the copy of the options only work in a local chunk.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/qq.options.html">qq.options</a></span>(<span class="st">"cat_prefix"</span> =<span class="st"> "[DEBUG] "</span>)
-<span class="kw"><a href="../reference/qq.options.html">qq.options</a></span>(<span class="dt">LOCAL =</span> <span class="ot">TRUE</span>)
-<span class="kw"><a href="../reference/qq.options.html">qq.options</a></span>(<span class="st">"cat_prefix"</span> =<span class="st"> "[INFO] "</span>)
-<span class="kw"><a href="../reference/qqcat.html">qqcat</a></span>(<span class="st">"This is the first message"</span>)</code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1"><span class="kw"><a href="../reference/qq.options.html">qq.options</a></span>(<span class="st">"cat_prefix"</span> =<span class="st"> "[DEBUG] "</span>)</a>
+<a class="sourceLine" id="cb20-2" data-line-number="2"><span class="kw"><a href="../reference/qq.options.html">qq.options</a></span>(<span class="dt">LOCAL =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb20-3" data-line-number="3"><span class="kw"><a href="../reference/qq.options.html">qq.options</a></span>(<span class="st">"cat_prefix"</span> =<span class="st"> "[INFO] "</span>)</a>
+<a class="sourceLine" id="cb20-4" data-line-number="4"><span class="kw"><a href="../reference/qqcat.html">qqcat</a></span>(<span class="st">"This is the first message"</span>)</a></code></pre></div>
 <pre><code>## [INFO] This is the first message</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/qqcat.html">qqcat</a></span>(<span class="st">"This is the second message"</span>)</code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1"><span class="kw"><a href="../reference/qqcat.html">qqcat</a></span>(<span class="st">"This is the second message"</span>)</a></code></pre></div>
 <pre><code>## [INFO] This is the second message</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/qq.options.html">qq.options</a></span>(<span class="dt">LOCAL =</span> <span class="ot">FALSE</span>)
-<span class="kw"><a href="../reference/qqcat.html">qqcat</a></span>(<span class="st">"This is the third message"</span>)</code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1"><span class="kw"><a href="../reference/qq.options.html">qq.options</a></span>(<span class="dt">LOCAL =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb24-2" data-line-number="2"><span class="kw"><a href="../reference/qqcat.html">qqcat</a></span>(<span class="st">"This is the third message"</span>)</a></code></pre></div>
 <pre><code>## [DEBUG] This is the third message</code></pre>
 <p>Reset the options so that it does not affect example code in following part of the vignette.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/qq.options.html">qq.options</a></span>(<span class="dt">RESET =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" data-line-number="1"><span class="kw"><a href="../reference/qq.options.html">qq.options</a></span>(<span class="dt">RESET =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
 <p>You can use <code>cat_verbose</code> together with <code><a href="../reference/GetoptLong.html">GetoptLong()</a></code> when you want to run the R script in command line. In following example code, if you do not specify <code>--verbose</code>, all messages will be shut down.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(GetoptLong)
-<span class="kw"><a href="../reference/GetoptLong.html">GetoptLong</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(
-    <span class="st">"verbose"</span>, <span class="st">"Print message"</span>
-))
-<span class="kw"><a href="../reference/qq.options.html">qq.options</a></span>(<span class="st">"cat_verbose"</span> =<span class="st"> </span>verbose)
-<span class="kw"><a href="../reference/qqcat.html">qqcat</a></span>(<span class="st">"This is a message"</span>)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/qq.options.html">qq.options</a></span>(<span class="dt">RESET =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(GetoptLong)</a>
+<a class="sourceLine" id="cb27-2" data-line-number="2"><span class="kw"><a href="../reference/GetoptLong.html">GetoptLong</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(</a>
+<a class="sourceLine" id="cb27-3" data-line-number="3">    <span class="st">"verbose"</span>, <span class="st">"Print message"</span></a>
+<a class="sourceLine" id="cb27-4" data-line-number="4">))</a>
+<a class="sourceLine" id="cb27-5" data-line-number="5"><span class="kw"><a href="../reference/qq.options.html">qq.options</a></span>(<span class="st">"cat_verbose"</span> =<span class="st"> </span>verbose)</a>
+<a class="sourceLine" id="cb27-6" data-line-number="6"><span class="kw"><a href="../reference/qqcat.html">qqcat</a></span>(<span class="st">"This is a message"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" data-line-number="1"><span class="kw"><a href="../reference/qq.options.html">qq.options</a></span>(<span class="dt">RESET =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
 <p>Not only simple scalars but also pieces of codes can be interpolated:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">n =<span class="st"> </span><span class="dv">1</span>
-<span class="kw"><a href="../reference/qqcat.html">qqcat</a></span>(<span class="st">"There @{ifelse(n == 1, 'is', 'are')} @{n} dog@{ifelse(n == 1, '', 's')}.</span><span class="ch">\n</span><span class="st">"</span>)</code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" data-line-number="1">n =<span class="st"> </span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb29-2" data-line-number="2"><span class="kw"><a href="../reference/qqcat.html">qqcat</a></span>(<span class="st">"There @{ifelse(n == 1, 'is', 'are')} @{n} dog@{ifelse(n == 1, '', 's')}.</span><span class="ch">\n</span><span class="st">"</span>)</a></code></pre></div>
 <pre><code>## There is 1 dog.</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">n =<span class="st"> </span><span class="dv">2</span>
-<span class="kw"><a href="../reference/qqcat.html">qqcat</a></span>(<span class="st">"There @{ifelse(n == 1, 'is', 'are')} @{n} dog@{ifelse(n == 1, '', 's')}.</span><span class="ch">\n</span><span class="st">"</span>)</code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" data-line-number="1">n =<span class="st"> </span><span class="dv">2</span></a>
+<a class="sourceLine" id="cb31-2" data-line-number="2"><span class="kw"><a href="../reference/qqcat.html">qqcat</a></span>(<span class="st">"There @{ifelse(n == 1, 'is', 'are')} @{n} dog@{ifelse(n == 1, '', 's')}.</span><span class="ch">\n</span><span class="st">"</span>)</a></code></pre></div>
 <pre><code>## There are 2 dogs.</code></pre>
 <p>If the text is too long, it can be wrapped into lines.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/qq.options.html">qq.options</a></span>(<span class="st">"cat_strwrap"</span> =<span class="st"> </span><span class="ot">TRUE</span>)
-<span class="kw"><a href="../reference/qqcat.html">qqcat</a></span>(<span class="st">"one, two, three, four, five, six, seven, eight, nine, ten, eleven, twelve, thirteen, fourteen, fifteen, sixteen, seventeen, eighteen, nineteen, twenty."</span>)</code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" data-line-number="1"><span class="kw"><a href="../reference/qq.options.html">qq.options</a></span>(<span class="st">"cat_strwrap"</span> =<span class="st"> </span><span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb33-2" data-line-number="2"><span class="kw"><a href="../reference/qqcat.html">qqcat</a></span>(<span class="st">"one, two, three, four, five, six, seven, eight, nine, ten, eleven, twelve, thirteen, fourteen, fifteen, sixteen, seventeen, eighteen, nineteen, twenty."</span>)</a></code></pre></div>
 <pre><code>## one, two, three, four, five, six, seven, eight, nine, ten, eleven, twelve, thirteen,
 ## fourteen, fifteen, sixteen, seventeen, eighteen, nineteen, twenty.</code></pre>
+<p>There can be multiple templates:</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" data-line-number="1">a =<span class="st"> </span><span class="dv">1</span>; b =<span class="st"> </span><span class="dv">2</span>; c =<span class="st"> </span><span class="dv">3</span></a>
+<a class="sourceLine" id="cb35-2" data-line-number="2">txt =<span class="st"> </span><span class="kw"><a href="../reference/qq.html">qq</a></span>(<span class="st">"command -a @{a}"</span>,</a>
+<a class="sourceLine" id="cb35-3" data-line-number="3">         <span class="st">"        -b @{b}"</span>,</a>
+<a class="sourceLine" id="cb35-4" data-line-number="4">         <span class="st">"        -c @{c}</span><span class="ch">\n</span><span class="st">"</span>, <span class="dt">sep =</span> <span class="st">" </span><span class="ch">\\\n</span><span class="st">"</span>)</a>
+<a class="sourceLine" id="cb35-5" data-line-number="5"><span class="kw"><a href="https://rdrr.io/r/base/cat.html">cat</a></span>(txt)</a></code></pre></div>
+<pre><code>## command -a 1 \
+##         -b 2 \
+##         -c 3</code></pre>
 <p><strong>NOTE:</strong> Since <code>qq</code> as the function name is very easy to be used by other packages (E.g., in <strong>lattice</strong>, there is also a <code><a href="../reference/qq.html">qq()</a></code> function as well) and if so, you can enforce <code><a href="../reference/qq.html">qq()</a></code> in your working environment as the function in <strong>GetoptLong</strong> by:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">qq =<span class="st"> </span>GetoptLong<span class="op">::</span>qq</code></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" data-line-number="1">qq =<span class="st"> </span>GetoptLong<span class="op">::</span>qq</a></code></pre></div>
 <div id="code-patterns" class="section level2">
 <h2 class="hasAnchor">
 <a href="#code-patterns" class="anchor"></a>Code patterns</h2>
 <p>In above exmaple, <code>@{}</code> is used to mark variables. Later, variable names will be extracted from these marks and replaced with their real values.</p>
 <p>The marking code pattern can be any type. But you should make sure it is easy to tell the difference from other part in the string. You can set your code pattern as an argument in <code><a href="../reference/qq.html">qq()</a></code>. The default pattern is <code>@\\{CODE\\}</code> because we only permit <code>CODE</code> to return simple vectors and <code>@</code> is a sigil representing array in <strong>Perl</strong>.</p>
 <p>In following example, the code pattern is <code>#{}</code>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x =<span class="st"> </span><span class="dv">1</span>
-<span class="kw"><a href="../reference/qqcat.html">qqcat</a></span>(<span class="st">"x = #{x}"</span>, <span class="dt">code.pattern =</span> <span class="st">"#</span><span class="ch">\\</span><span class="st">{CODE</span><span class="ch">\\</span><span class="st">}"</span>)</code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb38-1" data-line-number="1">x =<span class="st"> </span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb38-2" data-line-number="2"><span class="kw"><a href="../reference/qqcat.html">qqcat</a></span>(<span class="st">"x = #{x}"</span>, <span class="dt">code.pattern =</span> <span class="st">"#</span><span class="ch">\\</span><span class="st">{CODE</span><span class="ch">\\</span><span class="st">}"</span>)</a></code></pre></div>
 <pre><code>## x = 1</code></pre>
 <p>Or set in <code><a href="../reference/qq.options.html">qq.options()</a></code> as a global setting:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/qq.options.html">qq.options</a></span>(<span class="st">"code.pattern"</span> =<span class="st"> "#</span><span class="ch">\\</span><span class="st">{CODE</span><span class="ch">\\</span><span class="st">}"</span>)</code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb40-1" data-line-number="1"><span class="kw"><a href="../reference/qq.options.html">qq.options</a></span>(<span class="st">"code.pattern"</span> =<span class="st"> "#</span><span class="ch">\\</span><span class="st">{CODE</span><span class="ch">\\</span><span class="st">}"</span>)</a></code></pre></div>
 <p>As you can guess, in <code>@\\{CODE\\}</code>, <code>CODE</code> will be replaced with <code>.*?</code> to construct a regular expression and to match variable names in the string. So if your <code>code.pattern</code> contains special characters, make sure to escape them. Some candidate <code>code.pattern</code> are:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">code.pattern =<span class="st"> "@</span><span class="ch">\\</span><span class="st">{CODE</span><span class="ch">\\</span><span class="st">}"</span>    <span class="co"># default style</span>
-code.pattern =<span class="st"> "@</span><span class="ch">\\</span><span class="st">[CODE</span><span class="ch">\\</span><span class="st">]"</span>
-code.pattern =<span class="st"> "@</span><span class="ch">\\</span><span class="st">(CODE</span><span class="ch">\\</span><span class="st">)"</span>
-code.pattern =<span class="st"> "%</span><span class="ch">\\</span><span class="st">{CODE</span><span class="ch">\\</span><span class="st">}"</span>
-code.pattern =<span class="st"> "%</span><span class="ch">\\</span><span class="st">[CODE</span><span class="ch">\\</span><span class="st">]"</span>
-code.pattern =<span class="st"> "%</span><span class="ch">\\</span><span class="st">(CODE</span><span class="ch">\\</span><span class="st">)"</span>
-code.pattern =<span class="st"> "</span><span class="ch">\\</span><span class="st">$</span><span class="ch">\\</span><span class="st">{CODE</span><span class="ch">\\</span><span class="st">}"</span>
-code.pattern =<span class="st"> "</span><span class="ch">\\</span><span class="st">$</span><span class="ch">\\</span><span class="st">[CODE</span><span class="ch">\\</span><span class="st">]"</span>
-code.pattern =<span class="st"> "</span><span class="ch">\\</span><span class="st">$</span><span class="ch">\\</span><span class="st">(CODE</span><span class="ch">\\</span><span class="st">)"</span>
-code.pattern =<span class="st"> "#</span><span class="ch">\\</span><span class="st">{CODE</span><span class="ch">\\</span><span class="st">}"</span>
-code.pattern =<span class="st"> "#</span><span class="ch">\\</span><span class="st">[CODE</span><span class="ch">\\</span><span class="st">]"</span>
-code.pattern =<span class="st"> "#</span><span class="ch">\\</span><span class="st">(CODE</span><span class="ch">\\</span><span class="st">)"</span>
-code.pattern =<span class="st"> "</span><span class="ch">\\</span><span class="st">[%CODE%</span><span class="ch">\\</span><span class="st">]"</span>  <span class="co"># Template Toolkit (Perl module) style :)</span></code></pre></div>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" data-line-number="1">code.pattern =<span class="st"> "@</span><span class="ch">\\</span><span class="st">{CODE</span><span class="ch">\\</span><span class="st">}"</span>    <span class="co"># default style</span></a>
+<a class="sourceLine" id="cb41-2" data-line-number="2">code.pattern =<span class="st"> "@</span><span class="ch">\\</span><span class="st">[CODE</span><span class="ch">\\</span><span class="st">]"</span></a>
+<a class="sourceLine" id="cb41-3" data-line-number="3">code.pattern =<span class="st"> "@</span><span class="ch">\\</span><span class="st">(CODE</span><span class="ch">\\</span><span class="st">)"</span></a>
+<a class="sourceLine" id="cb41-4" data-line-number="4">code.pattern =<span class="st"> "%</span><span class="ch">\\</span><span class="st">{CODE</span><span class="ch">\\</span><span class="st">}"</span></a>
+<a class="sourceLine" id="cb41-5" data-line-number="5">code.pattern =<span class="st"> "%</span><span class="ch">\\</span><span class="st">[CODE</span><span class="ch">\\</span><span class="st">]"</span></a>
+<a class="sourceLine" id="cb41-6" data-line-number="6">code.pattern =<span class="st"> "%</span><span class="ch">\\</span><span class="st">(CODE</span><span class="ch">\\</span><span class="st">)"</span></a>
+<a class="sourceLine" id="cb41-7" data-line-number="7">code.pattern =<span class="st"> "</span><span class="ch">\\</span><span class="st">$</span><span class="ch">\\</span><span class="st">{CODE</span><span class="ch">\\</span><span class="st">}"</span></a>
+<a class="sourceLine" id="cb41-8" data-line-number="8">code.pattern =<span class="st"> "</span><span class="ch">\\</span><span class="st">$</span><span class="ch">\\</span><span class="st">[CODE</span><span class="ch">\\</span><span class="st">]"</span></a>
+<a class="sourceLine" id="cb41-9" data-line-number="9">code.pattern =<span class="st"> "</span><span class="ch">\\</span><span class="st">$</span><span class="ch">\\</span><span class="st">(CODE</span><span class="ch">\\</span><span class="st">)"</span></a>
+<a class="sourceLine" id="cb41-10" data-line-number="10">code.pattern =<span class="st"> "#</span><span class="ch">\\</span><span class="st">{CODE</span><span class="ch">\\</span><span class="st">}"</span></a>
+<a class="sourceLine" id="cb41-11" data-line-number="11">code.pattern =<span class="st"> "#</span><span class="ch">\\</span><span class="st">[CODE</span><span class="ch">\\</span><span class="st">]"</span></a>
+<a class="sourceLine" id="cb41-12" data-line-number="12">code.pattern =<span class="st"> "#</span><span class="ch">\\</span><span class="st">(CODE</span><span class="ch">\\</span><span class="st">)"</span></a>
+<a class="sourceLine" id="cb41-13" data-line-number="13">code.pattern =<span class="st"> "</span><span class="ch">\\</span><span class="st">[%CODE%</span><span class="ch">\\</span><span class="st">]"</span>  <span class="co"># Template Toolkit (Perl module) style :)</span></a></code></pre></div>
 <p>Since we just replace <code>CODE</code> to <code>.*?</code>, the function will only match to the first right parentheses/brackets. (In <strong>Perl</strong>, I always use recursive regular expression to extract such pairing parentheses. But in <strong>R</strong>, it seems difficult.) So, for example, if you are using <code>@\\[CODE\\]</code> and your string is <code>"@[a[1]]"</code>, it will fail to extract the correct variable name while only extracts <code>a[1</code>, finally it generates an error when executing <code>a[1</code>. In such condition, you should use other pattern styles that do not contain <code>[]</code>.</p>
 <p>Finally, I suggest a more safe code pattern style that you do not need to worry about parentheses stuff:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">code.pattern =<span class="st"> "`CODE`"</span></code></pre></div>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb42-1" data-line-number="1">code.pattern =<span class="st"> "`CODE`"</span></a></code></pre></div>
 </div>
 <div id="where-to-look-for-variables" class="section level2">
 <h2 class="hasAnchor">
 <a href="#where-to-look-for-variables" class="anchor"></a>Where to look for variables</h2>
 <p>It will first look up in the envoking environment, then through searching path. Users can also pass values of variables as a list like:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x =<span class="st"> </span><span class="dv">1</span>
-y =<span class="st"> </span><span class="dv">2</span>
-<span class="kw"><a href="../reference/qqcat.html">qqcat</a></span>(<span class="st">"x = @{x}, y = @{y}"</span>, <span class="dt">envir =</span> <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="dt">x =</span> <span class="st">"a"</span>, <span class="dt">y =</span> <span class="st">"b"</span>))</code></pre></div>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb43-1" data-line-number="1">x =<span class="st"> </span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb43-2" data-line-number="2">y =<span class="st"> </span><span class="dv">2</span></a>
+<a class="sourceLine" id="cb43-3" data-line-number="3"><span class="kw"><a href="../reference/qqcat.html">qqcat</a></span>(<span class="st">"x = @{x}, y = @{y}"</span>, <span class="dt">envir =</span> <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="dt">x =</span> <span class="st">"a"</span>, <span class="dt">y =</span> <span class="st">"b"</span>))</a></code></pre></div>
 <pre><code>## x = a, y = b</code></pre>
 <p>If variables are passed through list, <code><a href="../reference/qq.html">qq()</a></code> only looks up in the specified list.</p>
 </div>
@@ -221,25 +230,25 @@ y =<span class="st"> </span><span class="dv">2</span>
 <h2 class="hasAnchor">
 <a href="#variables-should-only-return-vectors" class="anchor"></a>Variables should only return vectors</h2>
 <p><code><a href="../reference/qq.html">qq()</a></code> only allows variables to return vectors. The whole string will be interpolated repeatedly according to longest vectors, and finally concatenated into a single long string.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x =<span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="dv">6</span>
-<span class="kw"><a href="../reference/qqcat.html">qqcat</a></span>(<span class="st">"@{x} is an @{ifelse(x %% 2, 'odd', 'even')} number.</span><span class="ch">\n</span><span class="st">"</span>)</code></pre></div>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb45-1" data-line-number="1">x =<span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="dv">6</span></a>
+<a class="sourceLine" id="cb45-2" data-line-number="2"><span class="kw"><a href="../reference/qqcat.html">qqcat</a></span>(<span class="st">"@{x} is an @{ifelse(x %% 2, 'odd', 'even')} number.</span><span class="ch">\n</span><span class="st">"</span>)</a></code></pre></div>
 <pre><code>## 1 is an odd number. 2 is an even number. 3 is an odd number. 4 is an even number. 5 is an
 ## odd number. 6 is an even number.</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">y =<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"a"</span>, <span class="st">"b"</span>)
-z =<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>, <span class="st">"D"</span>, <span class="st">"E"</span>)
-<span class="kw"><a href="../reference/qqcat.html">qqcat</a></span>(<span class="st">"@{x}, @{y}, @{z}</span><span class="ch">\n</span><span class="st">"</span>)</code></pre></div>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb47-1" data-line-number="1">y =<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"a"</span>, <span class="st">"b"</span>)</a>
+<a class="sourceLine" id="cb47-2" data-line-number="2">z =<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>, <span class="st">"D"</span>, <span class="st">"E"</span>)</a>
+<a class="sourceLine" id="cb47-3" data-line-number="3"><span class="kw"><a href="../reference/qqcat.html">qqcat</a></span>(<span class="st">"@{x}, @{y}, @{z}</span><span class="ch">\n</span><span class="st">"</span>)</a></code></pre></div>
 <pre><code>## 1, a, A 2, b, B 3, a, C 4, b, D 5, a, E 6, b, A</code></pre>
 <p>This feature is especially useful if you want to generate a report such as formatted in a HTML table:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">name =<span class="st"> </span>letters[<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>]
-value =<span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="dv">4</span>
-<span class="kw"><a href="../reference/qqcat.html">qqcat</a></span>(<span class="st">"&lt;tr&gt;&lt;td&gt;@{name}&lt;/td&gt;&lt;td&gt;@{value}&lt;/td&gt;&lt;tr&gt;</span><span class="ch">\n</span><span class="st">"</span>)</code></pre></div>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb49-1" data-line-number="1">name =<span class="st"> </span>letters[<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>]</a>
+<a class="sourceLine" id="cb49-2" data-line-number="2">value =<span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="dv">4</span></a>
+<a class="sourceLine" id="cb49-3" data-line-number="3"><span class="kw"><a href="../reference/qqcat.html">qqcat</a></span>(<span class="st">"&lt;tr&gt;&lt;td&gt;@{name}&lt;/td&gt;&lt;td&gt;@{value}&lt;/td&gt;&lt;tr&gt;</span><span class="ch">\n</span><span class="st">"</span>)</a></code></pre></div>
 <pre><code>## &lt;tr&gt;&lt;td&gt;a&lt;/td&gt;&lt;td&gt;1&lt;/td&gt;&lt;tr&gt; &lt;tr&gt;&lt;td&gt;b&lt;/td&gt;&lt;td&gt;2&lt;/td&gt;&lt;tr&gt; &lt;tr&gt;&lt;td&gt;c&lt;/td&gt;&lt;td&gt;3&lt;/td&gt;&lt;tr&gt;
 ## &lt;tr&gt;&lt;td&gt;d&lt;/td&gt;&lt;td&gt;4&lt;/td&gt;&lt;tr&gt;</code></pre>
 <p>The returned value can also be a vector while not collapsed into one string:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">str =<span class="st"> </span><span class="kw"><a href="../reference/qq.html">qq</a></span>(<span class="st">"@{x}, @{y}, @{z}"</span>, <span class="dt">collapse =</span> <span class="ot">FALSE</span>)
-<span class="kw"><a href="https://rdrr.io/r/base/length.html">length</a></span>(str)</code></pre></div>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb51-1" data-line-number="1">str =<span class="st"> </span><span class="kw"><a href="../reference/qq.html">qq</a></span>(<span class="st">"@{x}, @{y}, @{z}"</span>, <span class="dt">collapse =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb51-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/base/length.html">length</a></span>(str)</a></code></pre></div>
 <pre><code>## [1] 6</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">str</code></pre></div>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb53-1" data-line-number="1">str</a></code></pre></div>
 <pre><code>## [1] "1, a, A" "2, b, B" "3, a, C" "4, b, D" "5, a, E" "6, b, A"</code></pre>
 </div>
 <div id="you-can-also-interpolate-more-complicated-codes" class="section level2">
@@ -247,21 +256,21 @@ value =<span class="st"> </span><span class="dv">1</span><span class="op">:</spa
 <a href="#you-can-also-interpolate-more-complicated-codes" class="anchor"></a>You can also interpolate more complicated codes</h2>
 <p>Besides simple variables, you can also put chunk of codes in the string. Since <code><a href="../reference/qq.html">qq()</a></code> takes value of the last variable in the chunk as final returning value, you need to explicitly specify the return value in the chunk.</p>
 <p>Following example is another way to contruct a HTML table in which the first row is assigned with class name.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">name =<span class="st"> </span>letters[<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>]
-value =<span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="dv">4</span>
-str =<span class="st"> </span><span class="kw"><a href="../reference/qq.html">qq</a></span>(<span class="st">"</span>
-<span class="st">`</span>
-<span class="st">text = character(length(name))</span>
-<span class="st">for(i in seq_along(name)) {</span>
-<span class="st">    if(i == 1) {</span>
-<span class="st">        text[i] = qq(</span><span class="ch">\"</span><span class="st">&lt;tr class='highlight'&gt;&lt;td&gt;@{name[i]}&lt;/td&gt;&lt;td&gt;@{value[i]}&lt;/td&gt;&lt;/tr&gt;</span><span class="ch">\n\"</span><span class="st">)</span>
-<span class="st">    } else {</span>
-<span class="st">        text[i] = qq(</span><span class="ch">\"</span><span class="st">&lt;tr&gt;&lt;td&gt;@{name[i]}&lt;/td&gt;&lt;td&gt;@{value[i]}&lt;/td&gt;&lt;/tr&gt;</span><span class="ch">\n\"</span><span class="st">)</span>
-<span class="st">    }</span>
-<span class="st">}</span>
-<span class="st">text</span>
-<span class="st">`"</span>, <span class="dt">code.pattern =</span> <span class="st">"`CODE`"</span>)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://rdrr.io/r/base/cat.html">cat</a></span>(str)</code></pre></div>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb55-1" data-line-number="1">name =<span class="st"> </span>letters[<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>]</a>
+<a class="sourceLine" id="cb55-2" data-line-number="2">value =<span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="dv">4</span></a>
+<a class="sourceLine" id="cb55-3" data-line-number="3">str =<span class="st"> </span><span class="kw"><a href="../reference/qq.html">qq</a></span>(<span class="st">"</span></a>
+<a class="sourceLine" id="cb55-4" data-line-number="4"><span class="st">`</span></a>
+<a class="sourceLine" id="cb55-5" data-line-number="5"><span class="st">text = character(length(name))</span></a>
+<a class="sourceLine" id="cb55-6" data-line-number="6"><span class="st">for(i in seq_along(name)) {</span></a>
+<a class="sourceLine" id="cb55-7" data-line-number="7"><span class="st">    if(i == 1) {</span></a>
+<a class="sourceLine" id="cb55-8" data-line-number="8"><span class="st">        text[i] = qq(</span><span class="ch">\"</span><span class="st">&lt;tr class='highlight'&gt;&lt;td&gt;@{name[i]}&lt;/td&gt;&lt;td&gt;@{value[i]}&lt;/td&gt;&lt;/tr&gt;</span><span class="ch">\n\"</span><span class="st">)</span></a>
+<a class="sourceLine" id="cb55-9" data-line-number="9"><span class="st">    } else {</span></a>
+<a class="sourceLine" id="cb55-10" data-line-number="10"><span class="st">        text[i] = qq(</span><span class="ch">\"</span><span class="st">&lt;tr&gt;&lt;td&gt;@{name[i]}&lt;/td&gt;&lt;td&gt;@{value[i]}&lt;/td&gt;&lt;/tr&gt;</span><span class="ch">\n\"</span><span class="st">)</span></a>
+<a class="sourceLine" id="cb55-11" data-line-number="11"><span class="st">    }</span></a>
+<a class="sourceLine" id="cb55-12" data-line-number="12"><span class="st">}</span></a>
+<a class="sourceLine" id="cb55-13" data-line-number="13"><span class="st">text</span></a>
+<a class="sourceLine" id="cb55-14" data-line-number="14"><span class="st">`"</span>, <span class="dt">code.pattern =</span> <span class="st">"`CODE`"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb56-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/cat.html">cat</a></span>(str)</a></code></pre></div>
 <pre><code>## 
 ## &lt;tr class='highlight'&gt;&lt;td&gt;a&lt;/td&gt;&lt;td&gt;1&lt;/td&gt;&lt;/tr&gt;
 ## 
@@ -290,13 +299,13 @@ qq("&lt;tr@{ifelse(i == 1, ' class=\"highlight\"', '')}&gt;&lt;td&gt;@{name}&lt;
 &lt;/body&gt;
 &lt;/html&gt;</code></pre>
 <p>Read <code>template.html</code> and do the interpolation:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">template =<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/readLines.html">readLines</a></span>(<span class="st">"template.html"</span>), <span class="dt">collapse =</span> <span class="st">"</span><span class="ch">\n</span><span class="st">"</span>)
-
-report_name =<span class="st"> "test"</span>
-name =<span class="st"> </span>letters[<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>]
-value =<span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="dv">4</span>
-html =<span class="st"> </span><span class="kw"><a href="../reference/qq.html">qq</a></span>(template, <span class="dt">code.pattern =</span> <span class="st">"</span><span class="ch">\\</span><span class="st">[%CODE%</span><span class="ch">\\</span><span class="st">]"</span>)
-<span class="kw"><a href="https://rdrr.io/r/base/writeLines.html">writeLines</a></span>(html, <span class="dt">con =</span> <span class="st">"report.html"</span>)</code></pre></div>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb59-1" data-line-number="1">template =<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/readLines.html">readLines</a></span>(<span class="st">"template.html"</span>), <span class="dt">collapse =</span> <span class="st">"</span><span class="ch">\n</span><span class="st">"</span>)</a>
+<a class="sourceLine" id="cb59-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb59-3" data-line-number="3">report_name =<span class="st"> "test"</span></a>
+<a class="sourceLine" id="cb59-4" data-line-number="4">name =<span class="st"> </span>letters[<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>]</a>
+<a class="sourceLine" id="cb59-5" data-line-number="5">value =<span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="dv">4</span></a>
+<a class="sourceLine" id="cb59-6" data-line-number="6">html =<span class="st"> </span><span class="kw"><a href="../reference/qq.html">qq</a></span>(template, <span class="dt">code.pattern =</span> <span class="st">"</span><span class="ch">\\</span><span class="st">[%CODE%</span><span class="ch">\\</span><span class="st">]"</span>)</a>
+<a class="sourceLine" id="cb59-7" data-line-number="7"><span class="kw"><a href="https://rdrr.io/r/base/writeLines.html">writeLines</a></span>(html, <span class="dt">con =</span> <span class="st">"report.html"</span>)</a></code></pre></div>
 <p>You will get a report like:</p>
 <pre><code>&lt;html&gt; &lt;body&gt; &lt;h2&gt;Report for test&lt;/h2&gt; &lt;table&gt; &lt;tr&gt;&lt;th&gt;name&lt;/th&gt;&lt;th&gt;value&lt;/th&gt;&lt;/tr&gt; &lt;tr
 class="highlight"&gt;&lt;td&gt;a&lt;/td&gt;&lt;td&gt;1&lt;/td&gt;&lt;/tr&gt; &lt;tr&gt;&lt;td&gt;b&lt;/td&gt;&lt;td&gt;2&lt;/td&gt;&lt;/tr&gt;
@@ -307,31 +316,34 @@ class="highlight"&gt;&lt;td&gt;a&lt;/td&gt;&lt;td&gt;1&lt;/td&gt;&lt;/tr&gt; &lt
 <div id="session-info" class="section level2">
 <h2 class="hasAnchor">
 <a href="#session-info" class="anchor"></a>Session info</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span>()</code></pre></div>
-<pre><code>## R version 3.6.1 (2019-07-05)
-## Platform: x86_64-apple-darwin15.6.0 (64-bit)
-## Running under: macOS Mojave 10.14.2
+<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb61-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span>()</a></code></pre></div>
+<pre><code>## R version 3.6.0 (2019-04-26)
+## Platform: x86_64-pc-linux-gnu (64-bit)
+## Running under: CentOS Linux 7 (Core)
 ## 
 ## Matrix products: default
-## BLAS:   /Library/Frameworks/R.framework/Versions/3.6/Resources/lib/libRblas.0.dylib
-## LAPACK: /Library/Frameworks/R.framework/Versions/3.6/Resources/lib/libRlapack.dylib
+## BLAS:   /usr/lib64/libblas.so.3.4.2
+## LAPACK: /usr/lib64/liblapack.so.3.4.2
 ## 
 ## locale:
-## [1] en_GB.UTF-8/en_GB.UTF-8/en_GB.UTF-8/C/en_GB.UTF-8/en_GB.UTF-8
+##  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C               LC_TIME=en_US.UTF-8       
+##  [4] LC_COLLATE=en_US.UTF-8     LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+##  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                  LC_ADDRESS=C              
+## [10] LC_TELEPHONE=C             LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
 ## 
 ## attached base packages:
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-## [1] GetoptLong_0.1.7 knitr_1.25       markdown_1.1    
+## [1] GetoptLong_0.1.8 knitr_1.26       markdown_1.1    
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] Rcpp_1.0.2          rprojroot_1.3-2     crayon_1.3.4        digest_0.6.21      
-##  [5] assertthat_0.2.1    MASS_7.3-51.4       R6_2.4.0            backports_1.1.4    
-##  [9] magrittr_1.5        evaluate_0.14       GlobalOptions_0.1.0 stringi_1.4.3      
-## [13] rlang_0.4.0         fs_1.3.1            rmarkdown_1.15      pkgdown_1.4.1      
-## [17] desc_1.2.0          rjson_0.2.20        tools_3.6.1         stringr_1.4.0      
-## [21] xfun_0.9            compiler_3.6.1      memoise_1.1.0       htmltools_0.3.6</code></pre>
+##  [1] Rcpp_1.0.3          rprojroot_1.3-2     crayon_1.3.4        digest_0.6.23      
+##  [5] assertthat_0.2.1    MASS_7.3-51.4       R6_2.4.1            backports_1.1.5    
+##  [9] magrittr_1.5        evaluate_0.14       GlobalOptions_0.1.1 stringi_1.4.3      
+## [13] rlang_0.4.2         fs_1.3.1            rmarkdown_1.18      pkgdown_1.4.1      
+## [17] desc_1.2.0          rjson_0.2.20        tools_3.6.0         stringr_1.4.0      
+## [21] xfun_0.11           compiler_3.6.0      memoise_1.1.0       htmltools_0.4.0</code></pre>
 </div>
 </div>
   </div>

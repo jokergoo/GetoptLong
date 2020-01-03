@@ -69,7 +69,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">GetoptLong</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.8</span>
       </span>
     </div>
 
@@ -129,15 +129,15 @@
     <p>Print a string which has been intepolated with variables</p>
     </div>
 
-    <pre class="usage"><span class='fu'>qqcat</span>(<span class='no'>text</span>, <span class='kw'>envir</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sys.parent.html'>parent.frame</a></span>(), <span class='kw'>code.pattern</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>file</span> <span class='kw'>=</span> <span class='st'>""</span>,
+    <pre class="usage"><span class='fu'>qqcat</span>(<span class='no'>...</span>, <span class='kw'>envir</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sys.parent.html'>parent.frame</a></span>(), <span class='kw'>code.pattern</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>file</span> <span class='kw'>=</span> <span class='st'>""</span>,
     <span class='kw'>sep</span> <span class='kw'>=</span> <span class='st'>" "</span>, <span class='kw'>fill</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>labels</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>append</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>cat_prefix</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-    <span class='kw'>strwrap</span> <span class='kw'>=</span> <span class='fu'><a href='qq.options.html'>qq.options</a></span>(<span class='st'>"cat_strwrap"</span>), <span class='kw'>strwrap_param</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())</pre>
+    <span class='kw'>strwrap</span> <span class='kw'>=</span> <span class='fu'><a href='qq.options.html'>qq.options</a></span>(<span class='st'>"cat_strwrap"</span>), <span class='kw'>strwrap_param</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(), <span class='kw'>sep2</span> <span class='kw'>=</span> <span class='st'>""</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>text</th>
+      <th>...</th>
       <td><p>text string in which variables are marked with certain rules</p></td>
     </tr>
     <tr>
@@ -180,6 +180,10 @@
       <th>strwrap_param</th>
       <td><p>parameters sent to <code><a href='https://rdrr.io/r/base/strwrap.html'>strwrap</a></code>, must be a list</p></td>
     </tr>
+    <tr>
+      <th>sep2</th>
+      <td><p>Separation character when there are multiple templates.</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
@@ -205,8 +209,8 @@
 <span class='no'>b</span> <span class='kw'>=</span> <span class='st'>"text"</span>
 <span class='fu'>qqcat</span>(<span class='st'>"a = @{a}, b = '@{b}'\n"</span>)</div><div class='output co'>#&gt; a = 1, b = 'text'</div><div class='input'><span class='fu'>qqcat</span>(<span class='st'>"a = `a`, b = '`b`'\n"</span>, <span class='kw'>code.pattern</span> <span class='kw'>=</span> <span class='st'>"`CODE`"</span>)</div><div class='output co'>#&gt; a = 1, b = 'text'</div><div class='input'>
 <span class='fu'><a href='qq.options.html'>qq.options</a></span>(<span class='st'>"cat_prefix"</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'><a href='https://rdrr.io/r/base/format.html'>format</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/Sys.time.html'>Sys.time</a></span>(), <span class='st'>"[%Y-%m-%d %H:%M:%S] "</span>))
-<span class='fu'>qqcat</span>(<span class='st'>"a = @{a}, b = '@{b}'\n"</span>)</div><div class='output co'>#&gt; [2019-09-29 20:50:41] a = 1, b = 'text'</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/Sys.sleep.html'>Sys.sleep</a></span>(<span class='fl'>2</span>)
-<span class='fu'>qqcat</span>(<span class='st'>"a = @{a}, b = '@{b}'\n"</span>)</div><div class='output co'>#&gt; [2019-09-29 20:50:43] a = 1, b = 'text'</div><div class='input'><span class='fu'><a href='qq.options.html'>qq.options</a></span>(<span class='kw'>RESET</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div></pre>
+<span class='fu'>qqcat</span>(<span class='st'>"a = @{a}, b = '@{b}'\n"</span>)</div><div class='output co'>#&gt; [2020-01-03 09:50:21] a = 1, b = 'text'</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/Sys.sleep.html'>Sys.sleep</a></span>(<span class='fl'>2</span>)
+<span class='fu'>qqcat</span>(<span class='st'>"a = @{a}, b = '@{b}'\n"</span>)</div><div class='output co'>#&gt; [2020-01-03 09:50:23] a = 1, b = 'text'</div><div class='input'><span class='fu'><a href='qq.options.html'>qq.options</a></span>(<span class='kw'>RESET</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

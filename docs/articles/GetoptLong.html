@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">GetoptLong</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.8</span>
       </span>
     </div>
 
@@ -100,7 +100,7 @@
 <h1 class="hasAnchor">
 <a href="#parsing-command-line-arguments-by-getoptlong" class="anchor"></a>Parsing command-line arguments by Getopt::Long</h1>
 <p><strong>Author</strong>: Zuguang Gu ( <a href="mailto:z.gu@dkfz.de">z.gu@dkfz.de</a> )</p>
-<p><strong>Date</strong>: 2019-09-29</p>
+<p><strong>Date</strong>: 2020-01-03</p>
 <hr>
 <p>There are already several R packages which parse command-line arguments such as <strong>getopt</strong> or <strong>Python</strong>-style <strong>optparse</strong>. Here <strong>GetoptLong</strong> is another command-line argument parser which wraps the powerful <strong>Perl</strong> module <a href="http://search.cpan.org/perldoc?Getopt%3A%3ALong"><code>Getopt::Long</code></a>, also provides some adaptation for easier use in R.</p>
 <p>Using <strong>GetoptLong</strong> is simple especially for <strong>Perl</strong> users because the specification is almost the same as in <strong>Perl</strong>. The original website of <a href="http://search.cpan.org/perldoc?Getopt%3A%3ALong"><code>Getopt::Long</code></a> is always your best reference.</p>
@@ -114,14 +114,14 @@
 <div id="a-quick-example" class="section level2">
 <h2 class="hasAnchor">
 <a href="#a-quick-example" class="anchor"></a>A quick example</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(GetoptLong)
-
-cutoff =<span class="st"> </span><span class="fl">0.05</span>
-<span class="kw"><a href="../reference/GetoptLong.html">GetoptLong</a></span>(
-    <span class="st">"number=i"</span>, <span class="st">"Number of items, integer, mandatory option"</span>,
-    <span class="st">"cutoff=f"</span>, <span class="st">"cutoff to filter results, optional, default (0.05)"</span>,
-    <span class="st">"verbose"</span>,  <span class="st">"print messages"</span>
-)</code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(GetoptLong)</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb1-3" data-line-number="3">cutoff =<span class="st"> </span><span class="fl">0.05</span></a>
+<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="kw"><a href="../reference/GetoptLong.html">GetoptLong</a></span>(</a>
+<a class="sourceLine" id="cb1-5" data-line-number="5">    <span class="st">"number=i"</span>, <span class="st">"Number of items, integer, mandatory option"</span>,</a>
+<a class="sourceLine" id="cb1-6" data-line-number="6">    <span class="st">"cutoff=f"</span>, <span class="st">"cutoff to filter results, optional, default (0.05)"</span>,</a>
+<a class="sourceLine" id="cb1-7" data-line-number="7">    <span class="st">"verbose"</span>,  <span class="st">"print messages"</span></a>
+<a class="sourceLine" id="cb1-8" data-line-number="8">)</a></code></pre></div>
 <p>The number of arguments in <code><a href="../reference/GetoptLong.html">GetoptLong()</a></code> should be even number and the specification and description should always be paried.</p>
 <p>Save the code as <code>test.R</code> and we can execute the R script as:</p>
 <pre><code>~\&gt; Rscript test.R --number 4 --cutoff 0.01 --verbose
@@ -361,12 +361,12 @@ Error: Value ``–tag’’ invalid for option tag
 <a href="#help-and-version-options" class="anchor"></a>Help and version options</h2>
 <p><code>help</code> and <code>version</code> are two universal options. By default, these two options will be inferred from user’s source code.</p>
 <p>By default, <code><a href="../reference/GetoptLong.html">GetoptLong()</a></code> only provides descriptions of all specified options. Users can set the option by <code>head</code> and <code>foot</code> arguments to add informaiton for a complete help message. And version is from <code>VERSION</code> variable defined in user’s environment (Of course, <code>VERSION</code> should be defined before <code><a href="../reference/GetoptLong.html">GetoptLong()</a></code>).</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">VERSION =<span class="st"> "0.0.1"</span>
-<span class="kw"><a href="../reference/GetoptLong.html">GetoptLong</a></span>(
-    <span class="st">"tag=i"</span>, <span class="st">"this is a description of tag which is long long and very long and extremly long..."</span>, 
-    <span class="dt">head =</span> <span class="st">'An example to show how to use the packages'</span>,
-    <span class="dt">foot =</span> <span class="st">'Please contact author@gmail.com for comments'</span>
-)</code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">VERSION =<span class="st"> "0.0.1"</span></a>
+<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="kw"><a href="../reference/GetoptLong.html">GetoptLong</a></span>(</a>
+<a class="sourceLine" id="cb5-3" data-line-number="3">    <span class="st">"tag=i"</span>, <span class="st">"this is a description of tag which is long long and very long and extremly long..."</span>, </a>
+<a class="sourceLine" id="cb5-4" data-line-number="4">    <span class="dt">head =</span> <span class="st">'An example to show how to use the packages'</span>,</a>
+<a class="sourceLine" id="cb5-5" data-line-number="5">    <span class="dt">foot =</span> <span class="st">'Please contact author@gmail.com for comments'</span></a>
+<a class="sourceLine" id="cb5-6" data-line-number="6">)</a></code></pre></div>
 <p>Then you can specify `–help``:</p>
 <pre><code>~\&gt; Rscript command.R --help
 An example to show how to use the packages
@@ -391,8 +391,8 @@ Please contact author@gmail.com for comments</code></pre>
 <h2 class="hasAnchor">
 <a href="#configuring-getoptlong" class="anchor"></a>Configuring Getopt::Long</h2>
 <p>Configuration of <code>Getopt::Long</code> can be set by <code><a href="../reference/GetoptLong.options.html">GetoptLong.options("config")</a></code>:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/GetoptLong.options.html">GetoptLong.options</a></span>(<span class="st">"config"</span> =<span class="st"> "bundling"</span>)
-<span class="kw"><a href="../reference/GetoptLong.options.html">GetoptLong.options</a></span>(<span class="st">"config"</span> =<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"no_ignore_case"</span>, <span class="st">"bundling"</span>))</code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw"><a href="../reference/GetoptLong.options.html">GetoptLong.options</a></span>(<span class="st">"config"</span> =<span class="st"> "bundling"</span>)</a>
+<a class="sourceLine" id="cb8-2" data-line-number="2"><span class="kw"><a href="../reference/GetoptLong.options.html">GetoptLong.options</a></span>(<span class="st">"config"</span> =<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"no_ignore_case"</span>, <span class="st">"bundling"</span>))</a></code></pre></div>
 <p>With different configuration, it can support more types of option specifications:</p>
 <pre><code>-a -b -c  -abc
 -s 24 -s24 -s=24</code></pre>
@@ -409,35 +409,38 @@ Please contact author@gmail.com for comments</code></pre>
 <h2 class="hasAnchor">
 <a href="#specify-command-line-options-within-r-session" class="anchor"></a>Specify command-line options within R session</h2>
 <p>When in an interactive R session, arguments can be set when calling <code>GetoptLong:::source()</code>, so it would be convinient to control variables even you are in an interactive R session:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">GetoptLong<span class="op">:::</span><span class="kw"><a href="https://rdrr.io/r/base/source.html">source</a></span>(<span class="st">"foo.R"</span>, <span class="dt">argv =</span> <span class="st">"--cutoff 0.01 --input file=foo.txt --verbose"</span>)</code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">GetoptLong<span class="op">:::</span><span class="kw"><a href="https://rdrr.io/r/base/source.html">source</a></span>(<span class="st">"foo.R"</span>, <span class="dt">argv =</span> <span class="st">"--cutoff 0.01 --input file=foo.txt --verbose"</span>)</a></code></pre></div>
 </div>
 <div id="session-info" class="section level2">
 <h2 class="hasAnchor">
 <a href="#session-info" class="anchor"></a>Session info</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span>()</code></pre></div>
-<pre><code>## R version 3.6.1 (2019-07-05)
-## Platform: x86_64-apple-darwin15.6.0 (64-bit)
-## Running under: macOS Mojave 10.14.2
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span>()</a></code></pre></div>
+<pre><code>## R version 3.6.0 (2019-04-26)
+## Platform: x86_64-pc-linux-gnu (64-bit)
+## Running under: CentOS Linux 7 (Core)
 ## 
 ## Matrix products: default
-## BLAS:   /Library/Frameworks/R.framework/Versions/3.6/Resources/lib/libRblas.0.dylib
-## LAPACK: /Library/Frameworks/R.framework/Versions/3.6/Resources/lib/libRlapack.dylib
+## BLAS:   /usr/lib64/libblas.so.3.4.2
+## LAPACK: /usr/lib64/liblapack.so.3.4.2
 ## 
 ## locale:
-## [1] en_GB.UTF-8/en_GB.UTF-8/en_GB.UTF-8/C/en_GB.UTF-8/en_GB.UTF-8
+##  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C               LC_TIME=en_US.UTF-8       
+##  [4] LC_COLLATE=en_US.UTF-8     LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+##  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                  LC_ADDRESS=C              
+## [10] LC_TELEPHONE=C             LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
 ## 
 ## attached base packages:
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-## [1] knitr_1.25   markdown_1.1
+## [1] knitr_1.26   markdown_1.1
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] Rcpp_1.0.2       rprojroot_1.3-2  crayon_1.3.4     digest_0.6.21    assertthat_0.2.1
-##  [6] MASS_7.3-51.4    R6_2.4.0         backports_1.1.4  magrittr_1.5     evaluate_0.14   
-## [11] stringi_1.4.3    rlang_0.4.0      fs_1.3.1         rmarkdown_1.15   pkgdown_1.4.1   
-## [16] desc_1.2.0       tools_3.6.1      stringr_1.4.0    xfun_0.9         compiler_3.6.1  
-## [21] memoise_1.1.0    htmltools_0.3.6</code></pre>
+##  [1] Rcpp_1.0.3       rprojroot_1.3-2  crayon_1.3.4     digest_0.6.23    assertthat_0.2.1
+##  [6] MASS_7.3-51.4    R6_2.4.1         backports_1.1.5  magrittr_1.5     evaluate_0.14   
+## [11] stringi_1.4.3    rlang_0.4.2      fs_1.3.1         rmarkdown_1.18   pkgdown_1.4.1   
+## [16] desc_1.2.0       tools_3.6.0      stringr_1.4.0    xfun_0.11        compiler_3.6.0  
+## [21] memoise_1.1.0    htmltools_0.4.0</code></pre>
 </div>
 </div>
   </div>

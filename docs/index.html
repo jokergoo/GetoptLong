@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">GetoptLong</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.8</span>
       </span>
     </div>
 
@@ -99,13 +99,13 @@
 <a href="#control-command-line-options" class="anchor"></a>Control command line options</h2>
 <p>This package wraps the powerful Perl module <a href="http://perldoc.perl.org/Getopt/Long.html"><code>Getopt::Long</code></a> and keeps almost all features of it. The syntax of option specification is as same as <code>Getopt::Long</code>. So if you are coming from Perl and you know <code>Getopt::Long</code>, there would be no difficulty with using it.</p>
 <p>Also, this package supports default values, imports option names into working environment, and automatically generates help messages. The usage is very simple:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(GetoptLong)
-cutoff =<span class="st"> </span><span class="fl">0.05</span>  <span class="co"># cutoff has default value and not necessary to specify in command line</span>
-<span class="kw"><a href="reference/GetoptLong.html">GetoptLong</a></span>(
-    <span class="st">"cutoff=f"</span>, <span class="st">"cutoff of something (default is 0.05)"</span>,
-    <span class="st">"input=s%"</span>, <span class="st">"input file"</span>,
-    <span class="st">"verbose!"</span>, <span class="st">"print messages"</span>
-)</code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(GetoptLong)</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2">cutoff =<span class="st"> </span><span class="fl">0.05</span>  <span class="co"># cutoff has default value and not necessary to specify in command line</span></a>
+<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw"><a href="reference/GetoptLong.html">GetoptLong</a></span>(</a>
+<a class="sourceLine" id="cb1-4" data-line-number="4">    <span class="st">"cutoff=f"</span>, <span class="st">"cutoff of something (default is 0.05)"</span>,</a>
+<a class="sourceLine" id="cb1-5" data-line-number="5">    <span class="st">"input=s%"</span>, <span class="st">"input file"</span>,</a>
+<a class="sourceLine" id="cb1-6" data-line-number="6">    <span class="st">"verbose!"</span>, <span class="st">"print messages"</span></a>
+<a class="sourceLine" id="cb1-7" data-line-number="7">)</a></code></pre></div>
 <p>Then you can run this script by:</p>
 <pre><code>Rscript foo.R --cutoff 0.01 --input file=foo.txt --verbose
 Rscript foo.R -i file=foo.txt -v
@@ -129,18 +129,18 @@ Usage: Rscript foo.R [options]
   --version
     Print version information and exit</code></pre>
 <p>Also, arguments can be set when calling <code>GetoptLong:::source()</code>, so it would be convinient to control variables even you are in an interactive R session:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">GetoptLong<span class="op">:::</span><span class="kw"><a href="https://rdrr.io/r/base/source.html">source</a></span>(<span class="st">"foo.R"</span>, <span class="dt">argv =</span> <span class="st">"--cutoff 0.01 --input file=foo.txt --verbose"</span>)</code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">GetoptLong<span class="op">:::</span><span class="kw"><a href="https://rdrr.io/r/base/source.html">source</a></span>(<span class="st">"foo.R"</span>, <span class="dt">argv =</span> <span class="st">"--cutoff 0.01 --input file=foo.txt --verbose"</span>)</a></code></pre></div>
 </div>
 <div id="variable-interpolation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#variable-interpolation" class="anchor"></a>Variable interpolation</h2>
 <p>This package also supports simple variable interpolation in R, which means you can embed variables into texts directly, just like in Perl.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">r =<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">1</span>, <span class="dv">2</span>)
-value =<span class="st"> </span><span class="dv">4</span>
-name =<span class="st"> "name"</span>
-<span class="kw"><a href="reference/qq.html">qq</a></span>(<span class="st">"region = (@{r[1]}, @{r[2]}), value = @{value}, name = '@{name}'"</span>)
-
-## [1] "region = (1, 2), value = 4, name = 'name'"</code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">r =<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">1</span>, <span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb5-2" data-line-number="2">value =<span class="st"> </span><span class="dv">4</span></a>
+<a class="sourceLine" id="cb5-3" data-line-number="3">name =<span class="st"> "name"</span></a>
+<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="kw"><a href="reference/qq.html">qq</a></span>(<span class="st">"region = (@{r[1]}, @{r[2]}), value = @{value}, name = '@{name}'"</span>)</a>
+<a class="sourceLine" id="cb5-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb5-6" data-line-number="6">## [1] "region = (1, 2), value = 4, name = 'name'"</a></code></pre></div>
 <p>So it would be much easier for you to construct complicated texts instead of using <code>paste</code>.</p>
 </div>
 <div id="license" class="section level2">
