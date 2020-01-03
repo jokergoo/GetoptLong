@@ -7,13 +7,13 @@ Print a string which has been intepolated with variables
 Print a string which has been intepolated with variables
 }
 \usage{
-qqcat(text, envir = parent.frame(), code.pattern = NULL, file = "",
+qqcat(..., envir = parent.frame(), code.pattern = NULL, file = "",
     sep = " ", fill = FALSE, labels = NULL, append = FALSE, cat_prefix = NULL,
-    strwrap = qq.options("cat_strwrap"), strwrap_param = list())
+    strwrap = qq.options("cat_strwrap"), strwrap_param = list(), sep2 = "")
 }
 \arguments{
 
-  \item{text}{text string in which variables are marked with certain rules}
+  \item{...}{text string in which variables are marked with certain rules}
   \item{envir}{environment where to look for those variables}
   \item{code.pattern}{pattern of marks for the variables}
   \item{file}{pass to \code{\link[base]{cat}}}
@@ -24,6 +24,7 @@ qqcat(text, envir = parent.frame(), code.pattern = NULL, file = "",
   \item{cat_prefix}{prefix string. It is prior than \code{qq.options(cat_prefix)}.}
   \item{strwrap}{whether call \code{\link[base]{strwrap}} to wrap the string}
   \item{strwrap_param}{parameters sent to \code{\link[base]{strwrap}}, must be a list}
+  \item{sep2}{Separation character when there are multiple templates.}
 
 }
 \details{
