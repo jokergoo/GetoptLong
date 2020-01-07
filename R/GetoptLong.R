@@ -144,11 +144,11 @@ GetoptLong = function(..., help = TRUE, version = TRUE, envir = parent.frame(), 
 	
 	# first name in each options
 	long_name = extract_first_name(spec[, 1])
-	if(help && long_name %in% "help") {
+	if(help && "help" %in% long_name) {
 		stop("`help` is reserved as a default option, please do not use it.\n")
 	}
 	
-	if(version && long_name %in% "version") {
+	if(version && "version" %in% long_name) {
 		stop("`version` is reserved as default option, please do not use it.\n")
 	}
 	
