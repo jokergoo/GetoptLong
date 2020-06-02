@@ -1,3 +1,11 @@
+Changes in version 1.0.0
+
+* Re-implement options by reference class.
+* Support specification by a template.
+* Support help message of sub options.
+
+------------------------------------------------------------------------
+
 Changes in version 0.1.8
 
 * `qq()`/`qqcat()`: multiple text templates can be specified.

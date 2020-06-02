@@ -31,6 +31,7 @@
 # a = 1
 # b = "text"
 # qq("a = @{a}, b = '@{b}'")
+# qq("a = @{a}", "b = '@{b}'", sep = ", ")
 #
 # a = 1:2
 # qq("a = @{a}, b = '@{b}'")
@@ -39,7 +40,7 @@
 # a = 1
 # qq("a = `a`, b = '`b`'", code.pattern = "`CODE`")
 #
-qq = function(..., envir = parent.frame(), code.pattern = NULL, collapse = TRUE, sep = "") {
+qq = function(..., envir = parent.frame(), code.pattern = NULL, collapse = TRUE, sep = " ") {
 
 	lt = list(...)
 

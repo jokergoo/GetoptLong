@@ -7,7 +7,7 @@ Simple variable interpolation in texts
 Simple variable interpolation in texts
 }
 \usage{
-qq(..., envir = parent.frame(), code.pattern = NULL, collapse = TRUE, sep = "")
+qq(..., envir = parent.frame(), code.pattern = NULL, collapse = TRUE, sep = " ")
 }
 \arguments{
 
@@ -36,6 +36,7 @@ Zuguang Gu <z.gu@dkfz.de>
 a = 1
 b = "text"
 qq("a = @{a}, b = '@{b}'")
+qq("a = @{a}", "b = '@{b}'", sep = ", ")
 
 a = 1:2
 qq("a = @{a}, b = '@{b}'")

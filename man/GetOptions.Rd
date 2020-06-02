@@ -7,11 +7,12 @@ Wrapper of the Perl module \code{Getopt::Long} in R
 Wrapper of the Perl module \code{Getopt::Long} in R
 }
 \usage{
-GetOptions(...)
+GetOptions(..., envir = parent.frame())
 }
 \arguments{
 
-  \item{...}{pass to \code{\link{GetoptLong}}}
+  \item{...}{Pass to \code{\link{GetoptLong}}.}
+  \item{envir}{User's enrivonment where \code{\link{GetoptLong}} looks for default values and exports variables.}
 
 }
 \details{
@@ -24,4 +25,5 @@ Zuguang Gu <z.gu@dkfz.de>
 \examples{
 # There is no example
 NULL
+
 }

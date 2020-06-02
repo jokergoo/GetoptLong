@@ -11,11 +11,11 @@ qq.options(..., RESET = FALSE, READ.ONLY = NULL, LOCAL = FALSE, ADD = FALSE)
 }
 \arguments{
 
-  \item{...}{options, see 'details' section}
-  \item{RESET}{Whether to reset options to their default values}
-  \item{READ.ONLY}{only return read-only options?}
-  \item{LOCAL}{switch local mode}
-  \item{ADD}{add new options}
+  \item{...}{Options, see 'Details' section.}
+  \item{RESET}{Whether to reset options to their default values.}
+  \item{READ.ONLY}{Whether to only return read-only options.}
+  \item{LOCAL}{Whether to switch local mode.}
+  \item{ADD}{Whether to add new options.}
 
 }
 \details{

@@ -114,6 +114,6 @@ test_that("test `cat_prefix`", {
 test_that("multiple template", {
 	a = 1
 	b = 2
-	expect_that(qq("a = @{a};", "b = @{b}"), equals("a = 1;b = 2"))
+	expect_that(qq("a = @{a};", "b = @{b}"), equals("a = 1; b = 2"))
 	expect_that(qq("a = @{a};", "b = @{b}", sep = "\n"), equals("a = 1;\nb = 2"))
 })

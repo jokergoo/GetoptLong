@@ -3,18 +3,17 @@
 # Global options for GetoptLong() 
 #
 # == param
-# -... options, see 'details' section
-# -RESET Whether to reset options to their default values
-# -READ.ONLY only return read-only options?
-# -LOCAL switch local mode
-# -ADD add new options
+# -... Options, see 'Details' section.
+# -RESET Whether to reset options to their default values.
+# -READ.ONLY Whether to only return read-only options.
+# -LOCAL Whether to switch local mode.
+# -ADD Whether to add new options.
 #
 # == detail
-# Supported options are following:
+# Supported global options are following:
 #
-# -``startingMsg`` message that will be printed before the helping message when running ``Rscript foo.R --help``. Ignored if ``head`` is set in `GetoptLong`
-# -``endingMsg`` message that will be printed after the helping message when running ``Rscript foo.R --help``. Ignored if ``foot`` is set in `GetoptLong`
-# -``config`` configuration of ``Getopt::Long``, check http://perldoc.perl.org/Getopt/Long.html#Configuring-Getopt\%3a\%3aLong
+# -``config`` Configuration of ``Getopt::Long``, check http://perldoc.perl.org/Getopt/Long.html#Configuring-Getopt\%3a\%3aLong .
+# -``template_tag`` The tag for identifying specifications in the template. The format should be in ``left_tag CODE right_tag``.
 #
 # ``GetoptLong.options(...)`` should be put before calling `GetoptLong` function.
 #
@@ -23,12 +22,12 @@
 #
 GetoptLong.options = function(..., RESET = FALSE, READ.ONLY = NULL, LOCAL = FALSE, ADD = FALSE) {}
 GetoptLong.options = setGlobalOptions(
-	startingMsg = list(.value = "",
-					   .length = 1),
-	endingMsg = list(.value = "",
-					 .length = 1),
 	config = list(.value = NULL,
 		          .class = "character"),
+	template_tag = list(.value = "<CODE>",
+						.length = 1,
+						.validate = function(x) grepl("CODE", x)
+					),
 	"__argv_str__" = list(.value = NULL,
 						.length = c(0, 1),
 						.private = TRUE,
@@ -42,11 +41,11 @@ GetoptLong.options = setGlobalOptions(
 # Global options for qq() related functions
 #
 # == param
-# -... options, see 'details' section
-# -RESET Whether to reset options to their default values
-# -READ.ONLY only return read-only options?
-# -LOCAL switch local mode
-# -ADD add new options
+# -... Options, see 'Details' section.
+# -RESET Whether to reset options to their default values.
+# -READ.ONLY Whether to only return read-only options.
+# -LOCAL Whether to switch local mode.
+# -ADD Whether to add new options.
 #
 # == detail
 # Supported options are following:
