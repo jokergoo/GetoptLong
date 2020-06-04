@@ -1,6 +1,6 @@
 
 print_help_msg = function(opt_lt, file = stderr(), script_name = NULL, head = NULL, foot = NULL,
-	template = NULL, template_control = template_control) {
+	template = NULL, template_control = template_control, style = c("one-column", "two-column")) {
 
 	if(is.null(template)) {
 	
@@ -21,9 +21,23 @@ print_help_msg = function(opt_lt, file = stderr(), script_name = NULL, head = NU
 	    qqcat("Usage: Rscript @{script_name} [options]\n", file = file)
 	    qqcat("\n", file = file)
 	    qqcat("Options:\n", file = file)
-	    	
-		for(i in seq_along(opt_lt)) {
-			cat(opt_lt[[i]]$help_message(), "\n", file = file)
+	    
+	    style = match.arg(style)
+	    if(style == "one-column") {
+			for(i in seq_along(opt_lt)) {
+				cat(opt_lt[[i]]$help_message(), "\n", file = file)
+			}
+		} else {
+			opt_line = NULL
+			for(i in seq_along(opt_lt)) {
+				opt_line = c(opt_line, opt_lt[[i]]$help_message_two_columns(only_opt = TRUE))
+			}
+			opt_width = max(nchar(opt_line))
+
+			for(i in seq_along(opt_lt)) {
+				cat(opt_lt[[i]]$help_message_two_columns(opt_width = opt_width), "\n", file = file)
+			}
+			cat("\n", file = file)
 		}
 
 		if(!is.null(foot)) {
@@ -32,9 +46,11 @@ print_help_msg = function(opt_lt, file = stderr(), script_name = NULL, head = NU
 		}
 	} else {
 
-		lt = find_code(GetoptLong.options("template_tag"), template)
 		lines = strsplit(template, "\n")[[1]]
 		for(i in seq_along(lines)) {
+			lt = find_code(GetoptLong.options("template_tag"), lines[i])
+			if(length(lt$template) == 0) next
+
 			for(j in seq_along(lt$template)) {
 				for(k in seq_along(opt_lt)) {
 					if(opt_lt[[k]]$spec == lt$code[j]) {
@@ -51,29 +67,57 @@ print_help_msg = function(opt_lt, file = stderr(), script_name = NULL, head = NU
 
 						opt_str = gsub("\n$", "", opt_lt[[k]]$help_message(prefix = "", which = "opt_line", data_type = data_type))
 							
-						max_width = NULL
-						if(!is.null(template_control$max_width)) {
-							if(length(template_control$max_width) == 1 && is.null(names(template_control$max_width))) {
-								max_width = template_control$max_width
+						opt_width = NULL
+						if(!is.null(template_control$opt_width)) {
+							if(length(template_control$opt_width) == 1 && is.null(names(template_control$opt_width))) {
+								opt_width = template_control$opt_width
 							} else {
-								max_width = template_control$max_width[opt_lt[[k]]$name]
-								if(is.na(max_width)) max_width = NULL
+								opt_width = template_control$opt_width[opt_lt[[k]]$name]
+								if(is.na(opt_width)) opt_width = NULL
 							}
 						}
-						if(is.null(max_width)) {
-							lines[i] = gsub(lt$template[k], opt_str, lines[i], fixed = TRUE)
+
+						if(is.null(opt_width)) {
+							lines[i] = gsub(lt$template[j], opt_str, lines[i], fixed = TRUE)
 						} else {
-							if(max_width < nchar(opt_str)) {
-								lines[i] = gsub(lt$template[k], opt_str, lines[i], fixed = TRUE)
+							if(opt_width < nchar(opt_str)) {
+								lines[i] = gsub(lt$template[j], opt_str, lines[i], fixed = TRUE)
 							} else {
-								opt_str = paste0(opt_str, strrep(" ", max_width - nchar(opt_str)))
-								lines[i] = gsub(lt$template[k], opt_str, lines[i], fixed = TRUE)
+								opt_str = paste0(opt_str, strrep(" ", opt_width - nchar(opt_str)))
+								lines[i] = gsub(lt$template[j], opt_str, lines[i], fixed = TRUE)
+							}
+						}
+					} else if(grepl("^#", lt$code[j])) {
+						if(opt_lt[[k]]$name == gsub("^#", "", lt$code[j])) {
+							opt_str = gsub("\n$", "", opt_lt[[k]]$help_message(prefix = "", which = "opt_line", data_type = data_type))
+							
+							opt_width = NULL
+							if(!is.null(template_control$opt_width)) {
+								if(length(template_control$opt_width) == 1 && is.null(names(template_control$opt_width))) {
+									opt_width = template_control$opt_width
+								} else {
+									opt_width = template_control$opt_width[opt_lt[[k]]$name]
+									if(is.na(opt_width)) opt_width = NULL
+								}
+							}
+
+							opt_str = ""
+							if(is.null(opt_width)) {
+								lines[i] = gsub(lt$template[j], opt_str, lines[i], fixed = TRUE)
+							} else {
+								if(opt_width < nchar(opt_str)) {
+									lines[i] = gsub(lt$template[j], opt_str, lines[i], fixed = TRUE)
+								} else {
+									opt_str = paste0(opt_str, strrep(" ", opt_width - nchar(opt_str)))
+									lines[i] = gsub(lt$template[j], opt_str, lines[i], fixed = TRUE)
+								}
 							}
 						}
 					}
 				}
 			}
 		}
+
 		cat(paste(lines, collapse  = "\n"), "\n", file = file)
 	}
 }

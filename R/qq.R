@@ -2,16 +2,16 @@
 # Simple variable interpolation in texts
 #
 # == param
-# -...          text string in which variables are marked with certain rules
-# -envir        environment where to look for variables. By default it is the environment
+# -...          Text string in which variables are marked with certain rules
+# -envir        Environment where to look for variables. By default it is the environment
 #               where `qq` is envoked. It can also be a list in which element names are
 #               the variable names to be interpolated.
-# -code.pattern pattern of marks for the variables. By default it is ``@\\\\{CODE\\\\}`` which means
+# -code.pattern Pattern of marks for the variables. By default it is ``@\\\\{CODE\\\\}`` which means
 #               you can write your variable as ``@{variable}``. This value can be a vector that all 
 #               patterns are searched.
 # -collapse     If variables return vector of length larger than one, whether collapse into one string
 #               or return a vector
-# -sep          Separation character when there are multiple templates.
+# -sep          Separator character when there are multiple templates.
 #
 # == details
 # I like variable interpolation in Perl. But in R, if you want to concatenate plain text and variables,

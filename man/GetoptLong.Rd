@@ -8,7 +8,7 @@ Wrapper of the Perl module \code{Getopt::Long} in R
 }
 \usage{
 GetoptLong(..., help_head = NULL, help_foot = NULL, envir = parent.frame(),
-    argv_str = NULL, template_control = list())
+    argv_str = NULL, template_control = list(), help_style = GetoptLong.options$help_style)
 }
 \arguments{
 
@@ -18,6 +18,7 @@ GetoptLong(..., help_head = NULL, help_foot = NULL, envir = parent.frame(),
   \item{envir}{User's enrivonment where \code{\link{GetoptLong}} looks for default values and exports variables.}
   \item{argv_str}{A string that contains command-line arguments. It is only for testing purpose.}
   \item{template_control}{A list of parameters for controlling when the specification is a template.}
+  \item{help_style}{The style of the help messages. Value should be either "one-column" or "two-column".}
 
 }
 \details{
@@ -25,11 +26,12 @@ Following shows a simple example. Put following code at the beginning of your sc
 
   \preformatted{
     library(GetoptLong)
+
     cutoff = 0.05
     GetoptLong(
-        "number=i", "Number of items, integer, mandatory option",
-        "cutoff=f", "cutoff to filter results, optional, default (0.05)",
-        "verbose",  "print messages"
+        "number=i", "Number of items.",
+        "cutoff=f", "Cutoff for filtering results.",
+        "verbose",  "Print message."
     )  }
 
 Then you can call the script from command line either by:
@@ -39,11 +41,11 @@ Then you can call the script from command line either by:
     ~\> Rscript foo.R -n 4 -c 0.01 -v
     ~\> Rscript foo.R -n 4 --verbose  }
 
-In above example, \code{number} is a mandatory option and it should only be in integer mode. \code{cutoff}
-is optional and it already has a default value. \code{verbose} is a logical option. If parsing is
-successful, two variables with name \code{number} and \code{verbose} will be automatically imported into the working
-environment with specified values, and value for \code{cutoff} will be updated if it is specified from the
-command-line
+In this example, \code{number} is a mandatory option and it should only be in
+integer mode. \code{cutoff} is optional and it already has a default value 0.05.
+\code{verbose} is a logical option. If parsing is successful, two variables \code{number}
+and \code{verbose} will be imported into the working environment with the specified
+values. Value for \code{cutoff} will be updated if it is specified in command-line.
 
 For advanced use of this function, please go to the vignette.
 }

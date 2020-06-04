@@ -9,16 +9,18 @@
 # -envir    User's enrivonment where `GetoptLong` looks for default values and exports variables.
 # -argv_str A string that contains command-line arguments. It is only for testing purpose.
 # -template_control A list of parameters for controlling when the specification is a template.
+# -help_style The style of the help messages. Value should be either "one-column" or "two-column".
 #
 # == details
 # Following shows a simple example. Put following code at the beginning of your script (e.g. ``foo.R``):
 #
 #     library(GetoptLong)
+#     
 #     cutoff = 0.05
 #     GetoptLong(
-#         "number=i", "Number of items, integer, mandatory option",
-#         "cutoff=f", "cutoff to filter results, optional, default (0.05)",
-#         "verbose",  "print messages"
+#         "number=i", "Number of items.",
+#         "cutoff=f", "Cutoff for filtering results.",
+#         "verbose",  "Print message."
 #     )
 #
 # Then you can call the script from command line either by:
@@ -27,11 +29,11 @@
 #     ~\> Rscript foo.R -n 4 -c 0.01 -v
 #     ~\> Rscript foo.R -n 4 --verbose
 #
-# In above example, ``number`` is a mandatory option and it should only be in integer mode. ``cutoff``
-# is optional and it already has a default value. ``verbose`` is a logical option. If parsing is
-# successful, two variables with name ``number`` and ``verbose`` will be automatically imported into the working
-# environment with specified values, and value for ``cutoff`` will be updated if it is specified from the
-# command-line
+# In this example, ``number`` is a mandatory option and it should only be in
+# integer mode. ``cutoff`` is optional and it already has a default value 0.05.
+# ``verbose`` is a logical option. If parsing is successful, two variables ``number``
+# and ``verbose`` will be imported into the working environment with the specified
+# values. Value for ``cutoff`` will be updated if it is specified in command-line.
 #
 # For advanced use of this function, please go to the vignette.
 #
@@ -39,13 +41,18 @@
 # Zuguang Gu <z.gu@dkfz.de>
 #
 GetoptLong = function(..., help_head = NULL, help_foot = NULL, envir = parent.frame(), 
-	argv_str = NULL, template_control = list()) {
+	argv_str = NULL, template_control = list(), help_style = GetoptLong.options$help_style) {
 
 	if(is.null(get_scriptname())) {
 		IS_UNDER_COMMAND_LINE = FALSE
 	} else {
 		IS_UNDER_COMMAND_LINE = TRUE
 	}
+
+	if(is.null(argv_str)) {
+		argv_str = GetoptLong.options("__argv_str__")
+	}
+	on.exit(GetoptLong.options("__argv_str__" = NULL))
 
 	# to test whether the script is run under command-line or in R interactive environment
 	if(IS_UNDER_COMMAND_LINE || is.null(argv_str)) {
@@ -54,11 +61,6 @@ GetoptLong = function(..., help_head = NULL, help_foot = NULL, envir = parent.fr
 		OUT = stdout()  # message from STDOUT is important under testing mode
 	}
 
-	if(is.null(argv_str)) {
-		argv_str = GetoptLong.options("__argv_str__")
-	}
-	on.exit(GetoptLong.options("__argv_str__" = NULL))
-	
 	############### parse specification ##################
 
 	spec = list(...)
@@ -100,6 +102,7 @@ GetoptLong = function(..., help_head = NULL, help_foot = NULL, envir = parent.fr
 	l = grepl("\\w+\\$\\S+$", spec[, 1])
 	hash_sub_opt = spec[l, , drop = FALSE]
 	spec = spec[!l, , drop = FALSE]
+	spec[, 1] = gsub("\\s*", "", spec[, 1])
 
 	#### convert hash_sub_opt into a list
 	sub_opt = NULL
@@ -111,6 +114,8 @@ GetoptLong = function(..., help_head = NULL, help_foot = NULL, envir = parent.fr
 			structure(hash_sub_opt[ind, 2], names = nm)
 		})
 	}
+
+	if(is.list(envir)) envir = as.environment(envir)
 
 	############### construct a list of SingleOption objects ####################
 	opt_lt = list()
@@ -124,7 +129,7 @@ GetoptLong = function(..., help_head = NULL, help_foot = NULL, envir = parent.fr
 	}
 	
 	if("version" %in% names(opt_lt)) {
-		stop_wrap("`version` is reserved as default option. Please do not use it.")
+		stop_wrap("`version` is reserved as a default option. Please do not use it.")
 	}
 	
 	opt_lt$help = SingleOption(spec = "help", "Print help message and exit.")
@@ -140,11 +145,14 @@ GetoptLong = function(..., help_head = NULL, help_foot = NULL, envir = parent.fr
 	}
 
 	## add short opt name
-	first_letter = substr(names(opt_lt), 1, 1)
-	first_letter_tb = table(first_letter)
+	first_letter = lapply(opt_lt, function(opt) {
+		full_opt = opt$full_opt
+		substr(full_opt, 1, 1)
+	})
+	first_letter_tb = table(unlist(first_letter))[unique(unlist(first_letter))]
 	first_letter_unique = names(first_letter_tb[first_letter_tb == 1])
 	for(le in first_letter_unique) {
-		ind = which(first_letter == le)
+		ind = which(sapply(first_letter, function(x) any(x == le)))
 		opt_lt[[ind]]$full_opt = unique(c(opt_lt[[ind]]$full_opt, le))
 	}
 
@@ -184,9 +192,13 @@ GetoptLong = function(..., help_head = NULL, help_foot = NULL, envir = parent.fr
 	# get arguments string
 	if(is.null(argv_str)) {
 		ARGV = commandArgs(TRUE)
-		ARGV_string = paste(ARGV, collapse = " ")
+		ARGV_string = reformat_argv_string(opt_lt, ARGV)
 	} else {
-		ARGV_string = argv_str
+		if(grepl("'|\\\"", argv_str)) {
+			ARGV_string = argv_str
+		} else {
+			ARGV_string = reformat_argv_string(opt_lt, strsplit(argv_str, "\\s+")[[1]])
+		}
 	}
 
 	cmd = qq("\"@{perl_bin}\" \"@{perl_script}\" @{ARGV_string}")
@@ -200,7 +212,7 @@ GetoptLong = function(..., help_head = NULL, help_foot = NULL, envir = parent.fr
 		cat(red(qq("Error: @{res}\n")), file = OUT)
 		
 		print_help_msg(opt_lt, file = OUT, script_name = script_name, head = help_head, foot = help_foot,
-			template = template, template_control = template_control)
+			template = template, template_control = template_control, style = help_style)
 		
 		suppressWarnings({
 			file.remove(json_file)
@@ -231,7 +243,7 @@ GetoptLong = function(..., help_head = NULL, help_foot = NULL, envir = parent.fr
 
 	if(opt_json$help) {
 		print_help_msg(opt_lt, file = OUT, script_name = script_name, head = help_head, foot = help_foot, 
-			template = template, template_control = template_control)
+			template = template, template_control = template_control, style = help_style)
 		
 		if(IS_UNDER_COMMAND_LINE) {
 			q(save = "no", status = 127)
@@ -260,15 +272,14 @@ GetoptLong = function(..., help_head = NULL, help_foot = NULL, envir = parent.fr
 			cat(red(qq("Error: `@{opt_name}` is mandatory\n")), file = OUT)
 
 			print_help_msg(opt_lt, file = OUT, script_name = script_name, head = help_head, foot = help_foot,
-				template = template, template_control = template_control)
+				template = template, template_control = template_control, style = help_style)
 			if(IS_UNDER_COMMAND_LINE) {
 				q(save = "no", status = 127)
 			} else if(!is.null(argv_str)) {  # under test
 				return(invisible(NULL))
 			} else {
-				stop("You have an error.\n")
+				stop_wrap("You have an error.\n")
 			}
-			
 		}
 	}
 	
@@ -380,6 +391,60 @@ source_script = function(file, ..., argv_str = NULL) {
 parse_spec_template = function(template, match = GetoptLong.options("template_tag")) {
 	lt = find_code(match, template)
 	spec = cbind(lt$code, rep("", length(lt$code)))
+	spec = spec[!grepl("^#", spec[, 1]), ,drop = FALSE]
 
 	return(spec)
+}
+
+## careful when ARGV_string is --a '1 2 3' where '1, 2, 3' should not be split
+reformat_argv_string = function(opt_lt, argv) {
+
+	current_tag = NA
+	tag_increment = 0
+	argv2 = NULL
+
+	for(i in seq_along(argv)) {
+		if(grepl("^(-|\\+)", argv[i])) {
+			current_tag = argv[i]
+			tag_increment = 0
+			argv2 = c(argv2, argv[i])
+		} else {
+			tag_increment = tag_increment + 1
+			if(tag_increment == 1) argv2 = c(argv2, argv[i])
+		}
+
+		if(tag_increment >= 2) {
+			opt  = look_up_opt_by_tag(opt_lt, current_tag)
+			if(is.null(opt)) {
+				argv2 = c(argv2, argv[i])
+			} else {
+				if(grepl("(@|%)$", opt$spec)) {
+					argv2 = c(argv2, qq("--@{opt$name}"), argv[i])
+				} else {
+					argv2 = c(argv2, argv[i])
+				}
+			}
+		}
+	}
+
+	paste(argv2, collapse = " ")
+}
+
+look_up_opt_by_tag = function(opt_lt, tag) {
+
+	tag = gsub("^(-|--|\\+)", "", tag)
+	ind = NULL
+	for(i in seq_along(opt_lt)) {
+		opt = opt_lt[[i]]
+		if(tag %in% opt$full_opt) {
+			ind = c(ind, i)
+		} else if(any(grepl(qq("^@{tag}"), opt$full_opt))) {
+			ind  = c(ind, i)
+		}
+	}
+	if(length(ind) != 1) {
+		return(NULL)
+	} else {
+		return(opt_lt[[ind]])
+	}
 }

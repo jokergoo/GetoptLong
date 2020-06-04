@@ -11,11 +11,11 @@ qq(..., envir = parent.frame(), code.pattern = NULL, collapse = TRUE, sep = " ")
 }
 \arguments{
 
-  \item{...}{text string in which variables are marked with certain rules}
-  \item{envir}{environment where to look for variables. By default it is the environment where \code{\link{qq}} is envoked. It can also be a list in which element names are the variable names to be interpolated.}
-  \item{code.pattern}{pattern of marks for the variables. By default it is \code{@\\\\{CODE\\\\}} which means you can write your variable as \code{@{variable}}. This value can be a vector that all  patterns are searched.}
+  \item{...}{Text string in which variables are marked with certain rules}
+  \item{envir}{Environment where to look for variables. By default it is the environment where \code{\link{qq}} is envoked. It can also be a list in which element names are the variable names to be interpolated.}
+  \item{code.pattern}{Pattern of marks for the variables. By default it is \code{@\\\\{CODE\\\\}} which means you can write your variable as \code{@{variable}}. This value can be a vector that all  patterns are searched.}
   \item{collapse}{If variables return vector of length larger than one, whether collapse into one string or return a vector}
-  \item{sep}{Separation character when there are multiple templates.}
+  \item{sep}{Separator character when there are multiple templates.}
 
 }
 \details{

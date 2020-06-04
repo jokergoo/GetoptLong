@@ -1,16 +1,20 @@
-<!--
-%\VignetteEngine{knitr}
-%\VignetteIndexEntry{Simple variable interpolation in R}
--->
+---
+title: "Simple variable interpolation"
+author: "Zuguang Gu (z.gu@dkfz.de)"
+date: '`r Sys.Date()`'
+output:
+  html_document:
+    fig_caption: true
+    toc: true
+    toc_depth: 2
+    toc_float: true
+vignette: >
+  %\VignetteIndexEntry{Simple variable interpolation}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
 
-Simple variable interpolation in R
-========================================
-
-**Author**: Zuguang Gu ( z.gu@dkfz.de )
-
-**Date**: `r Sys.Date()`
-
--------------------------------------------------------------
+---------------------------------------------------------------------
 
 ```{r, echo = FALSE, message = FALSE}
 library(markdown)
@@ -27,9 +31,10 @@ options(markdown.HTML.stylesheet = "custom.css")
 options(width = 100)
 ```
 
-There are several ways to construct strings in **R** such as `paste()`. However,
-when the string which is going to be constructed is too complex, using `paste()`
-can be a pain. For example, we want to put some parameters as title in a plot.
+There are several ways to construct strings in **R** such as `paste()`.
+However, when the string which is going to be constructed is too complex,
+using `paste()` can be a pain. For example, we want to put some parameters as
+title in a plot.
 
 ```{r}
 region = c(1, 2)
@@ -40,16 +45,18 @@ str = paste("region = (", region[1], ", ", region[2], "), value = ", value,
 cat(str)
 ```
 
-As you can see, it is hard to read and very easy to make mistakes. (Syntax highlighting may be 
-helpful to match quotes, but it is still quite annoying to see so many commas and quotes.)
+As you can see, it is hard to read and very easy to make mistakes. (Syntax
+highlighting may be helpful to match brackets, but it is still quite annoying
+to see so many commas and quotes.)
 
-In **Perl**, we always use variable interpolation to construct complex strings in 
-which variables are started with special marks (sigil), and variables will be replaced with
-their real values. In this package, we aim to implement variable interpolation in *R*.
-The idea is rather simple: use special marks to identify variables and then
-replace with their values. The function here is `qq()` which is named from the
-subroutine with the same name in **Perl** (It stands for double quote). Using variable interpolation, above
-example can be written as:
+In **Perl**, we always use variable interpolation to construct complex strings
+in which variables are started with special marks (sigil), and variables will
+be replaced with their real values. In this package, we aim to implement
+variable interpolation in R. The idea is rather simple: use special marks to
+identify variables and then replace with their values. The function here is
+`qq()` which is named from the subroutine with the same name in **Perl** (It
+stands for double quote). Using variable interpolation, above example can be
+written as:
 
 ```{r}
 library(GetoptLong)
@@ -116,22 +123,6 @@ Reset the options so that it does not affect example code in following part of t
 qq.options(RESET = TRUE)
 ```
 
-You can use `cat_verbose` together with `GetoptLong()` when you want to run the R script in command line.
-In following example code, if you do not specify `--verbose`, all messages will be shut down.
-
-```{r, eval = FALSE}
-library(GetoptLong)
-GetoptLong(c(
-    "verbose", "Print message"
-))
-qq.options("cat_verbose" = verbose)
-qqcat("This is a message")
-```
-
-```{r, results = 'hide'}
-qq.options(RESET = TRUE)
-```
-
 Not only simple scalars but also pieces of codes can be interpolated:
 
 ```{r}
@@ -159,7 +150,7 @@ cat(txt)
 ```
 
 **NOTE:** Since `qq` as the function name is very easy to be used by other packages
-(E.g., in **lattice**, there is also a `qq()` function as well) and if so, you can enforce
+(E.g., in **lattice**, there is a `qq()` function as well) and if so, you can enforce
 `qq()` in your working environment as the function in **GetoptLong** by:
 
 ```{r, eval = FALSE}
@@ -265,81 +256,6 @@ length(str)
 str
 ```
 
-## You can also interpolate more complicated codes
-
-Besides simple variables, you can also put chunk of codes in the string. 
-Since `qq()` takes value of the last variable in the chunk as final returning value, you need 
-to explicitly specify the return value in the chunk.
-
-Following example is another way to contruct a HTML table in which the first row is assigned with class name.
-
-```{r}
-name = letters[1:4]
-value = 1:4
-str = qq("
-`
-text = character(length(name))
-for(i in seq_along(name)) {
-    if(i == 1) {
-        text[i] = qq(\"<tr class='highlight'><td>@{name[i]}</td><td>@{value[i]}</td></tr>\n\")
-    } else {
-        text[i] = qq(\"<tr><td>@{name[i]}</td><td>@{value[i]}</td></tr>\n\")
-    }
-}
-text
-`", code.pattern = "`CODE`")
-```
-
-```{r}
-cat(str)
-```
-
-In above example, the string also contains a `qq()` function, so please use different code patterns for them.
-
-## Simple template system
-
-More advanced, you can make a simple template system. E.g., put following code in `template.html`.
-In the template, **R** codes are marked by `[%` and `%]`. Again, if `qq()` is called inside the **R** codes in
-the template, you should use different code pattern instead of pattern in the template. That's why we use
-a complicated code pattern (`[%CODE%]`) in the template.
-
-```{r, eval = TRUE, echo = FALSE, results = 'makeup', comment = "", highlight = FALSE}
-html = "<html>
-<body>
-<h2>Report for [% report_name %]</h2>
-<table>
-<tr><th>name</th><th>value</th></tr>
-[% 
-i = seq_along(name)
-qq(\"<tr@{ifelse(i == 1, ' class=\\\"highlight\\\"', '')}><td>@{name}</td><td>@{value}</td></tr>\n\")
-%]
-</table>
-</body>
-</html>
-"
-cat(html)
-```
-
-Read `template.html` and do the interpolation:
-
-```{r, eval = FALSE, echo = TRUE}
-template = paste(readLines("template.html"), collapse = "\n")
-
-report_name = "test"
-name = letters[1:4]
-value = 1:4
-html = qq(template, code.pattern = "\\[%CODE%\\]")
-writeLines(html, con = "report.html")
-```
-
-You will get a report like:
-
-```{r, eval = TRUE, echo = FALSE, results = 'makeup', comment = "", highlight = FALSE}
-report_name = "test"
-name = letters[1:4]
-value = 1:4
-qqcat(html, code.pattern = "\\[%CODE%\\]")
-```
 
 ## Session info
 

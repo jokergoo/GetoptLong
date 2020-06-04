@@ -3,6 +3,7 @@ context("Test `GetoptLong`")
 
 test_that("test simple", {
 	GetoptLong("tag=i", "tag", argv_str = "--tag 1");         expect_that(tag, equals(1)); rm(tag)
+	GetoptLong("tag=i", "tag", argv_str = "--tag=1");         expect_that(tag, equals(1)); rm(tag)
 })
 
 test_that("test `tag=i`", {
@@ -17,6 +18,10 @@ test_that("test `tag=i`", {
 	expect_that(GetoptLong(spec, argv_str = "--tag a"),   prints_text("invalid"))
 	expect_that(GetoptLong(spec, argv_str = "--tag"),     prints_text("requires"))
 	expect_that(GetoptLong(spec, argv_str = ""),          prints_text("mandatory"))
+
+	tag = NA; GetoptLong(spec, argv_str = "");         expect_that(tag, equals(NA)); rm(tag)
+	tag = NULL; GetoptLong(spec, argv_str = "");         expect_that(tag, equals(NULL)); rm(tag)
+	tag = NA; GetoptLong(spec, argv_str = "--tag 1");         expect_that(tag, equals(1)); rm(tag)
 })
 
 test_that("test `len|size=i`", {
@@ -48,6 +53,10 @@ test_that("test `tag=s`", {
 	GetoptLong(spec, argv_str = "--tag 0.1"); expect_that(tag, is_identical_to("0.1")); rm(tag)
 	GetoptLong(spec, argv_str = "--tag a");   expect_that(tag, is_identical_to("a"));   rm(tag)
 	expect_that(GetoptLong(spec, argv_str = "--tag"), prints_text("requires"))
+
+	tag = NA; GetoptLong(spec, argv_str = "");         expect_that(tag, equals(NA)); rm(tag)
+	tag = NULL; GetoptLong(spec, argv_str = "");         expect_that(tag, equals(NULL)); rm(tag)
+	tag = NA; GetoptLong(spec, argv_str = "--tag 1");         expect_that(tag, equals("1")); rm(tag)
 })
 
 test_that("test `tag=f`", {
@@ -58,6 +67,10 @@ test_that("test `tag=f`", {
 	GetoptLong(spec, argv_str = "--tag 0.1"); expect_that(tag, equals(0.1)); rm(tag)
 	expect_that(GetoptLong(spec, argv_str = "--tag a"),  prints_text("invalid"))
 	expect_that(GetoptLong(spec, argv_str = "--tag"),    prints_text("requires"))
+
+	tag = NA; GetoptLong(spec, argv_str = "");         expect_that(tag, equals(NA)); rm(tag)
+	tag = NULL; GetoptLong(spec, argv_str = "");         expect_that(tag, equals(NULL)); rm(tag)
+	tag = NA; GetoptLong(spec, argv_str = "--tag 1");         expect_that(tag, equals(1)); rm(tag)
 })
 
 test_that("test `tag=o`", {
@@ -94,12 +107,30 @@ test_that("test `tag`", {
 
 })
 
+test_that("test `verbose!`", {
+	spec = c(
+		"verbose!", "print messages"
+	)
+	GetoptLong(spec, argv_str = "--verbose");    expect_that(verbose, is_identical_to(TRUE)); rm(verbose)
+	GetoptLong(spec, argv_str = "--no-verbose"); expect_that(verbose, is_identical_to(FALSE)); rm(verbose)
+	GetoptLong(spec, argv_str = "--noverbose"); expect_that(verbose, is_identical_to(FALSE)); rm(verbose)
+
+	verbose = FALSE
+	GetoptLong(spec, argv_str = ""); expect_that(verbose, equals(FALSE)); rm(verbose)
+	verbose = FALSE
+	GetoptLong(spec, argv_str = "--verbose"); expect_that(verbose, equals(TRUE)); rm(verbose)
+	verbose = TRUE
+	GetoptLong(spec, argv_str = "--no-verbose"); expect_that(verbose, equals(FALSE)); rm(verbose)
+})
+
+
 test_that("test `tag=i@`", {
 	spec = c(
 		"tag=i@", "desc"
 	)
 	GetoptLong(spec, argv_str = "--tag 1");         expect_that(tag, is_identical_to(1));   rm(tag)
 	GetoptLong(spec, argv_str = "--tag 1 --tag 2"); expect_that(tag, equals(1:2)); rm(tag)
+	GetoptLong(spec, argv_str = "--t 1 --t 2"); expect_that(tag, equals(1:2)); rm(tag)
 	expect_that(GetoptLong(spec, argv_str = "--tag 1 --tag a"), prints_text("invalid"))
 	expect_that(GetoptLong(spec, argv_str = "--tag 0.1"),       prints_text("invalid"))
 	expect_that(GetoptLong(spec, argv_str = "--tag a"),         prints_text("invalid"))
@@ -108,6 +139,18 @@ test_that("test `tag=i@`", {
 
 	tag = "a"
 	expect_error(GetoptLong(spec, argv_str = "--tag 1"), "must be number"); rm(tag)
+
+	GetoptLong(spec, argv_str = "--tag 1 2"); expect_that(tag, equals(1:2)); rm(tag)
+	GetoptLong(spec, argv_str = "--t 1 2"); expect_that(tag, equals(1:2)); rm(tag)
+	GetoptLong(spec, argv_str = "--tag=1 --tag=2"); expect_that(tag, equals(1:2)); rm(tag)
+	
+	spec = c(
+		"foo|bar=i@", "desc"
+	)
+	GetoptLong(spec, argv_str = "--foo=1 --bar=2"); expect_that(foo, equals(1:2)); rm(foo);
+	GetoptLong(spec, argv_str = "--foo 1 --bar 2"); expect_that(foo, equals(1:2)); rm(foo);
+	GetoptLong(spec, argv_str = "--bar 1 2"); expect_that(foo, equals(1:2)); rm(foo);
+	
 })
 
 test_that("test `tag=i%`", {
@@ -115,7 +158,7 @@ test_that("test `tag=i%`", {
 		"tag=i%", "desc"
 	)
 	GetoptLong(spec, argv_str = "--tag name=1"); expect_that(tag, is_identical_to(list(name = 1))); rm(tag)
-	GetoptLong(spec, argv_str = "--tag name=1 value=2"); expect_that(tag, is_identical_to(list(name = 1))); rm(tag)
+	GetoptLong(spec, argv_str = "--tag name=1 value=2");tag = tag[sort(names(tag))]; expect_that(tag, is_identical_to(list(name = 1, value = 2))); rm(tag)
 	GetoptLong(spec, argv_str = "--tag name=1 --tag value=2"); tag = tag[sort(names(tag))]; expect_that(tag, is_identical_to(list(name = 1, value = 2))); rm(tag)
 	GetoptLong(spec, argv_str = "--tag name=1 --tag name=2"); expect_that(tag, is_identical_to(list(name = 2))); rm(tag)
 	expect_that(GetoptLong(spec, argv_str = "--tag 1"),   prints_text("requires"))
@@ -197,22 +240,6 @@ test_that("test `tag=i{,}`", {
 	GetoptLong(spec, argv_str = "--tag 1 2");     expect_that(tag, equals(1:2)); rm(tag)
 	GetoptLong(spec, argv_str = "--tag 1 2 3");   expect_that(tag, equals(1:3)); rm(tag)
 	GetoptLong(spec, argv_str = "--tag 1 2 3 4"); expect_that(tag, equals(1:4)); rm(tag)
-})
-
-test_that("test `verbose!`", {
-	spec = c(
-		"verbose!", "print messages"
-	)
-	GetoptLong(spec, argv_str = "--verbose");    expect_that(verbose, is_identical_to(TRUE)); rm(verbose)
-	GetoptLong(spec, argv_str = "--no-verbose"); expect_that(verbose, is_identical_to(FALSE)); rm(verbose)
-	GetoptLong(spec, argv_str = "--noverbose"); expect_that(verbose, is_identical_to(FALSE)); rm(verbose)
-
-	verbose = FALSE
-	GetoptLong(spec, argv_str = ""); expect_that(verbose, equals(FALSE)); rm(verbose)
-	verbose = FALSE
-	GetoptLong(spec, argv_str = "--verbose"); expect_that(verbose, equals(TRUE)); rm(verbose)
-	verbose = TRUE
-	GetoptLong(spec, argv_str = "--no-verbose"); expect_that(verbose, equals(FALSE)); rm(verbose)
 })
 
 test_that("test other configurations", {

@@ -33,7 +33,7 @@ SingleOption$methods(
 		obj$value = NULL
 		obj$desc = desc
 		if(grepl("^\\s*$", obj$desc)) obj$desc = "No description is provided."
-		
+
 		obj$is_mandatory = detect_mandatory_on_spec(spec)
 
 		if(detect_optional_on_spec(spec)) {
@@ -122,11 +122,23 @@ SingleOption$methods(
 						stop_wrap(qq("`@{opt_name}` is set as a scalar. The value should be an atomic scalar."))
 					}
 					if(obj$opt_type %in% c("integer", "numeric")) {
+						if(is.na(v) && !is.numeric(v)) {
+							if(.self$opt_type == "integer") {
+								v = NA_integer_
+							} else {
+								v = NA_real_
+							}
+							.self$default = v
+						}
 						if(!is.numeric(v)) {
 							stop_wrap(qq("`@{opt_name}` is set in integer/numeric. The value must be number."))
 						}
 					}
 					if(obj$opt_type == "character") {
+						if(is.na(v) && !is.character(v)) {
+							v = NA_character_
+							.self$default = v
+						}
 						if(!is.character(v)) {
 							stop_wrap(qq("`@{opt_name}` is set in character. The value must be a character."))
 						}
@@ -200,8 +212,8 @@ SingleOption$methods(
 )
 
 SingleOption$methods(
-	help_message = function(prefix = "  ", width = 80, which = c("opt_line", "desc_line"),
-		data_type = TRUE) {
+	help_message = function(prefix = "  ", width = GetoptLong.options$help_width, 
+		which = c("opt_line", "desc_line"), data_type = TRUE) {
 
 		msg = ""
 
@@ -245,12 +257,14 @@ SingleOption$methods(
 				msg = paste0(msg, prefix, "  ", "[default: ", default_str, "]\n")
 			}
 
+			abbr = c("character" = "chr", "integer" = "int", "extended_integer" = "int", "numeric" = "num")
+
 			if(.self$var_type == "hash") {
 				if(!is.null(.self$sub_opt)) {
 					sub_opt_line = paste0("\n", prefix, "  Sub named options:\n")
 					so = .self$sub_opt
 					for(nm in names(so)) {
-						str1 = paste0(prefix, "  ", nm, "=.")
+						str1 = paste0(prefix, "  ", nm, qq("=@{.self$opt_type}"))
 						str2 = format_text(so[nm], prefix = paste0(prefix, strrep(" ", nchar(str1) + 1 - nchar(prefix) - 2)))
 						substr(str2, 1, nchar(str1)) = str1
 						sub_opt_line = paste0(sub_opt_line, str2, "\n")
@@ -262,6 +276,84 @@ SingleOption$methods(
 		}
 
 		return(msg)
+	}
+)
+
+SingleOption$methods(
+	help_message_two_columns = function(prefix = "  ", only_opt = FALSE, opt_width = NULL,
+		width = max(GetoptLong.options$help_width, opt_width + 60)) {
+		
+		opt_line = NULL
+		for(nm in .self$full_opt) {
+			if(nchar(nm) == 1) {
+				opt_line = c(opt_line, qq("-@{nm}"))
+			} else {
+				opt_line = c(opt_line, qq("--@{nm}"))
+			}
+		}
+		opt_line = paste(opt_line, collapse = ", ")
+		opt_line = paste0(prefix, opt_line)
+
+		abbr = c("character" = "chr", "integer" = "int", "extended_integer" = "int", "numeric" = "num")
+
+		if(.self$var_type == "scalar") {
+			if(.self$opt_type == "logical") {
+
+			} else if(.self$opt_type == "negatable_logical") {
+				opt_line = paste0(opt_line, ", -no-", .self$name)
+			} else {
+				opt_line = c(opt_line, paste0(prefix, "  [type: ", abbr[.self$opt_type], "]"))
+			}
+		} else if(.self$var_type == "array") {
+			opt_line = c(opt_line, paste0(prefix, "  [type: ", qq("[@{abbr[.self$opt_type]}, ...]"), "]"))
+		} else if(.self$var_type == "hash") {
+			opt_line = c(opt_line, paste0(prefix, "  [type: ", qq("{name=@{abbr[.self$opt_type]}, ...}"), "]"))
+		}
+		
+		if(only_opt) {
+			return(opt_line)
+		}
+
+		prefix2 = strrep(" ", opt_width)
+		desc_line = format_text(.self$desc, prefix = prefix2, width = width)
+
+		default_str = .self$default_as_string()
+		if(!is.null(default_str)) {
+			desc_line = paste0(desc_line, prefix2, "\n", prefix2, "  ", "[default: ", default_str, "]")
+		}
+
+		if(.self$var_type == "hash") {
+			if(!is.null(.self$sub_opt)) {
+				sub_opt_line = paste0(prefix2, "\n", prefix2, "  Sub named options:\n")
+				so = .self$sub_opt
+				for(nm in names(so)) {
+					str1 = paste0(prefix2, "  ", nm, qq("=@{abbr[.self$opt_type]}"))
+					str2 = format_text(so[nm], prefix = paste0(prefix2, strrep(" ", nchar(str1) + 1 - nchar(prefix2) - 2)))
+					substr(str2, 1, nchar(str1)) = str1
+					sub_opt_line = paste0(sub_opt_line, str2, "\n")
+				}
+				desc_line = paste0(desc_line, prefix2, "\n", sub_opt_line, "\n")
+			}
+		}
+
+		desc_line = strsplit(desc_line, "\n")[[1]]
+
+		n1 = length(opt_line)
+		n2 = length(desc_line)
+		msg = character(max(n1, n2))
+		for(i in seq_along(msg)) {
+			if(i <= n1 && i <= n2) {
+				msg[i] = desc_line[i]
+				substr(msg[i], 1, nchar(opt_line[i])) = opt_line[i]
+			} else if(i > n1) {
+				msg[i] = desc_line[i]
+			} else if(i > n2) {
+				msg[i] = opt_line[i]
+			}
+		}
+
+		paste(msg, collapse = "\n")
+
 	}
 )
 

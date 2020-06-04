@@ -14,6 +14,7 @@
 #
 # -``config`` Configuration of ``Getopt::Long``, check http://perldoc.perl.org/Getopt/Long.html#Configuring-Getopt\%3a\%3aLong .
 # -``template_tag`` The tag for identifying specifications in the template. The format should be in ``left_tag CODE right_tag``.
+# -``help_style`` The style of the help message. 
 #
 # ``GetoptLong.options(...)`` should be put before calling `GetoptLong` function.
 #
@@ -28,9 +29,30 @@ GetoptLong.options = setGlobalOptions(
 						.length = 1,
 						.validate = function(x) grepl("CODE", x)
 					),
+	help_style = list(.value = "one-column",
+					 .length = 1,
+					 .filter = function(x) {
+					 	if(x == "one column") {
+					 		x = "one-column"
+					 	} else if(x == "one_column") {
+					 		x = "one-column"
+					 	} else if(x == "two column") {
+					 		x = "two-column"
+					 	} else if(x == "two_column") {
+					 		x = "two-column"
+					 	} else if(x == "two columns") {
+					 		x = "two-column"
+					 	} else if(x == "two_columns") {
+					 		x = "two-column"
+					 	}
+					 	x
+					 },
+					 .validate = function(x) x %in% c("one-column", "two-column"),
+					 .failed_msg = "help_style should be one of 'one-column' and 'two-column'"
+					),
+	"help_width" = 100,
 	"__argv_str__" = list(.value = NULL,
 						.length = c(0, 1),
-						.private = TRUE,
 						.visible = FALSE),
 	"__script_name__" = list(.value = NULL,
 		                    .private = TRUE,
