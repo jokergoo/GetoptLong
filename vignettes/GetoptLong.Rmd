@@ -777,11 +777,11 @@ take the first argument next to `--` as the path of user-specified **Perl** path
 ## Specify command-line options within R session
 
 When in an interactive R session, arguments can be set when calling
-`GetoptLong:::source()`, so it would be convinient to load external R scripts
+`source_script()`, so it would be convinient to load external R scripts
 with different comand-line arguments. _E.g._:
 
 ```{r, eval = FALSE}
-GetoptLong:::source("foo.R", argv = "--cutoff 0.01 --input file=foo.txt --verbose")
+source_script("foo.R", argv_str = "--cutoff 0.01 --input file=foo.txt --verbose")
 ```
 
 ## Session info

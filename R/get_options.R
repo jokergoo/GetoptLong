@@ -388,6 +388,15 @@ source_script = function(file, ..., argv_str = NULL) {
 	base::source(file, ...)
 }
 
+source = function (file, ..., argv = NULL) {
+    GetoptLong.options(`__argv_str__` = argv)
+    GetoptLong.options(`__script_name__` = file)
+    on.exit({
+    	GetoptLong.options(`__script_name__` = NULL)
+    	GetoptLong.options(`__argv_str__` = NULL)
+    })
+    base::source(file, ...)
+}
 
 parse_spec_template = function(template, match = GetoptLong.options("template_tag")) {
 	lt = find_code(match, template)
