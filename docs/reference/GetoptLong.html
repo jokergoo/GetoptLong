@@ -183,9 +183,10 @@
 
 <p>Then you can call the script from command line either by:</p>
 <p></p><pre>
-    ~\&amp;gt; Rscript foo.R --number 4 --cutoff 0.01 --verbose
-    ~\&amp;gt; Rscript foo.R -n 4 -c 0.01 -v
-    ~\&amp;gt; Rscript foo.R -n 4 --verbose  </pre>
+    Rscript foo.R --number 4 --cutoff 0.01 --verbose
+    Rscript foo.R --number 4 --cutoff=0.01 --verbose
+    Rscript foo.R -n 4 -c 0.01 -v
+    Rscript foo.R -n 4 --verbose  </pre>
 
 <p>In this example, <code>number</code> is a mandatory option and it should only be in
 integer mode. <code>cutoff</code> is optional and it already has a default value 0.05.
