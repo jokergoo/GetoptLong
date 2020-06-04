@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Global options for qq() related functions — qq.options • GetoptLong</title>
+<title>Source the R script with command-line arguments — source_script • GetoptLong</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Global options for qq() related functions — qq.options" />
-<meta property="og:description" content="Global options for qq() related functions" />
+<meta property="og:title" content="Source the R script with command-line arguments — source_script" />
+<meta property="og:description" content="Source the R script with command-line arguments" />
 
 
 
@@ -123,62 +123,39 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Global options for qq() related functions</h1>
+    <h1>Source the R script with command-line arguments</h1>
     
-    <div class="hidden name"><code>qq.options.Rd</code></div>
+    <div class="hidden name"><code>source_script.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Global options for qq() related functions</p>
+    <p>Source the R script with command-line arguments</p>
     </div>
 
-    <pre class="usage"><span class='fu'>qq.options</span>(<span class='no'>...</span>, <span class='kw'>RESET</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>READ.ONLY</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>LOCAL</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>ADD</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>source_script</span>(<span class='no'>file</span>, <span class='no'>...</span>, <span class='kw'>argv_str</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
+      <th>file</th>
+      <td><p>The R script</p></td>
+    </tr>
+    <tr>
       <th>...</th>
-      <td><p>Options, see 'Details' section.</p></td>
+      <td><p>Pass to <code><a href='https://rdrr.io/r/base/source.html'>source</a></code>.</p></td>
     </tr>
     <tr>
-      <th>RESET</th>
-      <td><p>Whether to reset options to their default values.</p></td>
-    </tr>
-    <tr>
-      <th>READ.ONLY</th>
-      <td><p>Whether to only return read-only options.</p></td>
-    </tr>
-    <tr>
-      <th>LOCAL</th>
-      <td><p>Whether to switch local mode.</p></td>
-    </tr>
-    <tr>
-      <th>ADD</th>
-      <td><p>Whether to add new options.</p></td>
+      <th>argv_str</th>
+      <td><p>The command-line arguments.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>Supported options are following:</p>
-<dl'>
-  <dt><code>cat_prefix</code></dt><dd><p>prefix of the string which is printed by <code><a href='qqcat.html'>qqcat</a></code></p></dd>
-  <dt><code>cat_verbose</code></dt><dd><p>whether to print text by <code><a href='qqcat.html'>qqcat</a></code></p></dd>
-  <dt><code>cat_strwrap</code></dt><dd><p>whether call <code><a href='https://rdrr.io/r/base/strwrap.html'>strwrap</a></code> to wrap the string</p></dd>
-  <dt><code>code.pattern</code></dt><dd><p>code pattern for variable interpolation</p></dd>
-
-</dl>
-
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>a</span> <span class='kw'>=</span> <span class='fl'>1</span>
-<span class='fu'>qq.options</span>(<span class='kw'>cat_prefix</span> <span class='kw'>=</span> <span class='st'>"[INFO] "</span>)
-<span class='fu'><a href='qqcat.html'>qqcat</a></span>(<span class='st'>"a = @{a}\n"</span>)</div><div class='output co'>#&gt; [INFO] a = 1</div><div class='input'><span class='fu'>qq.options</span>(<span class='kw'>cat_verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-<span class='fu'><a href='qqcat.html'>qqcat</a></span>(<span class='st'>"a = @{a}\n"</span>)
-<span class='fu'>qq.options</span>(<span class='kw'>RESET</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-<span class='fu'>qq.options</span>(<span class='kw'>code.pattern</span> <span class='kw'>=</span> <span class='st'>"`CODE`"</span>)
-<span class='fu'><a href='qqcat.html'>qqcat</a></span>(<span class='st'>"a = `a`\n"</span>)</div><div class='output co'>#&gt; a = 1</div><div class='input'><span class='fu'>qq.options</span>(<span class='kw'>RESET</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div></pre>
+    <pre class="examples"><div class='input'><span class='co'># There is no example</span>
+<span class='kw'>NULL</span></div><div class='output co'>#&gt; NULL</div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
