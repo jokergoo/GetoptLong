@@ -25,9 +25,10 @@
 #
 # Then you can call the script from command line either by:
 #
-#     ~\> Rscript foo.R --number 4 --cutoff 0.01 --verbose
-#     ~\> Rscript foo.R -n 4 -c 0.01 -v
-#     ~\> Rscript foo.R -n 4 --verbose
+#     Rscript foo.R --number 4 --cutoff 0.01 --verbose
+#     Rscript foo.R --number 4 --cutoff=0.01 --verbose
+#     Rscript foo.R -n 4 -c 0.01 -v
+#     Rscript foo.R -n 4 --verbose
 #
 # In this example, ``number`` is a mandatory option and it should only be in
 # integer mode. ``cutoff`` is optional and it already has a default value 0.05.
