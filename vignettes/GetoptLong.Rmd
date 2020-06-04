@@ -28,10 +28,10 @@ library(GetoptLong)
 ```
 
 There are already several R packages which parse command-line arguments such
-as [**getopt**](https://cran.r-project.org/web/packages/getopt/index.html),
-[**optparse**](https://cran.r-project.org/web/packages/optparse/),
-[**argparse**](https://cran.r-project.org/web/packages/argparse/),
-[**docopt**](https://cran.r-project.org/web/packages/docopt/index.html). Here
+as [**getopt**](https://CRAN.R-project.org/package=getopt),
+[**optparse**](https://CRAN.R-project.org/package=optparse),
+[**argparse**](https://CRAN.R-project.org/package=argparse),
+[**docopt**](https://CRAN.R-project.org/package=docopt). Here
 **GetoptLong** is another command-line argument parser (actually it was
 developed very early, [the first CRAN
 version](https://cran.r-project.org/src/contrib/Archive/GetoptLong/) was in

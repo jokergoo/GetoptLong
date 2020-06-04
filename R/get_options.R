@@ -42,7 +42,8 @@
 # Zuguang Gu <z.gu@dkfz.de>
 #
 GetoptLong = function(..., help_head = NULL, help_foot = NULL, envir = parent.frame(), 
-	argv_str = NULL, template_control = list(), help_style = GetoptLong.options$help_style) {
+	argv_str = NULL, template_control = list(), 
+	help_style = GetoptLong.options$help_style) {
 
 	if(is.null(get_scriptname())) {
 		IS_UNDER_COMMAND_LINE = FALSE

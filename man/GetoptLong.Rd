@@ -8,7 +8,8 @@ Wrapper of the Perl module \code{Getopt::Long} in R
 }
 \usage{
 GetoptLong(..., help_head = NULL, help_foot = NULL, envir = parent.frame(),
-    argv_str = NULL, template_control = list(), help_style = GetoptLong.options$help_style)
+    argv_str = NULL, template_control = list(),
+    help_style = GetoptLong.options$help_style)
 }
 \arguments{
 
