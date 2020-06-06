@@ -159,7 +159,7 @@ Options:
   --verbose        Print message. 
   --help, -h       Print help message and exit. 
   --version        Print version information and exit. </code></pre>
-<p>You can find the short option names (in single characters) are automatically added. The information of default values is added as well.</p>
+<p>You can find the short option names (in single letters) are automatically added. The information of default values is added as well.</p>
 </div>
 <div id="specify-as-a-template" class="section level3">
 <h3 class="hasAnchor">
@@ -232,11 +232,13 @@ name=s{2,}      a character vector, at least two elements</code></pre>
 <p>or</p>
 <pre><code>length=i%    name-value pair, values should be integers
 name=s%      name-value pair, values should be characters</code></pre>
+<p>to be specified as:</p>
 <pre><code>--length foo=1 bar=3 --name foo=a bar=b</code></pre>
 <p>The features from R part are:</p>
 <ol style="list-style-type: decimal">
 <li><p>It automaticlly generates option usage in two styles. The data type and default value of options are automatically detected and included.</p></li>
 <li><p>It supports specifying the usage in a template which allows more complex text of option usage.</p></li>
+<li><p>It allows grouping options.</p></li>
 <li><p>It provides a natural and convenient way to specify defaults.</p></li>
 </ol>
 </div>
@@ -772,11 +774,11 @@ $number
 [1] 1 2
 
 $param
-$param$var1
-[1] "a"
-
 $param$var2
 [1] "b"
+
+$param$var1
+[1] "a"
 
 
 $verbose
@@ -786,7 +788,7 @@ $verbose
 <h2 class="hasAnchor">
 <a href="#help-option" class="anchor"></a>Help option</h2>
 <p><code>help</code> is a reserved option, which means, you can not use it as yours.</p>
-<p>Option usage is automatically generated and can be retrieved by setting <code>--help</code> in the command. In following example, I create an option specification that contains all types of options (with long description):</p>
+<p>Option usage is automatically generated and can be retrieved by setting <code>--help</code> in the command. In following example, I create an option specification that contains all types of options (with long descriptions):</p>
 <div class="sourceCode" id="cb27"><html><body><pre class="r"><span class="fu"><a href="../reference/GetoptLong.html">GetoptLong</a></span>(
     <span class="st">"count=i"</span>,  <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(<span class="st">"This is a count. This is a count. This is a count."</span>,
                       <span class="st">"This is a count.  This is a count. This is a count."</span>),
@@ -1015,7 +1017,7 @@ Options:
     Print version information and exit.
  
 Please contact name@address.</code></pre>
-<p>The options in the usage text can be grouped by setting separater lines. The separater line should contain two elements: the separator and the description. The separator can be any character in <code>-+=#%</code> with any length.</p>
+<p>The options in the usage text can be grouped by setting separator lines. The separator line should contain two elements: the separator and the description. The separator can be any character in <code>-+=#%</code> with any length.</p>
 <div class="sourceCode" id="cb39"><html><body><pre class="r"><span class="no">count</span> <span class="kw">=</span> <span class="fl">1</span>
 <span class="no">array</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.1</span>, <span class="fl">0.2</span>)
 <span class="fu"><a href="../reference/GetoptLong.html">GetoptLong</a></span>(

@@ -122,7 +122,7 @@ GetoptLong.options("__argv_str__" = NULL)
 GetoptLong.options("help_style" = "one-column")
 ```
 
-You can find the short option names (in single characters) are automatically added.
+You can find the short option names (in single letters) are automatically added.
 The information of default values is added as well.
 
 ### Specify as a template
@@ -236,6 +236,9 @@ length=i%    name-value pair, values should be integers
 name=s%      name-value pair, values should be characters
 ```
 
+to be specified as:
+
+
 ```
 --length foo=1 bar=3 --name foo=a bar=b
 ```
@@ -247,6 +250,8 @@ The features from R part are:
 
 2. It supports specifying the usage in a template which allows more complex
    text of option usage.
+
+3. It allows grouping options.
 
 3. It provides a natural and convenient way to specify defaults.
 
@@ -500,7 +505,7 @@ GetoptLong.options("__argv_str__" = NULL)
 
 Option usage is automatically generated and can be retrieved by setting
 `--help` in the command. In following example, I create an option
-specification that contains all types of options (with long description):
+specification that contains all types of options (with long descriptions):
 
 ```{r complex_example, eval = FALSE}
 GetoptLong(
@@ -653,8 +658,8 @@ local({ eval(parse(text = chunks[["head_and_foot"]])) })
 GetoptLong.options("__argv_str__" = NULL)
 ```
 
-The options in the usage text can be grouped by setting separater lines.
-The separater line should contain two elements: the separator and the description.
+The options in the usage text can be grouped by setting separator lines.
+The separator line should contain two elements: the separator and the description.
 The separator can be any character in `-+=#%` with any length.
 
 ```{r grouped_options, eval = FALSE}
