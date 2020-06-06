@@ -455,12 +455,6 @@ GetoptLong(
 )
 ```
 
-and the help message is:
-
-```
-
-```
-
 If `--verbose`/`--no-verbose` is not specified, the variable `verbose` is
 `TRUE`. If `--verbose` is specified, `verbose` is `TRUE` and if `--no-verbose`
 is specified, `verbose` is `FALSE`.
@@ -652,14 +646,66 @@ local({ eval(parse(text = chunks[["head_and_foot"]])) })
 GetoptLong.options("__argv_str__" = NULL)
 ```
 
+The options in the usage text can be grouped by setting separater lines.
+The separater line should contain two elements: the separator and the description.
+The separator can be any character in `-+=#%` with any length.
+
+```{r grouped_options, eval = FALSE}
+GetoptLong(
+    "--------", "Binary options:",
+    "verbose!", "Whether show messages",
+    "flag",     "a non-sense option",
+
+    "-------", "Single-value options:",
+    "count=i",  paste("This is a count. This is a count. This is a count.",
+                      "This is a count.  This is a count. This is a count."),
+    "number=f", paste("This is a number. This is a number. This is a number.",
+                      "This is a number. This is a number. This is a number."),
+    
+    "--------", paste("Multiple-vlaue options: long text long text long text",
+                      " long text long text long text long text long text"),
+    "array=f@", paste("This is an array. This is an array. This is an array.",
+                      "This is an array. This is an array. This is an array."),
+    "hash=s%",  paste("This is a hash. This is a hash. This is a hash.",
+                      "This is a hash. This is a hash. This is a hash."),
+    
+    "-------", "Other options:"
+)
+```
+
+```{r, echo = FALSE}
+chunks <- knitr:::knit_code$get()
+GetoptLong.options("__argv_str__" = "--help")
+local({ eval(parse(text = chunks[["grouped_options"]])) })
+GetoptLong.options("__argv_str__" = NULL)
+```
+
+And the two-column style for the grouped options.
+
+```{r, eval = FALSE}
+GetoptLong.options(help_style = "two-column")
+GetoptLong{
+    ...
+}
+```
+
+```{r, echo = FALSE}
+chunks <- knitr:::knit_code$get()
+GetoptLong.options("__argv_str__" = "--help")
+GetoptLong.options(help_style = "two-column")
+local({ eval(parse(text = chunks[["grouped_options"]])) })
+GetoptLong.options("__argv_str__" = NULL)
+GetoptLong.options(help_style = "one-column")
+```
+
 The global option `GetoptLong.options$help_width` controls the maximal width
 of the usage message.
 
 The specification can also be set as a template which provides more
-flexibilities for the usage message. _E.g._ to group options. Here option
-specifications are maked by `<>` where the specifications will be extracted
-and the text will be replaced by the option description. The mark can be set
-by `GetoptLong.options$template_tag` global option.
+flexibilities for the usage message. Here option specifications are maked by
+`<>` where the specifications will be extracted and the text will be replaced
+by the option description. The mark can be set by
+`GetoptLong.options$template_tag` global option.
 
 The option descriptions have different widths. To properly align the text, you
 need to manually adjust the width (spaces are filled if the width is larger

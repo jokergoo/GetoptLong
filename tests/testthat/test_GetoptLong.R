@@ -331,3 +331,20 @@ test_that("test sub options", {
 	), prints_text("name1"))
 })
 
+
+
+test_that("test grouped options", {
+	expect_that(GetoptLong(    
+		"-------", "Group1 options:",
+	    "number=i", "Number of items.",
+
+	    "-------", "Group2 options:",
+	    "cutoff=f", "Cutoff for filtering results.",
+
+	    "-------", "Group3 options:",
+	    "verbose",  "Print message.",
+
+    	argv_str = "--help"
+    ), prints_text("Group1"))
+})
+

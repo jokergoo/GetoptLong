@@ -101,20 +101,48 @@ GetoptLong = function(..., help_head = NULL, help_foot = NULL, envir = parent.fr
 	}
 	
 	##### extract specification for hash
-	l = grepl("\\w+\\$\\S+$", spec[, 1])
-	hash_sub_opt = spec[l, , drop = FALSE]
-	spec = spec[!l, , drop = FALSE]
+	l_sub_opt = grepl("\\w+\\$\\S+$", spec[, 1])
+	hash_sub_opt = spec[l_sub_opt, , drop = FALSE]
+	spec = spec[!l_sub_opt, , drop = FALSE]
 	spec[, 1] = gsub("\\s*", "", spec[, 1])
 
 	#### convert hash_sub_opt into a list
 	sub_opt = NULL
-	if(sum(l)) {
+	if(sum(l_sub_opt)) {
 		sub_opt = lapply(split(seq_len(nrow(hash_sub_opt)), gsub("\\$.*$", "", hash_sub_opt[, 1])), function(ind) {
 			nm = apply(hash_sub_opt[ind, , drop = FALSE], 1, function(x) {
 				gsub("^.*?\\$", "", x[1])
 			})
 			structure(hash_sub_opt[ind, 2], names = nm)
 		})
+	}
+
+	### opt groups
+	l_opt_group = grepl("^[-=\\+#%]*$", spec[, 1])
+	if(any(l_opt_group)) {
+		i_opt = 0
+		i_group = 0
+		opt_group = list()
+		opt_group_desc = NULL
+		if(!l_opt_group[1]) {
+			opt_group[[1]] = list()
+			opt_group_desc = ""
+			i_group = 1
+		}
+		for(i in seq_along(l_opt_group)) {
+			if(l_opt_group[i]) {
+				i_group = i_group + 1
+				opt_group[[i_group]] = list()
+				opt_group_desc = c(opt_group_desc, spec[i, 2])
+			} else {
+				i_opt = i_opt + 1
+				opt_group[[i_group]] = c(opt_group[[i_group]], i_opt)
+			}
+		}
+		spec = spec[!l_opt_group, , drop = FALSE]
+	} else {
+		opt_group = list(1:nrow(spec))
+		opt_group_desc = "Options:"
 	}
 
 	if(is.list(envir)) envir = as.environment(envir)
@@ -137,6 +165,8 @@ GetoptLong = function(..., help_head = NULL, help_foot = NULL, envir = parent.fr
 	opt_lt$help = SingleOption(spec = "help", "Print help message and exit.")
 	opt_lt$version = SingleOption(spec = "version", "Print version information and exit.")
 	n_opt = length(opt_lt)
+
+	opt_group[[length(opt_group)]] = c(opt_group[[length(opt_group)]], n_opt - 1, n_opt)
 
 	if(!is.null(sub_opt)) {
 		for(i in seq_len(n_opt)) {
@@ -214,7 +244,8 @@ GetoptLong = function(..., help_head = NULL, help_foot = NULL, envir = parent.fr
 		cat(red(qq("Error: @{res}\n")), file = OUT)
 		
 		print_help_msg(opt_lt, file = OUT, script_name = script_name, head = help_head, foot = help_foot,
-			template = template, template_control = template_control, style = help_style)
+			template = template, template_control = template_control, style = help_style,
+			opt_group = opt_group, opt_group_desc = opt_group_desc)
 		
 		suppressWarnings({
 			file.remove(json_file)
@@ -245,7 +276,8 @@ GetoptLong = function(..., help_head = NULL, help_foot = NULL, envir = parent.fr
 
 	if(opt_json$help) {
 		print_help_msg(opt_lt, file = OUT, script_name = script_name, head = help_head, foot = help_foot, 
-			template = template, template_control = template_control, style = help_style)
+			template = template, template_control = template_control, style = help_style,
+			opt_group = opt_group, opt_group_desc = opt_group_desc)
 		
 		if(IS_UNDER_COMMAND_LINE) {
 			q(save = "no", status = 127)
@@ -274,7 +306,8 @@ GetoptLong = function(..., help_head = NULL, help_foot = NULL, envir = parent.fr
 			cat(red(qq("Error: `@{opt_name}` is mandatory\n")), file = OUT)
 
 			print_help_msg(opt_lt, file = OUT, script_name = script_name, head = help_head, foot = help_foot,
-				template = template, template_control = template_control, style = help_style)
+				template = template, template_control = template_control, style = help_style,
+				opt_group = opt_group, opt_group_desc = opt_group_desc)
 			if(IS_UNDER_COMMAND_LINE) {
 				q(save = "no", status = 127)
 			} else if(!is.null(argv_str)) {  # under test

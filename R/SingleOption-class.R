@@ -314,7 +314,7 @@ SingleOption$methods(
 			return(opt_line)
 		}
 
-		prefix2 = strrep(" ", opt_width)
+		prefix2 = strrep(" ", opt_width + 2)
 		desc_line = format_text(.self$desc, prefix = prefix2, width = width)
 
 		default_str = .self$default_as_string()
