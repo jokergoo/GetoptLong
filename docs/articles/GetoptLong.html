@@ -736,11 +736,11 @@ Error: Insufficient arguments for option tag
 <p>will print</p>
 <pre><code>[1] 1 2
 [1] 0.05
-$var2
-[1] "b"
-
 $var1
 [1] "a"
+
+$var2
+[1] "b"
 
 [1] TRUE</code></pre>
 <p>There are two ways to specify logical options, <em>e.g.</em>, <code>verbose</code> and <code>verbose!</code>. <code>verbose</code> always takes <code>FALSE</code> as default and you cannot set default value for it, while you can set default for <code>verbose!</code>. <em>E.g.</em>:</p>
@@ -772,11 +772,11 @@ $number
 [1] 1 2
 
 $param
-$param$var2
-[1] "b"
-
 $param$var1
 [1] "a"
+
+$param$var2
+[1] "b"
 
 
 $verbose
@@ -804,20 +804,20 @@ $verbose
 
 Options:
   --count, -c integer
-    This is a count. This is a count. This is a count. This is a count.  This is a count.
-    This is a count.
+    This is a count. This is a count. This is a count. This is a count.  This is
+    a count. This is a count.
  
   --number, -n numeric
-    This is a number. This is a number. This is a number. This is a number. This is a
-    number. This is a number.
+    This is a number. This is a number. This is a number. This is a number. This
+    is a number. This is a number.
  
   --array, -a [numeric, ...]
-    This is an array. This is an array. This is an array. This is an array. This is an
-    array. This is an array.
+    This is an array. This is an array. This is an array. This is an array. This
+    is an array. This is an array.
  
   --hash {name=character, ...}
-    This is a hash. This is a hash. This is a hash. This is a hash. This is a hash. This
-    is a hash.
+    This is a hash. This is a hash. This is a hash. This is a hash. This is a
+    hash. This is a hash.
  
   --verbose, -no-verbose
     Whether show messages
@@ -845,23 +845,23 @@ Options:
 
 Options:
   --count, -c integer
-    This is a count. This is a count. This is a count. This is a count.  This is a count.
-    This is a count.
+    This is a count. This is a count. This is a count. This is a count.  This is
+    a count. This is a count.
     [default: 1]
  
   --number, -n numeric
-    This is a number. This is a number. This is a number. This is a number. This is a
-    number. This is a number.
+    This is a number. This is a number. This is a number. This is a number. This
+    is a number. This is a number.
     [default: 0.1]
  
   --array, -a [numeric, ...]
-    This is an array. This is an array. This is an array. This is an array. This is an
-    array. This is an array.
+    This is an array. This is an array. This is an array. This is an array. This
+    is an array. This is an array.
     [default: 1, 2]
  
   --hash {name=character, ...}
-    This is a hash. This is a hash. This is a hash. This is a hash. This is a hash. This
-    is a hash.
+    This is a hash. This is a hash. This is a hash. This is a hash. This is a
+    hash. This is a hash.
     [default: foo=a, bar=b]
  
   --verbose, -no-verbose
@@ -886,17 +886,19 @@ GetoptLong{
 <pre><code>Usage: Rscript foo.R [options]
 
 Options:
-  --count, -c                  This is a count. This is a count. This is a count. This is a
-    [type: int]                count.  This is a count. This is a count.                             
+  --count, -c                  This is a count. This is a count. This is a count.
+    [type: int]                This is a count.  This is a count. This is a count.                             
                                [default: 1] 
-  --number, -n                 This is a number. This is a number. This is a number. This is
-    [type: num]                a number. This is a number. This is a number.                             
+  --number, -n                 This is a number. This is a number. This is a
+    [type: num]                number. This is a number. This is a number. This is
+                               a number.                             
                                [default: 0.1] 
-  --array, -a                  This is an array. This is an array. This is an array. This is
-    [type: [num, ...]]         an array. This is an array. This is an array.                             
+  --array, -a                  This is an array. This is an array. This is an
+    [type: [num, ...]]         array. This is an array. This is an array. This is
+                               an array.                             
                                [default: 1, 2] 
-  --hash                       This is a hash. This is a hash. This is a hash. This is a
-    [type: {name=chr, ...}]    hash. This is a hash. This is a hash.                             
+  --hash                       This is a hash. This is a hash. This is a hash. This
+    [type: {name=chr, ...}]    is a hash. This is a hash. This is a hash.                             
                                [default: foo=a, bar=b] 
   --verbose, -no-verbose       Whether show messages                             
                                [default: on] 
@@ -923,25 +925,25 @@ Options:
 
 Options:
   --foo, -f {name=integer, ...}
-    This is foo. This is foo. This is foo. This is foo. This is foo. This is foo. This is
-    foo. This is foo.
+    This is foo. This is foo. This is foo. This is foo. This is foo. This is
+    foo. This is foo. This is foo.
     [default: a=1, b=2]
 
     Sub named options:
-    name1=integer name1 in foo. name1 in foo. name1 in foo. name1 in foo. name1 in foo.
-                  name1 in foo. name1 in foo. name1 in foo.
-    name2=integer name2 in foo. name2 in foo. name2 in foo. name2 in foo. name2 in foo.
-                  name2 in foo. name2 in foo. name2 in foo.
+    name1=integer name1 in foo. name1 in foo. name1 in foo. name1 in foo. name1
+                  in foo. name1 in foo. name1 in foo. name1 in foo.
+    name2=integer name2 in foo. name2 in foo. name2 in foo. name2 in foo. name2
+                  in foo. name2 in foo. name2 in foo. name2 in foo.
  
   --bar, -b {name=character, ...}
-    This is bar. This is bar. This is bar. This is bar. This is bar. This is bar. This is
-    bar. This is bar.
+    This is bar. This is bar. This is bar. This is bar. This is bar. This is
+    bar. This is bar. This is bar.
 
     Sub named options:
-    name3=character name3 in bar. name3 in bar. name3 in bar. name3 in bar. name3 in bar.
-                    name3 in bar. name3 in bar. name3 in bar.
-    name4=character name4 in bar. name4 in bar. name4 in bar. name4 in bar. name4 in bar.
-                    name4 in bar. name4 in bar. name4 in bar.
+    name3=character name3 in bar. name3 in bar. name3 in bar. name3 in bar. name3
+                    in bar. name3 in bar. name3 in bar. name3 in bar.
+    name4=character name4 in bar. name4 in bar. name4 in bar. name4 in bar. name4
+                    in bar. name4 in bar. name4 in bar. name4 in bar.
  
   --help, -h
     Print help message and exit.
@@ -957,28 +959,28 @@ GetoptLong{
 <pre><code>Usage: Rscript foo.R [options]
 
 Options:
-  --foo, -f                    This is foo. This is foo. This is foo. This is foo. This is
-    [type: {name=int, ...}]    foo. This is foo. This is foo. This is foo.                             
+  --foo, -f                    This is foo. This is foo. This is foo. This is foo.
+    [type: {name=int, ...}]    This is foo. This is foo. This is foo. This is foo.                             
                                [default: a=1, b=2]                             
                              
                                Sub named options:
-                               name1=int name1 in foo. name1 in foo. name1 in foo. name1 in
-                                         foo. name1 in foo. name1 in foo. name1 in foo. name1
-                                         in foo.
-                               name2=int name2 in foo. name2 in foo. name2 in foo. name2 in
-                                         foo. name2 in foo. name2 in foo. name2 in foo. name2
-                                         in foo.
+                               name1=int name1 in foo. name1 in foo. name1 in foo.
+                                         name1 in foo. name1 in foo. name1 in foo.
+                                         name1 in foo. name1 in foo.
+                               name2=int name2 in foo. name2 in foo. name2 in foo.
+                                         name2 in foo. name2 in foo. name2 in foo.
+                                         name2 in foo. name2 in foo.
  
-  --bar, -b                    This is bar. This is bar. This is bar. This is bar. This is
-    [type: {name=chr, ...}]    bar. This is bar. This is bar. This is bar.                             
+  --bar, -b                    This is bar. This is bar. This is bar. This is bar.
+    [type: {name=chr, ...}]    This is bar. This is bar. This is bar. This is bar.                             
                              
                                Sub named options:
-                               name3=chr name3 in bar. name3 in bar. name3 in bar. name3 in
-                                         bar. name3 in bar. name3 in bar. name3 in bar. name3
-                                         in bar.
-                               name4=chr name4 in bar. name4 in bar. name4 in bar. name4 in
-                                         bar. name4 in bar. name4 in bar. name4 in bar. name4
-                                         in bar.
+                               name3=chr name3 in bar. name3 in bar. name3 in bar.
+                                         name3 in bar. name3 in bar. name3 in bar.
+                                         name3 in bar. name3 in bar.
+                               name4=chr name4 in bar. name4 in bar. name4 in bar.
+                                         name4 in bar. name4 in bar. name4 in bar.
+                                         name4 in bar. name4 in bar.
  
   --help, -h                   Print help message and exit. 
   --version, -v                Print version information and exit. </code></pre>
@@ -1048,24 +1050,24 @@ Binary options:
  
 Single-value options:
   --count, -c integer
-    This is a count. This is a count. This is a count. This is a count.  This is a count.
-    This is a count.
+    This is a count. This is a count. This is a count. This is a count.  This is
+    a count. This is a count.
     [default: 1]
  
   --number, -n numeric
-    This is a number. This is a number. This is a number. This is a number. This is a
-    number. This is a number.
+    This is a number. This is a number. This is a number. This is a number. This
+    is a number. This is a number.
  
-Multiple-vlaue options: long text long text long text long text long text long text long
-text long text
+Multiple-vlaue options: long text long text long text long text long text long
+text long text long text
   --array, -a [numeric, ...]
-    This is an array. This is an array. This is an array. This is an array. This is an
-    array. This is an array.
+    This is an array. This is an array. This is an array. This is an array. This
+    is an array. This is an array.
     [default: 0.1, 0.2]
  
   --hash {name=character, ...}
-    This is a hash. This is a hash. This is a hash. This is a hash. This is a hash. This
-    is a hash.
+    This is a hash. This is a hash. This is a hash. This is a hash. This is a
+    hash. This is a hash.
  
 Other options:
   --help
@@ -1087,19 +1089,20 @@ Binary options:
   --flag, -f                a non-sense option 
 
 Single-value options:
-  --count, -c      This is a count. This is a count. This is a count. This is a count.
-    [type: int]    This is a count. This is a count.                 
+  --count, -c      This is a count. This is a count. This is a count. This is a
+    [type: int]    count.  This is a count. This is a count.                 
                    [default: 1] 
-  --number, -n     This is a number. This is a number. This is a number. This is a number.
-    [type: num]    This is a number. This is a number. 
+  --number, -n     This is a number. This is a number. This is a number. This is
+    [type: num]    a number. This is a number. This is a number. 
 
-Multiple-vlaue options: long text long text long text long text long text long text long
-text long text
-  --array, -a                  This is an array. This is an array. This is an array. This is
-    [type: [num, ...]]         an array. This is an array. This is an array.                             
+Multiple-vlaue options: long text long text long text long text long text long
+text long text long text
+  --array, -a                  This is an array. This is an array. This is an
+    [type: [num, ...]]         array. This is an array. This is an array. This is
+                               an array.                             
                                [default: 0.1, 0.2] 
-  --hash                       This is a hash. This is a hash. This is a hash. This is a
-    [type: {name=chr, ...}]    hash. This is a hash. This is a hash. 
+  --hash                       This is a hash. This is a hash. This is a hash. This
+    [type: {name=chr, ...}]    is a hash. This is a hash. This is a hash. 
 
 Other options:
   --help       Print help message and exit. 

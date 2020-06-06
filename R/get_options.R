@@ -275,12 +275,12 @@ GetoptLong = function(..., help_head = NULL, help_foot = NULL, envir = parent.fr
 	}
 
 	if(opt_json$help) {
-		print_help_msg(opt_lt, file = OUT, script_name = script_name, head = help_head, foot = help_foot, 
+		print_help_msg(opt_lt, file = stdout(), script_name = script_name, head = help_head, foot = help_foot, 
 			template = template, template_control = template_control, style = help_style,
 			opt_group = opt_group, opt_group_desc = opt_group_desc)
 		
 		if(IS_UNDER_COMMAND_LINE) {
-			q(save = "no", status = 127)
+			q(save = "no", status = 0)
 		} else if(!is.null(argv_str)) {  # under test
 			return(invisible(NULL))
 		} else {
@@ -289,10 +289,10 @@ GetoptLong = function(..., help_head = NULL, help_foot = NULL, envir = parent.fr
 	}
 	
 	if(opt_json$version) {
-		print_version_msg(envir, file = OUT)
+		print_version_msg(envir, file = stdout())
 		
 		if(IS_UNDER_COMMAND_LINE) {
-			q(save = "no", status = 127)
+			q(save = "no", status = 0)
 		} else if(!is.null(argv_str)) {  # under test
 			return(invisible(NULL))
 		} else {

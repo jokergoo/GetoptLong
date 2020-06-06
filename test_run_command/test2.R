@@ -146,3 +146,15 @@ GetoptLong(
 	argv_str = "--help"
 )
 
+GetoptLong.options$help_style = "two-column"
+cutoff = 0.05
+GetoptLong(
+  help_head = "foo",
+    "number=i{1,}", "Number of items.",
+    "cutoff=f", "Cutoff for filtering results.",
+    "param=s%", "Parameters specified by name=value pairs.",
+    "verbose",  "Print message.",
+    help_foot = "bar",
+    argv_str = "--help"
+)
+

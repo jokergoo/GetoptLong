@@ -50,7 +50,7 @@ GetoptLong.options = setGlobalOptions(
 					 .validate = function(x) x %in% c("one-column", "two-column"),
 					 .failed_msg = "help_style should be one of 'one-column' and 'two-column'"
 					),
-	"help_width" = 100,
+	"help_width" = 90,
 	"__argv_str__" = list(.value = NULL,
 						.length = c(0, 1),
 						.visible = FALSE),
