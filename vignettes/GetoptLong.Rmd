@@ -588,13 +588,20 @@ When options are specified as name-value pairs, these sub options can be documen
 follows. Note the specifications of _e.g._ `foo$name1` are only for the usage message.
 
 ```{r sub_opt, eval = FALSE}
+foo = list(a = 1, b = 2)
 GetoptLong(
-    "foo=i%", "This is foo. This is foo. This is foo. This is foo.",
-    "foo$name1", "name1 in foo. name1 in foo. name1 in foo. name1 in foo.",
-    "foo$name2", "name2 in foo. name2 in foo. name2 in foo. name2 in foo.",
-    "bar=s%", "This is bar. This is bar. This is bar. This is bar.",
-    "bar$name3", "name3 in bar. name3 in bar. name3 in bar. name3 in bar.",
-    "bar$name4", "name4 in bar. name4 in bar. name4 in bar. name4 in bar."
+    "foo=i%", paste("This is foo. This is foo. This is foo. This is foo.",
+                    "This is foo. This is foo. This is foo. This is foo."),
+    "foo$name1", paste("name1 in foo. name1 in foo. name1 in foo. name1 in foo.",
+                       "name1 in foo. name1 in foo. name1 in foo. name1 in foo."),
+    "foo$name2", paste("name2 in foo. name2 in foo. name2 in foo. name2 in foo.",
+                       "name2 in foo. name2 in foo. name2 in foo. name2 in foo."),
+    "bar=s%", paste("This is bar. This is bar. This is bar. This is bar.",
+                    "This is bar. This is bar. This is bar. This is bar."),
+    "bar$name3", paste("name3 in bar. name3 in bar. name3 in bar. name3 in bar.",
+                       "name3 in bar. name3 in bar. name3 in bar. name3 in bar."),
+    "bar$name4", paste("name4 in bar. name4 in bar. name4 in bar. name4 in bar.",
+                       "name4 in bar. name4 in bar. name4 in bar. name4 in bar.")
 )
 ```
 
@@ -651,6 +658,8 @@ The separater line should contain two elements: the separator and the descriptio
 The separator can be any character in `-+=#%` with any length.
 
 ```{r grouped_options, eval = FALSE}
+count = 1
+array = c(0.1, 0.2)
 GetoptLong(
     "--------", "Binary options:",
     "verbose!", "Whether show messages",
@@ -754,11 +763,11 @@ following example:
 GetoptLong("
 Usage: Rscript foo.R [options]
 
-  <count=i{2,}> This is a count. This is a count. This is a count. This is a count.
+  <count=i{2,}> This is a count. This is a count. This is a count.
   <#count> This is a count. This is a count.
-  <number=f> This is a number. This is a number. This is a number. This is a number.
+  <number=f> This is a number. This is a number. This is a number.
   <#number> This is a number. This is a number.
-", template_control = list(opt_width = c(count = 22, number = 22))
+", template_control = list(opt_width = c(count = 28, number = 28))
 )
 ```
 
