@@ -15,4 +15,3 @@ Description: This is a command-line argument parser which wraps the
 URL: https://github.com/jokergoo/GetoptLong
 SystemRequirements: Perl, Getopt::Long
 License: MIT + file LICENSE
-Repository: CRAN
