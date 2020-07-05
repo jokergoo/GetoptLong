@@ -1,11 +1,11 @@
 Package: GetoptLong
 Type: Package
 Title: Parsing Command-Line Arguments and Simple Variable Interpolation
-Version: 1.0.0
-Date: 2020-06-02
+Version: 1.0.1
+Date: 2020-07-05
 Author: Zuguang Gu
 Maintainer: Zuguang Gu <z.gu@dkfz.de>
-Depends: R (>= 3.6.0)
+Depends: R (>= 3.3.0)
 Imports: rjson, GlobalOptions (>= 0.1.0), methods, crayon
 Suggests: testthat (>= 1.0.0), knitr, markdown
 VignetteBuilder: knitr

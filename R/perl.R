@@ -154,7 +154,7 @@ find_perl_bin = function(con = stderr(), from_command_line = TRUE) {
 			}
 		}
 		
-		if(!file.info(perl_bin)$isdir) {
+		if(file.info(perl_bin)$isdir) {
 			cat(red(qq("@{perl_bin} should be a file, not a directory.\n")), file = con)
 			if(from_command_line) {
 				q(save = "no", status = 127)
