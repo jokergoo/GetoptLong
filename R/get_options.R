@@ -274,6 +274,17 @@ GetoptLong = function(..., help_head = NULL, help_foot = NULL, envir = parent.fr
 		opt_lt[[opt_name]] = opt
 	}
 
+	## logical options always have values no matter they are specified or not
+	## reset the value to NULL if they are not specified.
+	for(opt_name in names(opt_json)) {
+		opt = opt_lt[[opt_name]]
+		if(opt$opt_type == "negatable_logical") {
+			if(!negatable_logical_is_called(opt_name, argv_str)) {
+				opt$set_opt(NULL)
+			}
+		}
+	}
+
 	if(opt_json$help) {
 		print_help_msg(opt_lt, file = stdout(), script_name = script_name, head = help_head, foot = help_foot, 
 			template = template, template_control = template_control, style = help_style,
@@ -321,6 +332,28 @@ GetoptLong = function(..., help_head = NULL, help_foot = NULL, envir = parent.fr
 	export_to_parent_frame(opt_lt, envir = envir)
 	
 	return(invisible(opt_lt))
+}
+
+
+# test whether long_name is called in argv_str
+# negatable_logical_is_called("verbose", "--verbose")
+# negatable_logical_is_called("verbose", "-verbose")
+# negatable_logical_is_called("verbose", "--v")
+# negatable_logical_is_called("verbose", "-v")
+# negatable_logical_is_called("verbose", "--no-verbose")
+negatable_logical_is_called = function(long_name, argv_str) {
+	argv = strsplit(argv_str, " ")[[1]]
+	argv = argv[grepl("^-", argv)]
+	if(length(argv)) {
+		argv = gsub("^-+", "", argv)
+		if(any(sapply(argv, function(x) grepl(qq("^@{x}"), long_name)))) {
+			return(TRUE)
+		} else {
+			any(sapply(argv, function(x) grepl(qq("(no-?)?@{long_name}$"), x)))
+		}
+	} else {
+		return(FALSE)
+	}
 }
 
 

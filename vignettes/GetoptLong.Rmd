@@ -29,16 +29,40 @@ library(GetoptLong)
 
 
 ```{r, echo = FALSE, results = "asis"}
-is.solaris = function() {
-    grepl('SunOS',Sys.info()['sysname'])
+get_os <- function(){
+  sysinf <- Sys.info()
+  if (!is.null(sysinf)){
+  os <- sysinf['sysname']
+  if (os == 'Darwin')
+    os <- "osx"
+  } else { ## mystery machine
+    os <- .Platform$OS.type
+    if (grepl("^darwin", R.version$os))
+      os <- "osx"
+    if (grepl("linux-gnu", R.version$os))
+      os <- "linux"
+  }
+  tolower(os)
 }
 
-if(!is.solaris()) {
-    library(knitr)
-    knit("GetoptLong.Rmd2", "GetoptLong.md2")
-    invisible(file.copy("GetoptLong.md2", "/Users/jokergoo/project/GetoptLong/vignettes/GetoptLong.md2", overwrite = TRUE))
+is.solaris = function() {
+  os = get_os()
+  !(os %in% c("windows", "unix", "linux", "osx"))
 }
-ln = readLines("GetoptLong.md2")
-cat(paste(ln, collapse = "\n"))
+
+if(is.solaris()) {
+  cat("**GetoptLong** is not supported on Solaris platform.\n")
+} else {
+  if(!is.solaris()) {
+      invisible(knit("GetoptLong.Rmd2", "GetoptLong.md2"))
+  }
+
+  if(Sys.info()["user"] == "jokergoo") {
+      invisible(file.copy("GetoptLong.md2", "/Users/jokergoo/project/GetoptLong/vignettes/GetoptLong.md2", overwrite = TRUE))
+  }
+
+  ln = readLines("GetoptLong.md2")
+  cat(paste(ln, collapse = "\n"))
+}
 ```
 

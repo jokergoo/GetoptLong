@@ -512,11 +512,11 @@ $number
 [1] 1 2
 
 $param
-$param$var1
-[1] "a"
-
 $param$var2
 [1] "b"
+
+$param$var1
+[1] "a"
 
 
 $verbose
@@ -1096,7 +1096,7 @@ sessionInfo()
 ```
 
 ```
-R version 4.0.0 (2020-04-24)
+R version 4.0.2 (2020-06-22)
 Platform: x86_64-apple-darwin17.0 (64-bit)
 Running under: macOS Catalina 10.15.5
 
@@ -1111,14 +1111,14 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
-[1] GetoptLong_1.0.1 knitr_1.29      
+[1] GetoptLong_1.0.3 knitr_1.29      
 
 loaded via a namespace (and not attached):
- [1] compiler_4.0.0      rjson_0.2.20        magrittr_1.5       
- [4] htmltools_0.5.0     tools_4.0.0         GlobalOptions_0.1.2
+ [1] compiler_4.0.2      rjson_0.2.20        magrittr_1.5       
+ [4] htmltools_0.5.0     tools_4.0.2         GlobalOptions_0.1.2
  [7] yaml_2.2.1          crayon_1.3.4        stringi_1.4.6      
-[10] rmarkdown_2.2       stringr_1.4.0       digest_0.6.25      
-[13] xfun_0.15           rlang_0.4.6         evaluate_0.14      
+[10] rmarkdown_2.3       stringr_1.4.0       digest_0.6.25      
+[13] xfun_0.16           rlang_0.4.7         evaluate_0.14      
 ```
 
 <script>

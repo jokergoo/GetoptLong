@@ -1,3 +1,9 @@
+Changes in version 1.0.3
+
+* fixed a bug of setting "verbose!" and with TRUE for verbose as default
+
+---------------------------------------------------------------------
+
 Changes in version 1.0.1
 
 * fixed a bug of testng folders
