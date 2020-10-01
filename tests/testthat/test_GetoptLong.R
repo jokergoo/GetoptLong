@@ -119,6 +119,8 @@ test_that("test `verbose!`", {
 	GetoptLong(spec, argv_str = ""); expect_that(verbose, equals(FALSE)); rm(verbose)
 	verbose = TRUE
 	GetoptLong(spec, argv_str = ""); expect_that(verbose, equals(TRUE)); rm(verbose)
+	verbose = TRUE
+	GetoptLong(spec, argv_str = "-v"); expect_that(verbose, equals(TRUE)); rm(verbose)
 	verbose = FALSE
 	GetoptLong(spec, argv_str = "--verbose"); expect_that(verbose, equals(TRUE)); rm(verbose)
 	verbose = TRUE

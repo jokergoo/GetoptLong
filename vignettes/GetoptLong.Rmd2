@@ -25,7 +25,7 @@ package also provides some adaptations for easier use in R.
 Using **GetoptLong** is simple especially for users having Perl experience (Oops, age
 exposed :)) because the specification is almost the same as in Perl. The
 original website of
-[`Getopt::Long`](https://metacpan.org/pod/Getopt::Long) is always
+[`Getopt::Long`](https://perldoc.pl/Getopt::Long) is always
 your best reference.
 
 **Note: to use this package, Perl should be installed.**

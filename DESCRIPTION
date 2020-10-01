@@ -7,7 +7,7 @@ Author: Zuguang Gu
 Maintainer: Zuguang Gu <z.gu@dkfz.de>
 Depends: R (>= 3.3.0)
 Imports: rjson, GlobalOptions (>= 0.1.0), methods, crayon
-Suggests: testthat (>= 1.0.0), knitr, markdown
+Suggests: testthat (>= 1.0.0), knitr, markdown, rmarkdown
 VignetteBuilder: knitr
 Description: This is a command-line argument parser which wraps the 
     powerful Perl module Getopt::Long and with some adaptations for easier use

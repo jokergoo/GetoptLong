@@ -22,7 +22,7 @@ GetoptLong.options(..., RESET = FALSE, READ.ONLY = NULL, LOCAL = FALSE, ADD = FA
 Supported global options are following:
 
 \describe{
-  \item{\code{config}}{Configuration of \code{Getopt::Long}, check \url{http://perldoc.perl.org/Getopt/Long.html#Configuring-Getopt\%3a\%3aLong} .}
+  \item{\code{config}}{Configuration of \code{Getopt::Long}, check \url{https://perldoc.pl/Getopt::Long#Configuring-Getopt::Long} .}
   \item{\code{template_tag}}{The tag for identifying specifications in the template. The format should be in \code{left_tag CODE right_tag}.}
   \item{\code{help_style}}{The style of the help message. }
 }

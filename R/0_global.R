@@ -12,7 +12,7 @@
 # == detail
 # Supported global options are following:
 #
-# -``config`` Configuration of ``Getopt::Long``, check http://perldoc.perl.org/Getopt/Long.html#Configuring-Getopt\%3a\%3aLong .
+# -``config`` Configuration of ``Getopt::Long``, check https://perldoc.pl/Getopt::Long#Configuring-Getopt::Long .
 # -``template_tag`` The tag for identifying specifications in the template. The format should be in ``left_tag CODE right_tag``.
 # -``help_style`` The style of the help message. 
 #
