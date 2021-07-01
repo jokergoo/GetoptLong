@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">GetoptLong</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.3</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -106,7 +106,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/jokergoo/GetoptLong/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -132,7 +132,7 @@
     <p>Global options for GetoptLong()</p>
     </div>
 
-    <pre class="usage"><span class='fu'>GetoptLong.options</span>(<span class='no'>...</span>, <span class='kw'>RESET</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>READ.ONLY</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>LOCAL</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>ADD</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>GetoptLong.options</span><span class='op'>(</span><span class='va'>...</span>, RESET <span class='op'>=</span> <span class='cn'>FALSE</span>, READ.ONLY <span class='op'>=</span> <span class='cn'>NULL</span>, LOCAL <span class='op'>=</span> <span class='cn'>FALSE</span>, ADD <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -162,18 +162,22 @@
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>Supported global options are following:</p>
-<dl'>
-  <dt><code>config</code></dt><dd><p>Configuration of <code>Getopt::Long</code>, check <a href='http://perldoc.perl.org/Getopt/Long.html#Configuring-Getopt%3a%3aLong'>http://perldoc.perl.org/Getopt/Long.html#Configuring-Getopt%3a%3aLong</a> .</p></dd>
+<dl>
+  <dt><code>config</code></dt><dd><p>Configuration of <code>Getopt::Long</code>, check <a href='https://perldoc.pl/Getopt::Long#Configuring-Getopt::Long'>https://perldoc.pl/Getopt::Long#Configuring-Getopt::Long</a> .</p></dd>
   <dt><code>template_tag</code></dt><dd><p>The tag for identifying specifications in the template. The format should be in <code>left_tag CODE right_tag</code>.</p></dd>
   <dt><code>help_style</code></dt><dd><p>The style of the help message.</p></dd>
 
 </dl>
 
 <p><code>GetoptLong.options(...)</code> should be put before calling <code><a href='GetoptLong.html'>GetoptLong</a></code> function.</p>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Zuguang Gu &lt;z.gu@dkfz.de&gt;</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># There is no example</span>
-<span class='kw'>NULL</span></div><div class='output co'>#&gt; NULL</div><div class='input'>
+<span class='cn'>NULL</span>
+</div><div class='output co'>#&gt; NULL</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -190,7 +194,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

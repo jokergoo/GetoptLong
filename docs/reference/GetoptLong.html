@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Wrapper of the Perl module <code>Getopt::Long</code> in R — GetoptLong • GetoptLong</title>
+<title>Wrapper of the Perl module Getopt::Long in R — GetoptLong • GetoptLong</title>
 
 
 <!-- jquery -->
@@ -39,7 +39,7 @@
 
 
 
-<meta property="og:title" content="Wrapper of the Perl module <code>Getopt::Long</code> in R — GetoptLong" />
+<meta property="og:title" content="Wrapper of the Perl module Getopt::Long in R — GetoptLong" />
 <meta property="og:description" content="Wrapper of the Perl module Getopt::Long in R" />
 
 
@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">GetoptLong</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.3</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -106,7 +106,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/jokergoo/GetoptLong/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -132,9 +132,9 @@
     <p>Wrapper of the Perl module <code>Getopt::Long</code> in R</p>
     </div>
 
-    <pre class="usage"><span class='fu'>GetoptLong</span>(<span class='no'>...</span>, <span class='kw'>help_head</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>help_foot</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>envir</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sys.parent.html'>parent.frame</a></span>(),
-    <span class='kw'>argv_str</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>template_control</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(),
-    <span class='kw'>help_style</span> <span class='kw'>=</span> <span class='no'>GetoptLong.options</span>$<span class='no'>help_style</span>)</pre>
+    <pre class="usage"><span class='fu'>GetoptLong</span><span class='op'>(</span><span class='va'>...</span>, help_head <span class='op'>=</span> <span class='cn'>NULL</span>, help_foot <span class='op'>=</span> <span class='cn'>NULL</span>, envir <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sys.parent.html'>parent.frame</a></span><span class='op'>(</span><span class='op'>)</span>,
+    argv_str <span class='op'>=</span> <span class='cn'>NULL</span>, template_control <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>,
+    help_style <span class='op'>=</span> <span class='va'>GetoptLong.options</span><span class='op'>$</span><span class='va'>help_style</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -173,14 +173,14 @@
 
     <p>Following shows a simple example. Put following code at the beginning of your script (e.g. <code>foo.R</code>):</p>
 <p></p><pre>
-    <span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>GetoptLong</span>)
+    <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/jokergoo/GetoptLong'>GetoptLong</a></span><span class='op'>)</span>
 
-    <span class='no'>cutoff</span> <span class='kw'>=</span> <span class='fl'>0.05</span>
-    <span class='fu'>GetoptLong</span>(
+    <span class='va'>cutoff</span> <span class='op'>=</span> <span class='fl'>0.05</span>
+    <span class='fu'>GetoptLong</span><span class='op'>(</span>
         <span class='st'>"number=i"</span>, <span class='st'>"Number of items."</span>,
         <span class='st'>"cutoff=f"</span>, <span class='st'>"Cutoff for filtering results."</span>,
         <span class='st'>"verbose"</span>,  <span class='st'>"Print message."</span>
-    )</pre>
+    <span class='op'>)</span>  </pre>
 
 <p>Then you can call the script from command line either by:</p>
 <p></p><pre>
@@ -195,10 +195,14 @@ integer mode. <code>cutoff</code> is optional and it already has a default value
 and <code>verbose</code> will be imported into the working environment with the specified
 values. Value for <code>cutoff</code> will be updated if it is specified in command-line.</p>
 <p>For advanced use of this function, please go to the vignette.</p>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Zuguang Gu &lt;z.gu@dkfz.de&gt;</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># There is no example</span>
-<span class='kw'>NULL</span></div><div class='output co'>#&gt; NULL</div><div class='input'>
+<span class='cn'>NULL</span>
+</div><div class='output co'>#&gt; NULL</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -215,7 +219,7 @@ values. Value for <code>cutoff</code> will be updated if it is specified in comm
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -1,8 +1,8 @@
-pandoc: 2.9.2.1
-pkgdown: 1.5.1
+pandoc: 2.11.4
+pkgdown: 1.6.1
 pkgdown_sha: ~
 articles:
   GetoptLong: GetoptLong.html
   variable_interpolation: variable_interpolation.html
-last_built: 2020-06-06T17:31Z
+last_built: 2021-07-01T12:46Z
 

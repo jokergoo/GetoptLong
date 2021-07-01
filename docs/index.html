@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">GetoptLong</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.3</span>
       </span>
     </div>
 
@@ -41,7 +41,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -67,7 +67,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/jokergoo/GetoptLong/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -83,11 +83,10 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-
-
 <div id="getoptlong" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#getoptlong" class="anchor"></a>GetoptLong</h1></div>
+
 <p>This is a command-line argument parser which wraps the powerful Perl module <a href="http://perldoc.perl.org/Getopt/Long.html"><code>Getopt::Long</code></a> and with some adaptations for easier use in R. It also provides a simple way for variable interpolation in R.</p>
 <p>There are two vignettes in the package which explain in more detail:</p>
 <ol>
@@ -98,9 +97,11 @@
 <h2 class="hasAnchor">
 <a href="#install" class="anchor"></a>Install</h2>
 <p>The package can be installed from CRAN:</p>
-<div class="sourceCode" id="cb1"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"GetoptLong"</span>)</pre></div>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"GetoptLong"</span><span class="op">)</span></code></pre></div>
 <p>or directly from GitHub:</p>
-<div class="sourceCode" id="cb2"><pre class="r"><span class="kw pkg">devtools</span><span class="kw ns">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span>(<span class="st">"jokergoo/GetoptLong"</span>)</pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"jokergoo/GetoptLong"</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="usage" class="section level2">
 <h2 class="hasAnchor">
@@ -110,14 +111,15 @@
 <a href="#control-command-line-options" class="anchor"></a>Control command line options</h3>
 <p>This package wraps the powerful Perl module <a href="https://metacpan.org/pod/Getopt::Long"><code>Getopt::Long</code></a> and keeps almost all features of it. The syntax of option specification is the same as <code>Getopt::Long</code>. So if you are from Perl and you know <code>Getopt::Long</code>, there would be no difficulty with using it.</p>
 <p>The usage is very simple:</p>
-<div class="sourceCode" id="cb3"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">GetoptLong</span>)
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/jokergoo/GetoptLong">GetoptLong</a></span><span class="op">)</span>
 
-<span class="no">cutoff</span> <span class="kw">=</span> <span class="fl">0.05</span>
-<span class="fu"><a href="reference/GetoptLong.html">GetoptLong</a></span>(
+<span class="va">cutoff</span> <span class="op">=</span> <span class="fl">0.05</span>
+<span class="fu"><a href="reference/GetoptLong.html">GetoptLong</a></span><span class="op">(</span>
     <span class="st">"number=i"</span>, <span class="st">"Number of items."</span>,
     <span class="st">"cutoff=f"</span>, <span class="st">"Cutoff for filtering results."</span>,
     <span class="st">"verbose!"</span>, <span class="st">"Print message."</span>
-)</pre></div>
+<span class="op">)</span></code></pre></div>
 <p>Then you can run this script by:</p>
 <pre><code>~\&gt; Rscript foo.R --number 4 --cutoff 0.01 --verbose
 ~\&gt; Rscript foo.R --number=4 --cutoff=0.01 --no-verbose
@@ -148,12 +150,13 @@ Options:
 <h3 class="hasAnchor">
 <a href="#variable-interpolation" class="anchor"></a>Variable interpolation</h3>
 <p>This package also supports simple variable interpolation, which means you can embed variables into texts directly, just like in Perl.</p>
-<div class="sourceCode" id="cb6"><pre class="r"><span class="no">r</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>, <span class="fl">2</span>)
-<span class="no">value</span> <span class="kw">=</span> <span class="fl">4</span>
-<span class="no">name</span> <span class="kw">=</span> <span class="st">"name"</span>
-<span class="fu"><a href="reference/qq.html">qq</a></span>(<span class="st">"region = (@{r[1]}, @{r[2]}), value = @{value}, name = '@{name}'"</span>)
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">r</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>
+<span class="va">value</span> <span class="op">=</span> <span class="fl">4</span>
+<span class="va">name</span> <span class="op">=</span> <span class="st">"name"</span>
+<span class="fu"><a href="reference/qq.html">qq</a></span><span class="op">(</span><span class="st">"region = (@{r[1]}, @{r[2]}), value = @{value}, name = '@{name}'"</span><span class="op">)</span>
 
-<span class="co">## [1] "region = (1, 2), value = 4, name = 'name'"</span></pre></div>
+<span class="co">## [1] "region = (1, 2), value = 4, name = 'name'"</span></code></pre></div>
 <p>So it would be much easier for you to construct complicated texts instead of using <code><a href="https://rdrr.io/r/base/paste.html">paste()</a></code>.</p>
 </div>
 </div>
@@ -163,7 +166,6 @@ Options:
 <p>MIT @ Zuguang Gu</p>
 </div>
 </div>
-
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -194,7 +196,7 @@ Options:
   <div class="dev-status">
 <h2>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://travis-ci.org/jokergoo/GetoptLong"><img src="https://travis-ci.org/jokergoo/GetoptLong.svg" alt="Build Status"></a></li>
+<li><a href="https://github.com/jokergoo/GetoptLong/actions"><img src="https://github.com/jokergoo/GetoptLong/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
 <li><a href="https://cran.r-project.org/web/packages/GetoptLong/index.html"><img src="http://www.r-pkg.org/badges/version/GetoptLong" alt="CRAN"></a></li>
 <li><a href="https://codecov.io/github/jokergoo/GetoptLong"><img src="https://img.shields.io/codecov/c/github/jokergoo/GetoptLong.svg" alt="codecov"></a></li>
 </ul>
@@ -208,7 +210,7 @@ Options:
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
