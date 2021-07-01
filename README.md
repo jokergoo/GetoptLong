@@ -1,7 +1,8 @@
-[![Build Status](https://travis-ci.org/jokergoo/GetoptLong.svg)](https://travis-ci.org/jokergoo/GetoptLong) [![CRAN](http://www.r-pkg.org/badges/version/GetoptLong)](https://cran.r-project.org/web/packages/GetoptLong/index.html) [![codecov](https://img.shields.io/codecov/c/github/jokergoo/GetoptLong.svg)](https://codecov.io/github/jokergoo/GetoptLong) 
+# GetoptLong
 
-GetoptLong
-============
+[![R-CMD-check](https://github.com/jokergoo/GetoptLong/workflows/R-CMD-check/badge.svg)](https://github.com/jokergoo/GetoptLong/actions)
+[![CRAN](http://www.r-pkg.org/badges/version/GetoptLong)](https://cran.r-project.org/web/packages/GetoptLong/index.html) 
+[![codecov](https://img.shields.io/codecov/c/github/jokergoo/GetoptLong.svg)](https://codecov.io/github/jokergoo/GetoptLong) 
 
 This is a command-line argument parser which wraps the powerful Perl module
 [`Getopt::Long`](http://perldoc.perl.org/Getopt/Long.html) and with some

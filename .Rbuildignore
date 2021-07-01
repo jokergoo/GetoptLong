@@ -8,3 +8,4 @@ test_run_command/
 ^docs$
 ^pkgdown$
 build_pkg_site.R
+^\.github$
