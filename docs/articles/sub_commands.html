@@ -119,14 +119,14 @@
 
 <span class="fu"><a href="../reference/GetoptLong.html">GetoptLong</a></span><span class="op">(</span><span class="st">"foo=i"</span>, <span class="st">"Set value for foo."</span><span class="op">)</span>
 
-<span class="fu"><a href="../reference/qqcat.html">qqcat</a></span><span class="op">(</span><span class="st">"foo = @{foo}\n"</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="../reference/qqcat.html">qqcat</a></span><span class="op">(</span><span class="st">"foo is @{foo}\n"</span><span class="op">)</span></code></pre></div>
 <p>And code in <code>sub2.R</code>:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/jokergoo/GetoptLong" class="external-link">GetoptLong</a></span><span class="op">)</span>
 
 <span class="fu"><a href="../reference/GetoptLong.html">GetoptLong</a></span><span class="op">(</span><span class="st">"bar=i"</span>, <span class="st">"Set value for bar"</span><span class="op">)</span>
 
-<span class="fu"><a href="../reference/qqcat.html">qqcat</a></span><span class="op">(</span><span class="st">"bar = @{bar}\n"</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="../reference/qqcat.html">qqcat</a></span><span class="op">(</span><span class="st">"bar is @{bar}\n"</span><span class="op">)</span></code></pre></div>
 <p>Calling <code>main.R</code> with no argument prints the list of sub commands it supports:</p>
 <pre><code>Rscript main.R</code></pre>
 <pre><code>Usage: Rscript main.R [command] [options]
@@ -153,7 +153,7 @@ Options:
 <p>Internally, it actually executes <code>Rscript sub1.R --help</code>.</p>
 <p>Options in <code>sub1.R</code> can be directly set after the sub command:</p>
 <pre><code>Rscript main.R sub1 --foo 10</code></pre>
-<pre><code><span class="va">foo</span> <span class="op">=</span> <span class="fl">10</span></code></pre>
+<pre><code>foo is 10</code></pre>
 </div>
 <div class="section level2">
 <h2 id="the-specification">The specification<a class="anchor" aria-label="anchor" href="#the-specification"></a>

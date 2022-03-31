@@ -55,7 +55,7 @@ library(GetoptLong)
 
 GetoptLong("foo=i", "Set value for foo.")
 
-qqcat("foo = @{foo}\n")
+qqcat("foo is @{foo}\n")
 ```
 
 And code in `sub2.R`:
@@ -65,7 +65,7 @@ library(GetoptLong)
 
 GetoptLong("bar=i", "Set value for bar")
 
-qqcat("bar = @{bar}\n")
+qqcat("bar is @{bar}\n")
 ```
 
 Calling `main.R` with no argument prints the list of sub commands it supports:
