@@ -260,7 +260,7 @@ GetoptLong = function(..., help_head = NULL, help_foot = NULL, envir = parent.fr
 			stop("You have an error.\n")
 		}
 	}
-	
+
 	# if arguments are correct, values for options will be stored in .json file
 	opt_json = fromJSON(file = json_file)
 	suppressWarnings({
@@ -270,7 +270,15 @@ GetoptLong = function(..., help_head = NULL, help_foot = NULL, envir = parent.fr
 
 	for(opt_name in names(opt_json)) {
 		opt = opt_lt[[opt_name]]
-		opt$set_opt(opt_json[[opt_name]])
+		if(opt$opt_type == "negatable_logical") {
+			if(negatable_logical_is_called(opt_name, argv_str)) {
+				opt$set_opt(opt_json[[opt_name]])
+			} else { # Perl tells the value is FALSE, but if there is default, the value is reassigned
+				opt$set_opt(opt$default)
+			}
+		} else {
+			opt$set_opt(opt_json[[opt_name]])
+		}
 		opt_lt[[opt_name]] = opt
 	}
 
@@ -280,7 +288,7 @@ GetoptLong = function(..., help_head = NULL, help_foot = NULL, envir = parent.fr
 		opt = opt_lt[[opt_name]]
 		if(opt$opt_type == "negatable_logical") {
 			if(!negatable_logical_is_called(opt_name, argv_str)) {
-				opt$set_opt(NULL)
+				# opt$set_opt(NULL)
 			}
 		}
 	}
@@ -328,7 +336,7 @@ GetoptLong = function(..., help_head = NULL, help_foot = NULL, envir = parent.fr
 			}
 		}
 	}
-	
+
 	export_to_parent_frame(opt_lt, envir = envir)
 	
 	return(invisible(opt_lt))
@@ -349,7 +357,8 @@ negatable_logical_is_called = function(long_name, argv_str) {
 		if(any(sapply(argv, function(x) grepl(qq("^@{x}"), long_name)))) {
 			return(TRUE)
 		} else {
-			any(sapply(argv, function(x) grepl(qq("(no-?)?@{long_name}$"), x)))
+			long_name2 = gsub("(?<=\\w)_(?=\\w)", "-", long_name, perl = TRUE)
+			any(sapply(argv, function(x) grepl(qq("(no-?)?@{long_name}$"), x))) || any(sapply(argv, function(x) grepl(qq("(no-?)?@{long_name2}$"), x)))
 		}
 	} else {
 		return(FALSE)
@@ -482,6 +491,28 @@ reformat_argv_string = function(opt_lt, argv) {
 
 	for(i in seq_along(argv)) {
 		if(grepl("^(-|\\+)", argv[i])) {
+
+			## check multi-word option
+			if(grepl("^--", argv[i])) {
+				if(grepl("^--no-", argv[i])) {
+					logi_var_name = gsub("^--no-", "", argv[i])
+					logi_var_name2 = gsub("(?<=\\w)-(?=\\w)", "_", logi_var_name, perl = TRUE)
+
+					opt = look_up_opt_by_tag(opt_lt, logi_var_name2)
+					if(is.null(opt)) {
+						argv[i] = gsub("(?<=\\w)-(?=\\w)", "_", argv[i], perl = TRUE)
+					} else {
+						if(!grepl("logical", opt$opt_type)) {
+							argv[i] = gsub("(?<=\\w)-(?=\\w)", "_", argv[i], perl = TRUE)
+						} else {
+							argv[i] = paste0("--no-", logi_var_name2)
+						}
+					}
+				} else {
+					argv[i] = gsub("(?<=\\w)-(?=\\w)", "_", argv[i], perl = TRUE)
+				}
+			}
+
 			current_tag = argv[i]
 			tag_increment = 0
 			argv2 = c(argv2, argv[i])

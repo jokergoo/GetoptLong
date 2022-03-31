@@ -367,6 +367,7 @@ Following table contains examples for each type of option specification:
 <tr class = "_odd"><td>no argument</td><td><code>FALSE</code></td></tr>
 <tr class = "_even"><td rowspan=2 class="_first"><code>tag!</code></td><td><code>--tag</code></td><td><code>TRUE</code></td></tr>
 <tr class = "_even"><td><code>--no-tag</code></td><td><code>FALSE</code></td></tr>
+<tr class = "_even"><td>no argument, no default for <code>tag</code></td><td><code>FALSE</code></td></tr>
 <tr class = "_odd"><td rowspan=4 class="_first"><code>tag=i@</code></td><td><code>--tag 1</code></td><td><code>1</code></td></tr>
 <tr class = "_odd"><td><code>--tag 1 2</code></td><td><code>c(1, 2)</code></td></tr>
 <tr class = "_odd"><td><code>--tag 1 --tag 2</code></td><td><code>c(1, 2)</code></td></tr>
@@ -467,7 +468,7 @@ GetoptLong(
 print(as.list(opt))
 ```
 
-a calling from command-line:
+A calling from the command-line:
 
 ```
 Rscript foo.R --number 1 2 --param var1=a var2=b --verbose
@@ -480,6 +481,46 @@ chunks <- knitr:::knit_code$get()
 GetoptLong.options("__argv_str__" = "--number 1 2 --param var1=a var2=b --verbose")
 local({ eval(parse(text = chunks[["with_env"]])) })
 GetoptLong.options("__argv_str__" = NULL)
+```
+
+## Multi-word option
+
+It also supports multiple words as an option name. Note, in the option specification, the name of the option
+should always be in the format of a valid R variable name, because it will be exported as a real variable. In the command line,
+you can use `-` to connect words and it will be converted to `_` internally. Check the following example:
+
+```{r multi_word, eval = FALSE}
+opt = new.env()
+
+# or a default can be set for `bar_value`
+# bar_value = 2
+GetoptLong(
+    "bar_value=i", "Some value.",
+
+    envir = opt
+)
+print(as.list(opt))
+```
+
+A calling from the command-line:
+
+```
+Rscript foo.R --bar-value 1
+```
+
+will print
+
+```{r, echo = FALSE}
+chunks <- knitr:::knit_code$get()
+GetoptLong.options("__argv_str__" = "--bar-value 1")
+local({ eval(parse(text = chunks[["multi_word"]])) })
+GetoptLong.options("__argv_str__" = NULL)
+```
+
+Of course, you can also specify the option by:
+
+```
+Rscript foo.R --bar_value 1
 ```
 
 ## Help option

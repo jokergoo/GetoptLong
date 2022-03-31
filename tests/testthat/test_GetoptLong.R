@@ -120,11 +120,13 @@ test_that("test `verbose!`", {
 	verbose = TRUE
 	GetoptLong(spec, argv_str = ""); expect_that(verbose, equals(TRUE)); rm(verbose)
 	verbose = TRUE
-	GetoptLong(spec, argv_str = "-v"); expect_that(verbose, equals(TRUE)); rm(verbose)
+	GetoptLong(spec, argv_str = "--verbose"); expect_that(verbose, equals(TRUE)); rm(verbose)
 	verbose = FALSE
 	GetoptLong(spec, argv_str = "--verbose"); expect_that(verbose, equals(TRUE)); rm(verbose)
 	verbose = TRUE
 	GetoptLong(spec, argv_str = "--no-verbose"); expect_that(verbose, equals(FALSE)); rm(verbose)
+
+	GetoptLong(spec, argv_str = ""); expect_that(verbose, equals(FALSE)); rm(verbose)
 })
 
 
@@ -352,3 +354,26 @@ test_that("test grouped options", {
     ), prints_text("Group1"))
 })
 
+
+test_that("test `multi-word option`", {
+	spec = c(
+		"foo_bar=i", "desc"
+	)
+	GetoptLong(spec, argv_str = "--foo_bar 1");       expect_that(foo_bar, equals(1));   rm(foo_bar)
+	GetoptLong(spec, argv_str = "--foo-bar 1");       expect_that(foo_bar, equals(1));   rm(foo_bar)
+
+	spec = c(
+		"foo_bar!", "desc"
+	)
+	GetoptLong(spec, argv_str = "--foo-bar");       expect_that(foo_bar, equals(TRUE));   rm(foo_bar)
+	GetoptLong(spec, argv_str = "--foo_bar");       expect_that(foo_bar, equals(TRUE));   rm(foo_bar)
+	GetoptLong(spec, argv_str = "--no-foo-bar");     expect_that(foo_bar, equals(FALSE));   rm(foo_bar)
+	GetoptLong(spec, argv_str = "--no-foo_bar");     expect_that(foo_bar, equals(FALSE));   rm(foo_bar)
+
+	spec = c(
+		"no_foo=i", "desc"
+	)
+	GetoptLong(spec, argv_str = "--no-foo 1");       expect_that(no_foo, equals(1));   rm(no_foo)
+	GetoptLong(spec, argv_str = "--no_foo 1");       expect_that(no_foo, equals(1));   rm(no_foo)
+
+})

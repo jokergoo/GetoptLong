@@ -19,7 +19,11 @@ print_help_msg = function(opt_lt, file = stderr(), script_name = NULL, head = NU
 			cat("\n", file = file)
 		}
 
-	    qqcat("Usage: Rscript @{script_name} [options]\n", file = file)
+		if(is.null(GetoptLong.options("__prefix__"))) {
+	    	qqcat("Usage: Rscript @{script_name} [options]\n", file = file)
+	    } else {
+	    	qqcat("Usage: @{GetoptLong.options('__prefix__')} [options]\n", file = file)
+	    }
 	    qqcat("\n", file = file)
 
 	    for(ig in seq_along(opt_group)) {

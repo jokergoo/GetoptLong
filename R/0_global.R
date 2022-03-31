@@ -56,7 +56,9 @@ GetoptLong.options = setGlobalOptions(
 						.visible = FALSE),
 	"__script_name__" = list(.value = NULL,
 		                    .private = TRUE,
-		                    .visible = FALSE)
+		                    .visible = FALSE),
+	"__prefix__" = list(.value = NULL,
+		                .visible = FALSE)
 )
 
 # == title

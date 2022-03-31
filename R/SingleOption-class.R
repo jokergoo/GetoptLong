@@ -116,10 +116,10 @@ SingleOption$methods(
 					}
 				} else if(obj$var_type == "scalar") {
 					if(length(v) != 1) {
-						stop_wrap(qq("`@{opt_name}` is set as a scalar. The length of it must be 1."))
+						stop_wrap(qq("`@{opt_name}` is set as a scalar. The length of the default must be 1."))
 					}
 					if(!(is.atomic(v) && is.vector(v))) {
-						stop_wrap(qq("`@{opt_name}` is set as a scalar. The value should be an atomic scalar."))
+						stop_wrap(qq("`@{opt_name}` is set as a scalar. The value of the default should be an atomic scalar."))
 					}
 					if(obj$opt_type %in% c("integer", "numeric")) {
 						if(is.na(v) && !is.numeric(v)) {
@@ -131,7 +131,7 @@ SingleOption$methods(
 							.self$default = v
 						}
 						if(!is.numeric(v)) {
-							stop_wrap(qq("`@{opt_name}` is set in integer/numeric. The value must be number."))
+							stop_wrap(qq("`@{opt_name}` is set in integer/numeric. The value of the default must be number."))
 						}
 					}
 					if(obj$opt_type == "character") {
@@ -140,42 +140,42 @@ SingleOption$methods(
 							.self$default = v
 						}
 						if(!is.character(v)) {
-							stop_wrap(qq("`@{opt_name}` is set in character. The value must be a character."))
+							stop_wrap(qq("`@{opt_name}` is set in character. The value of the default must be a character."))
 						}
 					}
 				} else if(obj$var_type == "array") {
 					if(!(is.atomic(v) && is.vector(v))) {
-						stop_wrap(qq("`@{opt_name}` is set as an array. The value should be an atomic vector"))
+						stop_wrap(qq("`@{opt_name}` is set as an array. The value of the default should be an atomic vector"))
 					}
 					if(obj$opt_type %in% c("integer", "numeric")) {
 						if(!is.numeric(v)) {
-							stop_wrap(qq("`@{opt_name}` is set in integer/numeric. The value must be number."))
+							stop_wrap(qq("`@{opt_name}` is set in integer/numeric. The value of the default must be number."))
 						}
 					}
 					if(obj$opt_type == "character") {
 						if(!is.character(v)) {
-							stop_wrap(qq("`@{opt_name}` is set in character. The value must be a character."))
+							stop_wrap(qq("`@{opt_name}` is set in character. The value of the default must be a character."))
 						}
 					}
 				} else if(obj$var_type == "hash") {
 					if(!is.list(v)) {
-						stop_wrap(qq("`@{opt_name}` is set as a hash. The value should be a list."))
+						stop_wrap(qq("`@{opt_name}` is set as a hash. The value of the default should be a list."))
 					}
 					if(is.null(names(v))) {
-						stop_wrap(qq("`@{opt_name}` is set as a hash. The value should be a named list."))
+						stop_wrap(qq("`@{opt_name}` is set as a hash. The value of the default should be a named list."))
 					}
 					for(i in seq_along(v)) {
 						if(!(is.atomic(v[[i]]) && is.vector(v[[i]]))) {
-							stop_wrap(qq("`@{opt_name}` is set as an hash. The value should be an atomic vector."))
+							stop_wrap(qq("`@{opt_name}` is set as an hash. The value of the default should be an atomic vector."))
 						}
 						if(obj$opt_type %in% c("integer", "numeric")) {
 							if(!is.numeric(v[[i]])) {
-								stop_wrap(qq("`@{opt_name}` is set in integer/numeric. The value must be number."))
+								stop_wrap(qq("`@{opt_name}` is set in integer/numeric. The value of the default must be number."))
 							}
 						}
 						if(obj$opt_type == "character") {
 							if(!is.character(v[[i]])) {
-								stop_wrap(qq("`@{opt_name}` is set in character. The value must be a character."))
+								stop_wrap(qq("`@{opt_name}` is set in character. The value of the default must be a character."))
 							}
 						}
 					}
@@ -223,7 +223,7 @@ SingleOption$methods(
 				if(nchar(nm) == 1) {
 					opt_line = c(opt_line, qq("-@{nm}"))
 				} else {
-					opt_line = c(opt_line, qq("--@{nm}"))
+					opt_line = c(opt_line, paste0("--", gsub("(?<=\\w)_(?=\\w)", "-", nm, perl = TRUE)))
 				}
 			}
 			opt_line = paste(opt_line, collapse = ", ")
@@ -235,7 +235,7 @@ SingleOption$methods(
 					if(.self$opt_type == "logical") {
 
 					} else if(.self$opt_type == "negatable_logical") {
-						opt_line = paste0(opt_line, ", -no-", .self$name)
+						opt_line = paste0(opt_line, ", -no-", gsub("(?<=\\w)_(?=\\w)", "-", .self$name, perl = TRUE))
 					} else {
 						opt_line = paste0(opt_line, " ", .self$opt_type)
 					}
@@ -288,7 +288,7 @@ SingleOption$methods(
 			if(nchar(nm) == 1) {
 				opt_line = c(opt_line, qq("-@{nm}"))
 			} else {
-				opt_line = c(opt_line, qq("--@{nm}"))
+				opt_line = c(opt_line, paste0("--", gsub("(?<=\\w)_(?=\\w)", "-", nm, perl = TRUE)))
 			}
 		}
 		opt_line = paste(opt_line, collapse = ", ")
@@ -300,7 +300,7 @@ SingleOption$methods(
 			if(.self$opt_type == "logical") {
 
 			} else if(.self$opt_type == "negatable_logical") {
-				opt_line = paste0(opt_line, ", -no-", .self$name)
+				opt_line = paste0(opt_line, ", -no-", gsub("(?<=\\w)_(?=\\w)", "-", .self$name, perl = TRUE))
 			} else {
 				opt_line = c(opt_line, paste0(prefix, "  [type: ", abbr[.self$opt_type], "]"))
 			}
