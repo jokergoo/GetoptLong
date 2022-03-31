@@ -159,14 +159,14 @@ SingleOption$methods(
 					}
 				} else if(obj$var_type == "hash") {
 					if(!is.list(v)) {
-						stop_wrap(qq("`@{opt_name}` is set as a hash. The value of the default should be a list."))
+						stop_wrap(qq("`@{opt_name}` is set as a hash (name-value pairs). The value of the default should be a list."))
 					}
 					if(is.null(names(v))) {
-						stop_wrap(qq("`@{opt_name}` is set as a hash. The value of the default should be a named list."))
+						stop_wrap(qq("`@{opt_name}` is set as a hash (name-value pairs). The value of the default should be a named list."))
 					}
 					for(i in seq_along(v)) {
 						if(!(is.atomic(v[[i]]) && is.vector(v[[i]]))) {
-							stop_wrap(qq("`@{opt_name}` is set as an hash. The value of the default should be an atomic vector."))
+							stop_wrap(qq("`@{opt_name}` is set as an hash (name-value pairs). The value of the default should be an atomic vector."))
 						}
 						if(obj$opt_type %in% c("integer", "numeric")) {
 							if(!is.numeric(v[[i]])) {

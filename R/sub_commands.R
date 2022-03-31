@@ -3,13 +3,21 @@
 # Setting sub commands
 #
 # == param
-# -...     Specification of commands.
-# -help_head Head of the help message when invoking ``Rscript foo.R --help``.
-# -help_foot Foot of the help message when invoking ``Rscript foo.R --help``.
+# -...     Specification of commands. See section Details.
+# -help_head Head of the help message when invoking ``Rscript foo.R``.
+# -help_foot Foot of the help message when invoking ``Rscript foo.R``.
 # -argv_str A string that contains command-line arguments. It is only for testing purpose.
 #
-subCommands = function(..., help_head = NULL, help_foot = NULL,
-	argv_str = NULL) {
+# == details
+# The format of input can be one of the following:
+#
+# 1. A matrix with two columns. Then the first column contains paths of the scripts and the second column contains the description of the subcommand. The basenames of path in the first column
+#    by removing the suffix are taken as the sub commands.
+# 2. A matrix with three columns. The the first column contains the sub commands, the second column contains corresponding script paths and the third column contains descriptions of the sub commands.
+# 3. A vector with length as multiples of 2. In this case, every two elements are grouped and concatenated into a matrix by rows. Then it follows the rule 1.
+# 4. A vector with length as multiples of 3. In this case, every three elements are grouped and concatenated into a matrix by rows. Then it follows the rule 2.
+#
+subCommands = function(..., help_head = NULL, help_foot = NULL, argv_str = NULL) {
 
 	if(is.null(get_scriptname())) {
 		IS_UNDER_COMMAND_LINE = FALSE
@@ -154,8 +162,22 @@ subCommands = function(..., help_head = NULL, help_foot = NULL,
 	cmd = ARGV[1]
 	ARGV_string = paste(ARGV[-1], collapse = " ")
 
+	if(grepl("^-", cmd)) {
+		cat(red(qq("Error: a command should be specified.\n")), file = OUT)
+
+		print_help_msg_sub_commands(spec, file = stdout(), script_name = script_name, head = help_head, foot = help_foot, 
+			opt_group = opt_group, opt_group_desc = opt_group_desc)
+		if(IS_UNDER_COMMAND_LINE) {
+			q(save = "no", status = 0)
+		} else if(!is.null(argv_str)) {  # under test
+			return(invisible(NULL))
+		} else {
+			stop("You have an error.\n")
+		}
+	}
+
 	if(!cmd %in% all_commands) {
-		cat(red(qq("Error: wrong command: @{cmd}\n")), file = OUT)
+		cat(red(qq("Error: wrong command: @{cmd}.\n")), file = OUT)
 
 		print_help_msg_sub_commands(spec, file = OUT, script_name = script_name, head = help_head, foot = help_foot, 
 			opt_group = opt_group, opt_group_desc = opt_group_desc)
@@ -171,6 +193,7 @@ subCommands = function(..., help_head = NULL, help_foot = NULL,
 	script = spec[spec[, 1] == cmd, 2]
 	GetoptLong.options("__prefix__" = paste0("Rscript ", script_name, " ", cmd))
 	on.exit(GetoptLong.options("__prefix__" = NULL))
+
 	source_script(script, argv_str = ARGV_string)
 }
 
@@ -215,9 +238,8 @@ print_help_msg_sub_commands = function(spec, file = stderr(), script_name = NULL
 			cat("\n", file = file)
 		}
 
-		if(ig != length(opt_group)) {
-			cat("\n", file = file)
-		}
+		cat("\n", file = file)
+		
 	}
 
 	if(!is.null(foot)) {

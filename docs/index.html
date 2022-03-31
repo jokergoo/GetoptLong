@@ -21,6 +21,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -33,18 +35,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">GetoptLong</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.0</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="articles/GetoptLong.html">Get started</a>
 </li>
@@ -59,6 +55,9 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
+      <a href="articles/sub_commands.html">Sub-commands</a>
+    </li>
+    <li>
       <a href="articles/variable_interpolation.html">Simple variable interpolation</a>
     </li>
   </ul>
@@ -66,7 +65,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/jokergoo/GetoptLong/">
+  <a href="https://github.com/jokergoo/GetoptLong/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -83,36 +82,36 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-<div id="getoptlong" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#getoptlong" class="anchor"></a>GetoptLong</h1></div>
+<div class="section level1">
+<div class="page-header"><h1 id="getoptlong">GetoptLong<a class="anchor" aria-label="anchor" href="#getoptlong"></a>
+</h1></div>
 
-<p>This is a command-line argument parser which wraps the powerful Perl module <a href="http://perldoc.perl.org/Getopt/Long.html"><code>Getopt::Long</code></a> and with some adaptations for easier use in R. It also provides a simple way for variable interpolation in R.</p>
+<p>This is a command-line argument parser which wraps the powerful Perl module <a href="http://perldoc.perl.org/Getopt/Long.html" class="external-link"><code>Getopt::Long</code></a> and with some adaptations for easier use in R. It also provides a simple way for variable interpolation in R.</p>
 <p>There are two vignettes in the package which explain in more detail:</p>
-<ol>
-<li><a href="http://jokergoo.github.io/GetoptLong/articles/GetoptLong.html">Parsing command-line arguments by Getopt::Long</a></li>
-<li><a href="http://jokergoo.github.io/GetoptLong/articles/variable_interpolation.html">Simple variable interpolation</a></li>
+<ol style="list-style-type: decimal">
+<li><a href="http://jokergoo.github.io/GetoptLong/articles/GetoptLong.html" class="external-link">Parsing command-line arguments by Getopt::Long</a></li>
+<li><a href="http://jokergoo.github.io/GetoptLong/articles/variable_interpolation.html" class="external-link">Simple variable interpolation</a></li>
 </ol>
-<div id="install" class="section level2">
-<h2 class="hasAnchor">
-<a href="#install" class="anchor"></a>Install</h2>
+<div class="section level2">
+<h2 id="install">Install<a class="anchor" aria-label="anchor" href="#install"></a>
+</h2>
 <p>The package can be installed from CRAN:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"GetoptLong"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"GetoptLong"</span><span class="op">)</span></code></pre></div>
 <p>or directly from GitHub:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"jokergoo/GetoptLong"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/remote-reexports.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"jokergoo/GetoptLong"</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="usage" class="section level2">
-<h2 class="hasAnchor">
-<a href="#usage" class="anchor"></a>Usage</h2>
-<div id="control-command-line-options" class="section level3">
-<h3 class="hasAnchor">
-<a href="#control-command-line-options" class="anchor"></a>Control command line options</h3>
-<p>This package wraps the powerful Perl module <a href="https://metacpan.org/pod/Getopt::Long"><code>Getopt::Long</code></a> and keeps almost all features of it. The syntax of option specification is the same as <code>Getopt::Long</code>. So if you are from Perl and you know <code>Getopt::Long</code>, there would be no difficulty with using it.</p>
+<div class="section level2">
+<h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
+</h2>
+<div class="section level3">
+<h3 id="control-command-line-options">Control command line options<a class="anchor" aria-label="anchor" href="#control-command-line-options"></a>
+</h3>
+<p>This package wraps the powerful Perl module <a href="https://metacpan.org/pod/Getopt::Long" class="external-link"><code>Getopt::Long</code></a> and keeps almost all features of it. The syntax of option specification is the same as <code>Getopt::Long</code>. So if you are from Perl and you know <code>Getopt::Long</code>, there would be no difficulty with using it.</p>
 <p>The usage is very simple:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/jokergoo/GetoptLong">GetoptLong</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/jokergoo/GetoptLong" class="external-link">GetoptLong</a></span><span class="op">)</span>
 
 <span class="va">cutoff</span> <span class="op">=</span> <span class="fl">0.05</span>
 <span class="fu"><a href="reference/GetoptLong.html">GetoptLong</a></span><span class="op">(</span>
@@ -146,23 +145,23 @@ Options:
     Print version information and exit.
 </code></pre>
 </div>
-<div id="variable-interpolation" class="section level3">
-<h3 class="hasAnchor">
-<a href="#variable-interpolation" class="anchor"></a>Variable interpolation</h3>
+<div class="section level3">
+<h3 id="variable-interpolation">Variable interpolation<a class="anchor" aria-label="anchor" href="#variable-interpolation"></a>
+</h3>
 <p>This package also supports simple variable interpolation, which means you can embed variables into texts directly, just like in Perl.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">r</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">r</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>
 <span class="va">value</span> <span class="op">=</span> <span class="fl">4</span>
 <span class="va">name</span> <span class="op">=</span> <span class="st">"name"</span>
 <span class="fu"><a href="reference/qq.html">qq</a></span><span class="op">(</span><span class="st">"region = (@{r[1]}, @{r[2]}), value = @{value}, name = '@{name}'"</span><span class="op">)</span>
 
 <span class="co">## [1] "region = (1, 2), value = 4, name = 'name'"</span></code></pre></div>
-<p>So it would be much easier for you to construct complicated texts instead of using <code><a href="https://rdrr.io/r/base/paste.html">paste()</a></code>.</p>
+<p>So it would be much easier for you to construct complicated texts instead of using <code><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste()</a></code>.</p>
 </div>
 </div>
-<div id="license" class="section level2">
-<h2 class="hasAnchor">
-<a href="#license" class="anchor"></a>License</h2>
+<div class="section level2">
+<h2 id="license">License<a class="anchor" aria-label="anchor" href="#license"></a>
+</h2>
 <p>MIT @ Zuguang Gu</p>
 </div>
 </div>
@@ -170,47 +169,58 @@ Options:
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
-<h2>Links</h2>
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=GetoptLong">https://​cloud.r-project.org/​package=GetoptLong</a>
-</li>
-<li>Browse source code at <br><a href="https://github.com/jokergoo/GetoptLong/">https://​github.com/​jokergoo/​GetoptLong/​</a>
-</li>
-</ul>
-</div>
-<div class="license">
-<h2>License</h2>
-<ul class="list-unstyled">
-<li>
-<a href="https://opensource.org/licenses/mit-license.php">MIT</a> + file <a href="LICENSE-text.html">LICENSE</a>
-</li>
-</ul>
-</div>
-<div class="developers">
-<h2>Developers</h2>
-<ul class="list-unstyled">
-<li>Zuguang Gu <br><small class="roles"> Maintainer </small>  </li>
+<li><a href="https://cloud.r-project.org/package=GetoptLong" class="external-link">View on CRAN</a></li>
+<li><a href="https://github.com/jokergoo/GetoptLong/" class="external-link">Browse source code</a></li>
 </ul>
 </div>
 
-  <div class="dev-status">
-<h2>Dev status</h2>
+<div class="license">
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
-<li><a href="https://github.com/jokergoo/GetoptLong/actions"><img src="https://github.com/jokergoo/GetoptLong/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
-<li><a href="https://cran.r-project.org/web/packages/GetoptLong/index.html"><img src="http://www.r-pkg.org/badges/version/GetoptLong" alt="CRAN"></a></li>
-<li><a href="https://codecov.io/github/jokergoo/GetoptLong"><img src="https://img.shields.io/codecov/c/github/jokergoo/GetoptLong.svg" alt="codecov"></a></li>
+<li>
+<a href="https://opensource.org/licenses/mit-license.php" class="external-link">MIT</a> + file <a href="LICENSE-text.html">LICENSE</a>
+</li>
 </ul>
 </div>
+
+
+<div class="citation">
+<h2 data-toc-skip>Citation</h2>
+<ul class="list-unstyled">
+<li><a href="authors.html#citation">Citing GetoptLong</a></li>
+</ul>
 </div>
+
+<div class="developers">
+<h2 data-toc-skip>Developers</h2>
+<ul class="list-unstyled">
+<li>Zuguang Gu <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0002-7395-8709" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+</ul>
+</div>
+
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://github.com/jokergoo/GetoptLong/actions" class="external-link"><img src="https://github.com/jokergoo/GetoptLong/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
+<li><a href="https://cran.r-project.org/web/packages/GetoptLong/index.html" class="external-link"><img src="http://www.r-pkg.org/badges/version/GetoptLong" alt="CRAN"></a></li>
+<li><a href="https://codecov.io/github/jokergoo/GetoptLong" class="external-link"><img src="https://img.shields.io/codecov/c/github/jokergoo/GetoptLong.svg" alt="codecov"></a></li>
+</ul>
+</div>
+
+  </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by Zuguang Gu.</p>
+  <p></p>
+<p>Developed by Zuguang Gu.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>
@@ -218,6 +228,8 @@ Options:
 
   
 
+
+  
 
   </body>
 </html>

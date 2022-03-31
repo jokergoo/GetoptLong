@@ -1,0 +1,211 @@
+---
+title: "Sub-commands"
+author: "Zuguang Gu (z.gu@dkfz.de)"
+date: '`r Sys.Date()`'
+output:
+  html_document:
+    fig_caption: true
+    toc: true
+    toc_depth: 3
+    toc_float: true
+vignette: >
+  %\VignetteIndexEntry{Sub-commands}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+---------------------------------------------------------------------
+
+```{r, echo = FALSE, message = FALSE}
+library(knitr)
+knitr::opts_chunk$set(
+    tidy  = FALSE,
+    comment = NA,
+    fig.align = "center")
+library(GetoptLong)
+```
+
+
+## A quick example
+
+The following code gives you a quick example of how the sub commands are set. In the function `subCommands()`, the input is in form
+of a vector, where the elements are grouped by every three. The three elements in every group are 
+
+1. name of the sub command,
+2. path of the corresponding R script,
+3. description of the corresponding sub command.
+
+The following code is in the script called `main.R` which contains dispatch of the sub commands.
+
+```{r main, eval = FALSE}
+library(GetoptLong)
+
+subCommands(
+	"sub1", "sub1.R", 
+	        "This is the description of sub command 1, which will be a long long long text.",
+	"sub2", "sub2.R",
+	        "This is the description of sub command 2, which will be a long long long text."
+)
+```
+
+Code in `sub1.R`:
+
+```{r sub1, eval = FALSE}
+library(GetoptLong)
+
+GetoptLong("foo=i", "Set value for foo.")
+
+qqcat("foo = @{foo}\n")
+```
+
+And code in `sub2.R`.
+
+```{r sub2, eval = FALSE}
+library(GetoptLong)
+
+GetoptLong("bar=i", "Set value for bar")
+
+qqcat("bar = @{bar}\n")
+```
+
+Calling `main.R` with no argument prints the list of sub commands it supports:
+
+```
+Rscript main.R
+```
+
+```{r, echo = FALSE, eval = TRUE, results = "asis"}
+chunks <- knitr:::knit_code$get()
+writeLines(chunks[["main"]], con = "main.R")
+writeLines(chunks[["sub1"]], con = "sub1.R")
+writeLines(chunks[["sub2"]], con = "sub2.R")
+cat("```\n")
+cat(system("Rscript main.R", intern = TRUE), sep = "\n")
+cat("```\n")
+```
+
+When sub command is called, the corresponding R script is invoked. Here all command-line arguments after the sub command `sub1` go
+to the correspond R script `sub1.R`.
+
+```
+Rscript main.R sub1 --help
+```
+
+```{r, echo = FALSE, eval = TRUE, results = "asis"}
+cat("```\n")
+cat(system("Rscript main.R sub1 --help", intern = TRUE), sep = "\n")
+cat("```\n")
+```
+
+Internally, it actually executes `Rscript sub1.R --help`.
+
+Options in `sub1.R` can be directly set after the sub command:
+
+```
+Rscript main.R sub1 --foo 10
+```
+
+```{r, echo = FALSE, eval = TRUE, results = "asis"}
+cat("```\n")
+cat(system("Rscript main.R sub1 --foo 10", intern = TRUE), sep = "\n")
+cat("```\n")
+```
+
+
+## The specification
+
+The specification for sub commands can be set as a vector. The length should be multiples of either 2 or 3.
+
+In the following code, the input of `subCommands()` will be internally put into a three-column matrix filled by rows,
+where the first column contains sub commands, the second column contains paths of corresponding R scripts, and the third
+column contains descriptions for sub commands.
+
+```{r, eval = FALSE}
+subCommands(
+	"sub1", "path/sub1.R", "description 1",
+	"sub2", "path/sub2.R", "description 2"
+)
+```
+
+Or in another way:
+
+```{r, eval = FALSE}
+subCommands(
+	"path/sub1.R", "description 1",
+	"path/sub2.R", "description 2"
+)
+```
+
+In this case, the sub commands are taken from the basename of the R script, also removing the suffix names (`.R`).
+
+Whether the arguments are grouped by every 2 elements or 3 elements is automatically detected in `subCommands()`.
+
+## Commands in sections
+
+Sometimes are want to group commands and put then into sections. This can be done by adding a section tag `"-----"` as shown in the following example.
+
+```{r section, eval = FALSE}
+subCommands(
+	"----", "----", "This is section1",
+	"sub1", "sub1.R", 
+	      "This is the description of sub command 1, which will be a long long long text.",
+
+	"----", "----", "This is section2",
+	"sub2", "sub2.R",
+	      "This is the description of sub command 2, which will be a long long long text."
+)
+```
+
+
+```{r, echo = FALSE, eval = TRUE, results = "asis"}
+chunks <- knitr:::knit_code$get()
+writeLines(c("library(GetoptLong)", chunks[["section"]]), con = "main.R")
+
+cat("```\n")
+cat(system("Rscript main.R", intern = TRUE), sep = "\n")
+cat("```\n")
+```
+
+## Setting help head and foot
+
+`help_head` adds text before the help message and `help_foot` adds text after the help message.
+
+
+```{r head-foot, eval = FALSE}
+subCommands(
+	help_head = "This is the head of the help message.",
+
+	"sub1", "sub1.R", 
+	        "This is the description of sub command 1, which will be a long long long text.",
+	"sub2", "sub2.R",
+	        "This is the description of sub command 2, which will be a long long long text.",
+
+	help_foot = "This is the foot of the help message."
+)
+```
+
+```{r, echo = FALSE, eval = TRUE, results = "asis"}
+chunks <- knitr:::knit_code$get()
+writeLines(c("library(GetoptLong)", chunks[["head-foot"]]), con = "main.R")
+
+cat("```\n")
+cat(system("Rscript main.R", intern = TRUE), sep = "\n")
+cat("```\n")
+```
+
+```{r, echo = FALSE, results = "hide"}
+file.remove("main.R")
+file.remove("sub1.R")
+file.remove("sub2.R")
+```
+
+<script>
+var elements = document.getElementsByTagName("pre");
+for(var i = 0; i < elements.length; i ++ ) {
+    if(!elements[i].hasAttribute("class")) {
+        code = elements[i].children[0];
+        code.style.color = "white";
+        elements[i].style.background = "hsl(70, 0%, 15%)";
+    }
+}
+</script>

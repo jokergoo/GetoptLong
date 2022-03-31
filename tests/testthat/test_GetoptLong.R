@@ -144,7 +144,7 @@ test_that("test `tag=i@`", {
 	expect_that(GetoptLong(spec, argv_str = ""),                prints_text("mandatory"))
 
 	tag = "a"
-	expect_error(GetoptLong(spec, argv_str = "--tag 1"), "must be number"); rm(tag)
+	expect_error(GetoptLong(spec, argv_str = "--tag 1"), "number"); rm(tag)
 
 	GetoptLong(spec, argv_str = "--tag 1 2"); expect_that(tag, equals(1:2)); rm(tag)
 	GetoptLong(spec, argv_str = "--t 1 2"); expect_that(tag, equals(1:2)); rm(tag)
@@ -174,9 +174,9 @@ test_that("test `tag=i%`", {
 	expect_that(GetoptLong(spec, argv_str = ""),          prints_text("mandatory"))
 	
 	expect_error({tag = 1;GetoptLong(spec, argv_str = "--tag name=1")}, "should be a list");rm(tag)
-	expect_error({tag = list(name = list(1));GetoptLong(spec, argv_str = "--tag name=1")}, "should be an atomic vector"); rm(tag)
+	expect_error({tag = list(name = list(1));GetoptLong(spec, argv_str = "--tag name=1")}, "atomic"); rm(tag)
 	expect_error({tag = list(1);GetoptLong(spec, argv_str = "--tag name=1")}, "should be a named list"); rm(tag)
-	expect_error({tag = list(name = "a");GetoptLong(spec, argv_str = "--tag name=1")}, "must be number"); rm(tag)	
+	expect_error({tag = list(name = "a");GetoptLong(spec, argv_str = "--tag name=1")}, "number"); rm(tag)	
 	expect_that({tag = list(name = 1);GetoptLong(spec, argv_str = "--tag name=s")}, prints_text("number expected")); rm(tag)	
 
 	tag = list(name = 2)

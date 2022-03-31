@@ -1,3 +1,10 @@
+Changes in version 1.1.0
+
+* support multiple-word option
+* subpport sub-commands
+
+----------------------------------------------------------------------
+
 Changes in version 1.0.3
 
 * fixed a bug of setting "verbose!" and with TRUE for verbose as default

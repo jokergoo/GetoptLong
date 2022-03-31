@@ -384,8 +384,9 @@ Following table contains examples for each type of option specification:
 <tr class = "_odd"><td><code>--tag a</code></td><td><code>TRUE</code></td></tr>
 <tr class = "_odd"><td><code>--tag</code></td><td><code>TRUE</code></td></tr>
 <tr class = "_odd"><td>no argument</td><td><code>FALSE</code></td></tr>
-<tr class = "_even"><td rowspan=2 class="_first"><code>tag!</code></td><td><code>--tag</code></td><td><code>TRUE</code></td></tr>
+<tr class = "_even"><td rowspan=3 class="_first"><code>tag!</code></td><td><code>--tag</code></td><td><code>TRUE</code></td></tr>
 <tr class = "_even"><td><code>--no-tag</code></td><td><code>FALSE</code></td></tr>
+<tr class = "_even"><td>no argument, no default for <code>tag</code></td><td><code>FALSE</code></td></tr>
 <tr class = "_odd"><td rowspan=4 class="_first"><code>tag=i@</code></td><td><code>--tag 1</code></td><td><code>1</code></td></tr>
 <tr class = "_odd"><td><code>--tag 1 2</code></td><td><code>c(1, 2)</code></td></tr>
 <tr class = "_odd"><td><code>--tag 1 --tag 2</code></td><td><code>c(1, 2)</code></td></tr>
@@ -495,7 +496,7 @@ GetoptLong(
 print(as.list(opt))
 ```
 
-a calling from command-line:
+A calling from the command-line:
 
 ```
 Rscript foo.R --number 1 2 --param var1=a var2=b --verbose
@@ -521,6 +522,69 @@ $param$var1
 
 $verbose
 [1] TRUE
+```
+
+## Multi-word option name
+
+It also supports multiple words as an option name. Note, in the option specification, the name of the option
+should always be in the format of a valid R variable name, because it will be exported as a real variable. In the command line,
+you can use `-` to connect words and it will be converted to `_` internally. Check the following example:
+
+
+```r
+# or a default can be set for `bar_value`
+# bar_value = 2
+GetoptLong(
+    "bar_value=i", "Some value."
+)
+print(bar_value)
+```
+
+A calling from the command-line:
+
+```
+Rscript foo.R --bar-value 10
+```
+
+will print
+
+
+```
+[1] 1
+```
+
+Of course, you can also specify the option by:
+
+```
+Rscript foo.R --bar_value 1
+```
+
+A second example of using multiple-word as a logical option name:
+
+
+```r
+GetoptLong(
+    "show_messages!", "Whether to show messages?"
+)
+print(show_messages)
+```
+
+```
+Rscript foo.R --show-messages
+```
+
+
+```
+[1] TRUE
+```
+
+```
+Rscript foo.R --no-show-messages
+```
+
+
+```
+[1] FALSE
 ```
 
 ## Help option
@@ -1096,12 +1160,12 @@ sessionInfo()
 ```
 
 ```
-R version 4.1.0 (2021-05-18)
+R version 4.1.2 (2021-11-01)
 Platform: x86_64-apple-darwin17.0 (64-bit)
 Running under: macOS Big Sur 10.16
 
 Matrix products: default
-BLAS:   /Library/Frameworks/R.framework/Versions/4.1/Resources/lib/libRblas.dylib
+BLAS:   /Library/Frameworks/R.framework/Versions/4.1/Resources/lib/libRblas.0.dylib
 LAPACK: /Library/Frameworks/R.framework/Versions/4.1/Resources/lib/libRlapack.dylib
 
 locale:
@@ -1111,20 +1175,20 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
-[1] GetoptLong_1.0.3 knitr_1.33      
+[1] GetoptLong_1.1.0 knitr_1.37      
 
 loaded via a namespace (and not attached):
- [1] magrittr_2.0.1      rjson_0.2.20        R6_2.5.0           
- [4] ragg_1.1.3          rlang_0.4.11        fastmap_1.1.0      
- [7] highr_0.9           stringr_1.4.0       tools_4.1.0        
-[10] xfun_0.24           jquerylib_0.1.4     htmltools_0.5.1.1  
-[13] systemfonts_1.0.2   yaml_2.2.1          digest_0.6.27      
-[16] rprojroot_2.0.2     pkgdown_1.6.1       crayon_1.4.1       
-[19] textshaping_0.3.5   sass_0.4.0          fs_1.5.0           
-[22] GlobalOptions_0.1.2 memoise_2.0.0       cachem_1.0.5       
-[25] evaluate_0.14       rmarkdown_2.9       stringi_1.6.2      
-[28] compiler_4.1.0      bslib_0.2.5.1       desc_1.3.0         
-[31] jsonlite_1.7.2     
+ [1] magrittr_2.0.1      rjson_0.2.21        R6_2.5.1           
+ [4] ragg_1.2.1          rlang_0.4.12        fastmap_1.1.0      
+ [7] highr_0.9           stringr_1.4.0       tools_4.1.2        
+[10] xfun_0.29           jquerylib_0.1.4     htmltools_0.5.2    
+[13] systemfonts_1.0.3   yaml_2.2.1          digest_0.6.29      
+[16] rprojroot_2.0.2     pkgdown_2.0.2       crayon_1.4.2       
+[19] textshaping_0.3.6   purrr_0.3.4         GlobalOptions_0.1.2
+[22] sass_0.4.0          fs_1.5.2            memoise_2.0.1      
+[25] cachem_1.0.6        evaluate_0.14       rmarkdown_2.11     
+[28] stringi_1.7.6       compiler_4.1.2      bslib_0.3.1        
+[31] desc_1.4.0          jsonlite_1.7.2     
 ```
 
 <script>

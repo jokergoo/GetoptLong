@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,18 +33,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">GetoptLong</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.0</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="../articles/GetoptLong.html">Get started</a>
 </li>
@@ -57,6 +53,9 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
+      <a href="../articles/sub_commands.html">Sub-commands</a>
+    </li>
+    <li>
       <a href="../articles/variable_interpolation.html">Simple variable interpolation</a>
     </li>
   </ul>
@@ -64,7 +63,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/jokergoo/GetoptLong/">
+  <a href="https://github.com/jokergoo/GetoptLong/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -79,15 +78,15 @@
 
       
 
-      </header><script src="GetoptLong_files/header-attrs-2.9/header-attrs.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Parsing command-line arguments by Getopt::Long</h1>
-                        <h4 class="author">Zuguang Gu (<a href="mailto:z.gu@dkfz.de" class="email">z.gu@dkfz.de</a>)</h4>
+                        <h4 data-toc-skip class="author">Zuguang Gu (<a href="mailto:z.gu@dkfz.de" class="email">z.gu@dkfz.de</a>)</h4>
             
-            <h4 class="date">2021-07-01</h4>
+            <h4 data-toc-skip class="date">2022-03-31</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/jokergoo/GetoptLong/blob/master/vignettes/GetoptLong.Rmd"><code>vignettes/GetoptLong.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/jokergoo/GetoptLong/blob/HEAD/vignettes/GetoptLong.Rmd" class="external-link"><code>vignettes/GetoptLong.Rmd</code></a></small>
       <div class="hidden name"><code>GetoptLong.Rmd</code></div>
 
     </div>
@@ -95,25 +94,25 @@
     
     
 <hr>
-<p>There are already several R packages which parse command-line arguments such as <a href="https://CRAN.R-project.org/package=getopt"><strong>getopt</strong></a>, <a href="https://CRAN.R-project.org/package=optparse"><strong>optparse</strong></a>, <a href="https://CRAN.R-project.org/package=argparse"><strong>argparse</strong></a>, <a href="https://CRAN.R-project.org/package=docopt"><strong>docopt</strong></a>. Here <strong>GetoptLong</strong> is another command-line argument parser (actually it was developed very early, <a href="https://cran.r-project.org/src/contrib/Archive/GetoptLong/">the first CRAN version</a> was in 2013) which wraps the powerful Perl module <a href="https://metacpan.org/pod/Getopt::Long"><code>Getopt::Long</code></a>. <strong>GetoptLong</strong> package also provides some adaptations for easier use in R.</p>
-<p>Using <strong>GetoptLong</strong> is simple especially for users having Perl experience (Oops, age exposed :)) because the specification is almost the same as in Perl. The original website of <a href="https://perldoc.pl/Getopt::Long"><code>Getopt::Long</code></a> is always your best reference.</p>
+<p>There are already several R packages which parse command-line arguments such as <a href="https://CRAN.R-project.org/package=getopt" class="external-link"><strong>getopt</strong></a>, <a href="https://CRAN.R-project.org/package=optparse" class="external-link"><strong>optparse</strong></a>, <a href="https://CRAN.R-project.org/package=argparse" class="external-link"><strong>argparse</strong></a>, <a href="https://CRAN.R-project.org/package=docopt" class="external-link"><strong>docopt</strong></a>. Here <strong>GetoptLong</strong> is another command-line argument parser (actually it was developed very early, <a href="https://cran.r-project.org/src/contrib/Archive/GetoptLong/" class="external-link">the first CRAN version</a> was in 2013) which wraps the powerful Perl module <a href="https://metacpan.org/pod/Getopt::Long" class="external-link"><code>Getopt::Long</code></a>. <strong>GetoptLong</strong> package also provides some adaptations for easier use in R.</p>
+<p>Using <strong>GetoptLong</strong> is simple especially for users having Perl experience (Oops, age exposed :)) because the specification is almost the same as in Perl. The original website of <a href="https://perldoc.pl/Getopt::Long" class="external-link"><code>Getopt::Long</code></a> is always your best reference.</p>
 <p><strong>Note: to use this package, Perl should be installed.</strong></p>
-<div id="workflow-of-the-wrapping" class="section level2">
-<h2 class="hasAnchor">
-<a href="#workflow-of-the-wrapping" class="anchor"></a>Workflow of the wrapping</h2>
+<div class="section level2">
+<h2 id="workflow-of-the-wrapping">Workflow of the wrapping<a class="anchor" aria-label="anchor" href="#workflow-of-the-wrapping"></a>
+</h2>
 <p>The <strong>GetoptLong</strong> R package automatically generates a Perl script according to the specifications in the R script. Later the Perl script is executed with the command-line arguments that user specified. The options are parsed and saved into a json file. Finally R reads back the json file and formats them as R variables.</p>
 <p>Following figure shows how the R package works for parsing the command-line arguments.</p>
 <p><img src="workflow.png" width="600px" style="display: block; margin: auto;"></p>
 </div>
-<div id="a-quick-example" class="section level2">
-<h2 class="hasAnchor">
-<a href="#a-quick-example" class="anchor"></a>A quick example</h2>
-<div id="specify-as-a-vector" class="section level3">
-<h3 class="hasAnchor">
-<a href="#specify-as-a-vector" class="anchor"></a>Specify as a vector</h3>
+<div class="section level2">
+<h2 id="a-quick-example">A quick example<a class="anchor" aria-label="anchor" href="#a-quick-example"></a>
+</h2>
+<div class="section level3">
+<h3 id="specify-as-a-vector">Specify as a vector<a class="anchor" aria-label="anchor" href="#specify-as-a-vector"></a>
+</h3>
 <p>The following example gives you some feels of using <strong>GetoptLong</strong> package. The following code is saved in to an R script named <code>foo.R</code>.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/jokergoo/GetoptLong">GetoptLong</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/jokergoo/GetoptLong" class="external-link">GetoptLong</a></span><span class="op">)</span>
 
 <span class="va">cutoff</span> <span class="op">=</span> <span class="fl">0.05</span>
 <span class="fu"><a href="../reference/GetoptLong.html">GetoptLong</a></span><span class="op">(</span>
@@ -162,9 +161,9 @@ Options:
   --version        Print version information and exit. </code></pre>
 <p>You can find the short option names (in single letters) are automatically added. The information of default values is added as well.</p>
 </div>
-<div id="specify-as-a-template" class="section level3">
-<h3 class="hasAnchor">
-<a href="#specify-as-a-template" class="anchor"></a>Specify as a template</h3>
+<div class="section level3">
+<h3 id="specify-as-a-template">Specify as a template<a class="anchor" aria-label="anchor" href="#specify-as-a-template"></a>
+</h3>
 <p>The specification can also be set as a template where the specifications are marked by <code>&lt;&gt;</code>.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">spec</span> <span class="op">=</span> <span class="st">"
@@ -180,7 +179,7 @@ Options:
 Contact: name@address
 "</span>
 
-<span class="fu"><a href="../reference/GetoptLong.html">GetoptLong</a></span><span class="op">(</span><span class="va">spec</span>, template_control <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>opt_width <span class="op">=</span> <span class="fl">21</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="../reference/GetoptLong.html">GetoptLong</a></span><span class="op">(</span><span class="va">spec</span>, template_control <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>opt_width <span class="op">=</span> <span class="fl">21</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>The parameter <code>opt_width</code> controls the maximal width of the option description (<em>i.e.</em>, <code>--number, -n integer</code>, <code>--cutoff, -c numeric</code> and <code>--verbose</code>).</p>
 <p>Calling <code>Rscript foo.R --help</code> generates the following message:</p>
 <pre><code>This is an example of using template to specify options.
@@ -195,9 +194,9 @@ Options:
 Contact: name@address </code></pre>
 </div>
 </div>
-<div id="advantages" class="section level2">
-<h2 class="hasAnchor">
-<a href="#advantages" class="anchor"></a>Advantages</h2>
+<div class="section level2">
+<h2 id="advantages">Advantages<a class="anchor" aria-label="anchor" href="#advantages"></a>
+</h2>
 <p>There are several advantages compared to other command-line argument parser packages. The major advantage comes from the <code>Getopt::Long</code> Perl module which actually parses the options. The <code>Getopt::Long</code> module provides a flexible, smart and compact way for specifying command-line arguments. The major features are:</p>
 <ol style="list-style-type: decimal">
 <li>Various formats of specifying options with values, such as</li>
@@ -208,15 +207,15 @@ Contact: name@address </code></pre>
 <ol start="2" style="list-style-type: decimal">
 <li>Single-letter options can be bundled:</li>
 </ol>
-<pre><code>-a -b -c  -abs</code></pre>
+<pre><code><span class="op">-</span><span class="va">a</span> <span class="op">-</span><span class="va">b</span> <span class="op">-</span><span class="va">c</span>  <span class="op">-</span><span class="va">abs</span></code></pre>
 <ol start="3" style="list-style-type: decimal">
 <li>Options with multiple names. With the following specification, <code>--length</code>, <code>--height</code> are the same.</li>
 </ol>
-<pre><code>length|height=f</code></pre>
+<pre><code><span class="va">length</span><span class="op">|</span><span class="va">height</span><span class="op">=</span><span class="va">f</span></code></pre>
 <ol start="4" style="list-style-type: decimal">
 <li>Automatically support single-letter options. If the first letter of an option is unique to all other options, the first letter can be used as an optional option name. For example, if <code>l</code> and <code>h</code> are unique, <code>--length</code>, <code>--height</code>, <code>-l</code> and <code>-h</code> set the same option.</li>
 </ol>
-<pre><code>length|height=f  --length --height -l -h</code></pre>
+<pre><code><span class="va">length</span><span class="op">|</span><span class="va">height</span><span class="op">=</span><span class="va">f</span>  <span class="op">-</span><span class="op">-</span><span class="va">length</span> <span class="op">-</span><span class="op">-</span><span class="va">height</span> <span class="op">-</span><span class="va">l</span> <span class="op">-</span><span class="va">h</span></code></pre>
 <ol start="5" style="list-style-type: decimal">
 <li>Rich option data types, including scalar, vector (array in Perl), list (hash in Perl). For example:</li>
 </ol>
@@ -244,12 +243,12 @@ name=s%      name-value pair, values should be characters</code></pre>
 <li><p>It provides a natural and convenient way to specify defaults.</p></li>
 </ol>
 </div>
-<div id="customize-the-specifications" class="section level2">
-<h2 class="hasAnchor">
-<a href="#customize-the-specifications" class="anchor"></a>Customize the specifications</h2>
+<div class="section level2">
+<h2 id="customize-the-specifications">Customize the specifications<a class="anchor" aria-label="anchor" href="#customize-the-specifications"></a>
+</h2>
 <p>Each specifier in options consists of two parts: the name specification and the argument specification:</p>
 <pre><code>length|size|l=i@</code></pre>
-<p>Here <code>length|size|l</code> is a list of alternative names separated by <code><a href="https://rdrr.io/r/base/Logic.html">|</a></code>. The remaining part is argument specification which defines the mode and amount of arguments.</p>
+<p>Here <code>length|size|l</code> is a list of alternative names separated by <code>|</code>. The remaining part is argument specification which defines the mode and amount of arguments.</p>
 <p>Specify any of alternative option name from command-line is ok and it doesn’t matter whether using one or two slash in front of the option name. Sometimes you even don’t need to specify complete option names, you only need to make sure the partial name match is unique. If the partial match is not uniqe, it will throw an error. For above example, we can specify the argument like:</p>
 <pre><code>~\&gt; Rscript foo.R --length 1
 ~\&gt; Rscript foo.R --length=1 # adding "=" is also ok
@@ -261,9 +260,9 @@ name=s%      name-value pair, values should be characters</code></pre>
 <ul>
 <li>no argument specification: taking no argument. Options are logical.</li>
 <li>
-<code><a href="https://rdrr.io/r/base/Logic.html">!</a></code>: taking no argument. Options are logical. You can set its oposite value by adding it with <code>no</code> or <code>no-</code>. <em>E.g.</em>, <code>foo!</code> allows <code>--foo</code> as well as <code>--nofoo</code> and <code>--no-foo</code>.</li>
+<code>!</code>: taking no argument. Options are logical. You can set its oposite value by adding it with <code>no</code> or <code>no-</code>. <em>E.g.</em>, <code>foo!</code> allows <code>--foo</code> as well as <code>--nofoo</code> and <code>--no-foo</code>.</li>
 <li>
-<code>=type[desttype][repeat]</code>: options should have arguments (or options should have values specified). <em>E.g.</em> <code>tag=i@</code> where <code>i</code> corresponds to <code>type</code>, and <code><a href="https://rdrr.io/r/base/slotOp.html">@</a></code> corresponds to <code>desttype</code>, or <code>tag=i{2,}</code> where <code>{2,}</code> corresponds to <code>repeat</code>.</li>
+<code>=type[desttype][repeat]</code>: options should have arguments (or options should have values specified). <em>E.g.</em> <code>tag=i@</code> where <code>i</code> corresponds to <code>type</code>, and <code>@</code> corresponds to <code>desttype</code>, or <code>tag=i{2,}</code> where <code>{2,}</code> corresponds to <code>repeat</code>.</li>
 </ul>
 <p>Please note <code>:[type][desttype]</code> is not supported here. We use another way to define mandatory options and optional options. If you don’t know what it is, just ignore this paragraph.</p>
 <p>Available <code>type</code> options are:</p>
@@ -280,7 +279,7 @@ name=s%      name-value pair, values should be characters</code></pre>
 <p>Available <code>desttype</code> settings are:</p>
 <ul>
 <li>
-<code><a href="https://rdrr.io/r/base/slotOp.html">@</a></code>: array, allow more than one arguments for an option.</li>
+<code>@</code>: array, allow more than one arguments for an option.</li>
 <li>
 <code>%</code>: hash, allow arguments like <code>name=value</code>.</li>
 <li>nothing: scalar, single argument for single option.</li>
@@ -317,7 +316,7 @@ name=s%      name-value pair, values should be characters</code></pre>
     vertical-align: text-top;
 }
 </style>
-<table class="table">
+<table id="tb" class="table">
 <tr>
 <th>
 Options
@@ -553,7 +552,7 @@ no argument
 </td>
 </tr>
 <tr class="_even">
-<td rowspan="2" class="_first">
+<td rowspan="3" class="_first">
 <code>tag!</code>
 </td>
 <td>
@@ -566,6 +565,14 @@ no argument
 <tr class="_even">
 <td>
 <code>–no-tag</code>
+</td>
+<td>
+<code>FALSE</code>
+</td>
+</tr>
+<tr class="_even">
+<td>
+no argument, no default for <code>tag</code>
 </td>
 <td>
 <code>FALSE</code>
@@ -587,7 +594,7 @@ no argument
 <code>–tag 1 2</code>
 </td>
 <td>
-<code><a href="https://rdrr.io/r/base/c.html">c(1, 2)</a></code>
+<code>c(1, 2)</code>
 </td>
 </tr>
 <tr class="_odd">
@@ -595,7 +602,7 @@ no argument
 <code>–tag 1 –tag 2</code>
 </td>
 <td>
-<code><a href="https://rdrr.io/r/base/c.html">c(1, 2)</a></code>
+<code>c(1, 2)</code>
 </td>
 </tr>
 <tr class="_odd">
@@ -603,7 +610,7 @@ no argument
 <code>–tag=1 –tag=2</code>
 </td>
 <td>
-<code><a href="https://rdrr.io/r/base/c.html">c(1, 2)</a></code>
+<code>c(1, 2)</code>
 </td>
 </tr>
 <tr class="_even">
@@ -622,7 +629,7 @@ Error: Option tag, key “1”, requires a value
 <code>–tag foo=1 –tag bar=2</code>
 </td>
 <td>
-<code><a href="https://rdrr.io/r/base/list.html">list(foo = 1, bar = 2)</a></code>, <code>tag</code> is a list.
+<code>list(foo = 1, bar = 2)</code>, <code>tag</code> is a list.
 </td>
 </tr>
 <tr class="_even">
@@ -630,7 +637,7 @@ Error: Option tag, key “1”, requires a value
 <code>–tag foo=1 bar=2</code>
 </td>
 <td>
-<code><a href="https://rdrr.io/r/base/list.html">list(foo = 1, bar = 2)</a></code>, <code>tag</code> is a list.
+<code>list(foo = 1, bar = 2)</code>, <code>tag</code> is a list.
 </td>
 </tr>
 <tr class="_odd">
@@ -649,7 +656,7 @@ Error: Insufficient arguments for option tag
 <code>–tag 1 2</code>
 </td>
 <td>
-<code><a href="https://rdrr.io/r/base/c.html">c(1, 2)</a></code>
+<code>c(1, 2)</code>
 </td>
 </tr>
 <tr class="_odd">
@@ -676,7 +683,7 @@ Error: Insufficient arguments for option tag
 <code>–tag 1 2</code>
 </td>
 <td>
-<code><a href="https://rdrr.io/r/base/c.html">c(1, 2)</a></code>
+<code>c(1, 2)</code>
 </td>
 </tr>
 <tr class="_even">
@@ -684,7 +691,7 @@ Error: Insufficient arguments for option tag
 <code>–tag 1 2 3</code>
 </td>
 <td>
-<code><a href="https://rdrr.io/r/base/c.html">c(1, 2, 3)</a></code>
+<code>c(1, 2, 3)</code>
 </td>
 </tr>
 <tr class="_odd">
@@ -703,7 +710,7 @@ Error: Insufficient arguments for option tag
 <code>–tag 1 2</code>
 </td>
 <td>
-<code><a href="https://rdrr.io/r/base/c.html">c(1, 2)</a></code>
+<code>c(1, 2)</code>
 </td>
 </tr>
 <tr class="_odd">
@@ -711,18 +718,18 @@ Error: Insufficient arguments for option tag
 <code>–tag 1 2 3</code>
 </td>
 <td>
-<code><a href="https://rdrr.io/r/base/c.html">c(1, 2)</a></code>
+<code>c(1, 2)</code>
 </td>
 </tr>
 </table>
 </div>
-<div id="where-do-the-option-values-go" class="section level2">
-<h2 class="hasAnchor">
-<a href="#where-do-the-option-values-go" class="anchor"></a>Where do the option values go</h2>
+<div class="section level2">
+<h2 id="where-do-the-option-values-go">Where do the option values go<a class="anchor" aria-label="anchor" href="#where-do-the-option-values-go"></a>
+</h2>
 <p>Options will be imported into user’s environment as R variables by default. The first option name in all alternative names will be taken as the name of the variable, (<em>e.g.</em> for specification of <code>length|size=s</code>, <code>length</code> will be used as the variable name.), which means, it must be a valid R variable name. Any definition of these variables in front of <code><a href="../reference/GetoptLong.html">GetoptLong()</a></code> will be treated as default values for the corresponding options. <strong>If options already have default values, they are optional in command-line</strong>. If the variable is defined as a function before <code><a href="../reference/GetoptLong.html">GetoptLong()</a></code> is called, it is treated as undefined. Please note your option names should not start with the dot. Although it is valid for R variables but it is not allowed for <strong>Getopt::Long</strong> module.</p>
 <p>For the following example:</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/jokergoo/GetoptLong">GetoptLong</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/jokergoo/GetoptLong" class="external-link">GetoptLong</a></span><span class="op">)</span>
 
 <span class="va">cutoff</span> <span class="op">=</span> <span class="fl">0.05</span>
 <span class="fu"><a href="../reference/GetoptLong.html">GetoptLong</a></span><span class="op">(</span>
@@ -732,10 +739,10 @@ Error: Insufficient arguments for option tag
     <span class="st">"verbose"</span>,  <span class="st">"Print message."</span>
 <span class="op">)</span>
 
-<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">number</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">cutoff</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">param</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">verbose</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">number</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">cutoff</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">param</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">verbose</span><span class="op">)</span></code></pre></div>
 <p>a calling from command-line:</p>
 <pre><code>Rscript foo.R --number 1 2 --param var1=a var2=b --verbose</code></pre>
 <p>will print</p>
@@ -757,7 +764,7 @@ $var2
 <p>If <code>--verbose</code>/<code>--no-verbose</code> is not specified, the variable <code>verbose</code> is <code>TRUE</code>. If <code>--verbose</code> is specified, <code>verbose</code> is <code>TRUE</code> and if <code>--no-verbose</code> is specified, <code>verbose</code> is <code>FALSE</code>.</p>
 <p>If you don’t want to directly export options as variables, you can assign <code>envir</code> argument with an environment variable so that all the option values go there.</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">opt</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/environment.html">new.env</a></span><span class="op">(</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">opt</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/environment.html" class="external-link">new.env</a></span><span class="op">(</span><span class="op">)</span>
 
 <span class="va">opt</span><span class="op">$</span><span class="va">cutoff</span> <span class="op">=</span> <span class="fl">0.05</span>
 <span class="fu"><a href="../reference/GetoptLong.html">GetoptLong</a></span><span class="op">(</span>
@@ -768,8 +775,8 @@ $var2
 
     envir <span class="op">=</span> <span class="va">opt</span>
 <span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">as.list</a></span><span class="op">(</span><span class="va">opt</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p>a calling from command-line:</p>
+<span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">as.list</a></span><span class="op">(</span><span class="va">opt</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<p>A calling from the command-line:</p>
 <pre><code>Rscript foo.R --number 1 2 --param var1=a var2=b --verbose</code></pre>
 <p>will print</p>
 <pre><code>$cutoff
@@ -789,20 +796,48 @@ $param$var1
 $verbose
 [1] TRUE</code></pre>
 </div>
-<div id="help-option" class="section level2">
-<h2 class="hasAnchor">
-<a href="#help-option" class="anchor"></a>Help option</h2>
+<div class="section level2">
+<h2 id="multi-word-option-name">Multi-word option name<a class="anchor" aria-label="anchor" href="#multi-word-option-name"></a>
+</h2>
+<p>It also supports multiple words as an option name. Note, in the option specification, the name of the option should always be in the format of a valid R variable name, because it will be exported as a real variable. In the command line, you can use <code>-</code> to connect words and it will be converted to <code>_</code> internally. Check the following example:</p>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># or a default can be set for `bar_value`</span>
+<span class="co"># bar_value = 2</span>
+<span class="fu"><a href="../reference/GetoptLong.html">GetoptLong</a></span><span class="op">(</span>
+    <span class="st">"bar_value=i"</span>, <span class="st">"Some value."</span>
+<span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">bar_value</span><span class="op">)</span></code></pre></div>
+<p>A calling from the command-line:</p>
+<pre><code>Rscript foo.R --bar-value 10</code></pre>
+<p>will print</p>
+<pre><code>[1] 1</code></pre>
+<p>Of course, you can also specify the option by:</p>
+<pre><code>Rscript foo.R --bar_value 1</code></pre>
+<p>A second example of using multiple-word as a logical option name:</p>
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/GetoptLong.html">GetoptLong</a></span><span class="op">(</span>
+    <span class="st">"show_messages!"</span>, <span class="st">"Whether to show messages?"</span>
+<span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">show_messages</span><span class="op">)</span></code></pre></div>
+<pre><code>Rscript foo.R --show-messages</code></pre>
+<pre><code>[1] TRUE</code></pre>
+<pre><code>Rscript foo.R --no-show-messages</code></pre>
+<pre><code>[1] FALSE</code></pre>
+</div>
+<div class="section level2">
+<h2 id="help-option">Help option<a class="anchor" aria-label="anchor" href="#help-option"></a>
+</h2>
 <p><code>help</code> is a reserved option, which means, you can not use it as yours.</p>
 <p>Option usage is automatically generated and can be retrieved by setting <code>--help</code> in the command. In following example, I create an option specification that contains all types of options (with long descriptions):</p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/GetoptLong.html">GetoptLong</a></span><span class="op">(</span>
-    <span class="st">"count=i"</span>,  <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="st">"This is a count. This is a count. This is a count."</span>,
+    <span class="st">"count=i"</span>,  <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"This is a count. This is a count. This is a count."</span>,
                       <span class="st">"This is a count.  This is a count. This is a count."</span><span class="op">)</span>,
-    <span class="st">"number=f"</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="st">"This is a number. This is a number. This is a number."</span>,
+    <span class="st">"number=f"</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"This is a number. This is a number. This is a number."</span>,
                       <span class="st">"This is a number. This is a number. This is a number."</span><span class="op">)</span>,
-    <span class="st">"array=f@"</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="st">"This is an array. This is an array. This is an array."</span>,
+    <span class="st">"array=f@"</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"This is an array. This is an array. This is an array."</span>,
                       <span class="st">"This is an array. This is an array. This is an array."</span><span class="op">)</span>,
-    <span class="st">"hash=s%"</span>,  <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="st">"This is a hash. This is a hash. This is a hash."</span>,
+    <span class="st">"hash=s%"</span>,  <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"This is a hash. This is a hash. This is a hash."</span>,
                       <span class="st">"This is a hash. This is a hash. This is a hash."</span><span class="op">)</span>,
     <span class="st">"verbose!"</span>, <span class="st">"Whether show messages"</span>,
     <span class="st">"flag"</span>,     <span class="st">"a non-sense option"</span>
@@ -841,11 +876,11 @@ Options:
     Print version information and exit.
  </code></pre>
 <p>If default values for options are provided, they are properly inserted to the usage message.</p>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">count</span> <span class="op">=</span> <span class="fl">1</span>
 <span class="va">number</span> <span class="op">=</span> <span class="fl">0.1</span>
-<span class="va">array</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>
-<span class="va">hash</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="st">"foo"</span> <span class="op">=</span> <span class="st">"a"</span>, <span class="st">"bar"</span> <span class="op">=</span> <span class="st">"b"</span><span class="op">)</span>
+<span class="va">array</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>
+<span class="va">hash</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"foo"</span> <span class="op">=</span> <span class="st">"a"</span>, <span class="st">"bar"</span> <span class="op">=</span> <span class="st">"b"</span><span class="op">)</span>
 <span class="va">verbose</span> <span class="op">=</span> <span class="cn">TRUE</span>
 <span class="fu"><a href="../reference/GetoptLong.html">GetoptLong</a></span><span class="op">(</span>
   <span class="va">...</span>
@@ -887,11 +922,11 @@ Options:
     Print version information and exit.
  </code></pre>
 <p>The global parameters <code>help_style</code> can be set to <code>two-column</code> to change to another style:</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">GetoptLong.options</span>(<span class="at">help_style =</span> <span class="st">"two-column"</span>)</span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="co"># specifying the defaults</span></span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>GetoptLong{</span>
-<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>    ...</span>
-<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">GetoptLong.options</span>(<span class="at">help_style =</span> <span class="st">"two-column"</span>)</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="co"># specifying the defaults</span></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>GetoptLong{</span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>    ...</span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 <pre><code>Usage: Rscript foo.R [options]
 
 Options:
@@ -915,20 +950,20 @@ Options:
   --help                       Print help message and exit. 
   --version                    Print version information and exit. </code></pre>
 <p>When options are specified as name-value pairs, these sub options can be documented as follows. Note the specifications of <em>e.g.</em> <code>foo$name1</code> are only for the usage message.</p>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">foo</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>a <span class="op">=</span> <span class="fl">1</span>, b <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
+<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">foo</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>a <span class="op">=</span> <span class="fl">1</span>, b <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
 <span class="fu"><a href="../reference/GetoptLong.html">GetoptLong</a></span><span class="op">(</span>
-    <span class="st">"foo=i%"</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="st">"This is foo. This is foo. This is foo. This is foo."</span>,
+    <span class="st">"foo=i%"</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"This is foo. This is foo. This is foo. This is foo."</span>,
                     <span class="st">"This is foo. This is foo. This is foo. This is foo."</span><span class="op">)</span>,
-    <span class="st">"foo$name1"</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="st">"name1 in foo. name1 in foo. name1 in foo. name1 in foo."</span>,
+    <span class="st">"foo$name1"</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"name1 in foo. name1 in foo. name1 in foo. name1 in foo."</span>,
                        <span class="st">"name1 in foo. name1 in foo. name1 in foo. name1 in foo."</span><span class="op">)</span>,
-    <span class="st">"foo$name2"</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="st">"name2 in foo. name2 in foo. name2 in foo. name2 in foo."</span>,
+    <span class="st">"foo$name2"</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"name2 in foo. name2 in foo. name2 in foo. name2 in foo."</span>,
                        <span class="st">"name2 in foo. name2 in foo. name2 in foo. name2 in foo."</span><span class="op">)</span>,
-    <span class="st">"bar=s%"</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="st">"This is bar. This is bar. This is bar. This is bar."</span>,
+    <span class="st">"bar=s%"</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"This is bar. This is bar. This is bar. This is bar."</span>,
                     <span class="st">"This is bar. This is bar. This is bar. This is bar."</span><span class="op">)</span>,
-    <span class="st">"bar$name3"</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="st">"name3 in bar. name3 in bar. name3 in bar. name3 in bar."</span>,
+    <span class="st">"bar$name3"</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"name3 in bar. name3 in bar. name3 in bar. name3 in bar."</span>,
                        <span class="st">"name3 in bar. name3 in bar. name3 in bar. name3 in bar."</span><span class="op">)</span>,
-    <span class="st">"bar$name4"</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="st">"name4 in bar. name4 in bar. name4 in bar. name4 in bar."</span>,
+    <span class="st">"bar$name4"</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"name4 in bar. name4 in bar. name4 in bar. name4 in bar."</span>,
                        <span class="st">"name4 in bar. name4 in bar. name4 in bar. name4 in bar."</span><span class="op">)</span>
 <span class="op">)</span></code></pre></div>
 <pre><code>Usage: Rscript foo.R [options]
@@ -962,10 +997,10 @@ Options:
     Print version information and exit.
  </code></pre>
 <p>And the two-column style for the sub options.</p>
-<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">GetoptLong.options</span>(<span class="at">help_style =</span> <span class="st">"two-column"</span>)</span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>GetoptLong{</span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>    ...</span>
-<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">GetoptLong.options</span>(<span class="at">help_style =</span> <span class="st">"two-column"</span>)</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>GetoptLong{</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>    ...</span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 <pre><code>Usage: Rscript foo.R [options]
 
 Options:
@@ -995,7 +1030,7 @@ Options:
   --help, -h                   Print help message and exit. 
   --version, -v                Print version information and exit. </code></pre>
 <p>Extra text such head and foot of the usage message can be set with <code>help_head</code> and <code>help_foot</code> arguments:</p>
-<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/GetoptLong.html">GetoptLong</a></span><span class="op">(</span>
     help_head <span class="op">=</span> <span class="st">"This is a demonstration of adding usage head and foot."</span>,
 
@@ -1027,25 +1062,25 @@ Options:
  
 Please contact name@address.</code></pre>
 <p>The options in the usage text can be grouped by setting separator lines. The separator line should contain two elements: the separator and the description. The separator can be any character in <code>-+=#%</code> with any length.</p>
-<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">count</span> <span class="op">=</span> <span class="fl">1</span>
-<span class="va">array</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">0.2</span><span class="op">)</span>
+<span class="va">array</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">0.2</span><span class="op">)</span>
 <span class="fu"><a href="../reference/GetoptLong.html">GetoptLong</a></span><span class="op">(</span>
     <span class="st">"--------"</span>, <span class="st">"Binary options:"</span>,
     <span class="st">"verbose!"</span>, <span class="st">"Whether show messages"</span>,
     <span class="st">"flag"</span>,     <span class="st">"a non-sense option"</span>,
 
     <span class="st">"-------"</span>, <span class="st">"Single-value options:"</span>,
-    <span class="st">"count=i"</span>,  <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="st">"This is a count. This is a count. This is a count."</span>,
+    <span class="st">"count=i"</span>,  <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"This is a count. This is a count. This is a count."</span>,
                       <span class="st">"This is a count.  This is a count. This is a count."</span><span class="op">)</span>,
-    <span class="st">"number=f"</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="st">"This is a number. This is a number. This is a number."</span>,
+    <span class="st">"number=f"</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"This is a number. This is a number. This is a number."</span>,
                       <span class="st">"This is a number. This is a number. This is a number."</span><span class="op">)</span>,
     
-    <span class="st">"--------"</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="st">"Multiple-vlaue options: long text long text long text"</span>,
+    <span class="st">"--------"</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Multiple-vlaue options: long text long text long text"</span>,
                       <span class="st">" long text long text long text long text long text"</span><span class="op">)</span>,
-    <span class="st">"array=f@"</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="st">"This is an array. This is an array. This is an array."</span>,
+    <span class="st">"array=f@"</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"This is an array. This is an array. This is an array."</span>,
                       <span class="st">"This is an array. This is an array. This is an array."</span><span class="op">)</span>,
-    <span class="st">"hash=s%"</span>,  <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="st">"This is a hash. This is a hash. This is a hash."</span>,
+    <span class="st">"hash=s%"</span>,  <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"This is a hash. This is a hash. This is a hash."</span>,
                       <span class="st">"This is a hash. This is a hash. This is a hash."</span><span class="op">)</span>,
     
     <span class="st">"-------"</span>, <span class="st">"Other options:"</span>
@@ -1089,10 +1124,10 @@ Other options:
     Print version information and exit.
  </code></pre>
 <p>And the two-column style for the grouped options.</p>
-<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">GetoptLong.options</span>(<span class="at">help_style =</span> <span class="st">"two-column"</span>)</span>
-<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>GetoptLong{</span>
-<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>    ...</span>
-<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">GetoptLong.options</span>(<span class="at">help_style =</span> <span class="st">"two-column"</span>)</span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>GetoptLong{</span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>    ...</span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 <pre><code>Usage: Rscript foo.R [options]
 
 Binary options:
@@ -1122,7 +1157,7 @@ Other options:
 <p>The global option <code>GetoptLong.options$help_width</code> controls the maximal width of the usage message.</p>
 <p>The specification can also be set as a template which provides more flexibilities for the usage message. Here option specifications are maked by <code>&lt;&gt;</code> where the specifications will be extracted and the text will be replaced by the option description. The mark can be set by <code>GetoptLong.options$template_tag</code> global option.</p>
 <p>The option descriptions have different widths. To properly align the text, you need to manually adjust the width (spaces are filled if the width is larger than the option description) by setting <code>opt_width</code> parameter via <code>template_control</code> argument. See the following example.</p>
-<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/GetoptLong.html">GetoptLong</a></span><span class="op">(</span><span class="st">"
 This is a demonstration of using template as the option specification.
 
@@ -1141,7 +1176,7 @@ Multiple-vlaue options:
   &lt;hash=s%&gt; This is a hash. This is a hash.
 
 Questions, please contact your.name@email
-"</span>, template_control <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>opt_width <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>verbose <span class="op">=</span> <span class="fl">23</span>, flag <span class="op">=</span> <span class="fl">23</span>,
+"</span>, template_control <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>opt_width <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>verbose <span class="op">=</span> <span class="fl">23</span>, flag <span class="op">=</span> <span class="fl">23</span>,
                                          count <span class="op">=</span> <span class="fl">22</span>, number <span class="op">=</span> <span class="fl">22</span>,
                                          array <span class="op">=</span> <span class="fl">30</span>, hash <span class="op">=</span> <span class="fl">30</span><span class="op">)</span>
 <span class="op">)</span><span class="op">)</span></code></pre></div>
@@ -1163,7 +1198,7 @@ Multiple-vlaue options:
 
 Questions, please contact your.name@email </code></pre>
 <p>If the option explanation lies in more than one lines, in front from the second line, you should add a tag in form of <code>&lt;#tag&gt;</code> where <code>tag</code> is the option name of the current option block, so that proper spaces in front of the text can be calculated and the text will be properly aligned. See the following example:</p>
-<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/GetoptLong.html">GetoptLong</a></span><span class="op">(</span><span class="st">"
 Usage: Rscript foo.R [options]
 
@@ -1171,7 +1206,7 @@ Usage: Rscript foo.R [options]
   &lt;#count&gt; This is a count. This is a count.
   &lt;number=f&gt; This is a number. This is a number. This is a number.
   &lt;#number&gt; This is a number. This is a number.
-"</span>, template_control <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>opt_width <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>count <span class="op">=</span> <span class="fl">28</span>, number <span class="op">=</span> <span class="fl">28</span><span class="op">)</span><span class="op">)</span>
+"</span>, template_control <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>opt_width <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>count <span class="op">=</span> <span class="fl">28</span>, number <span class="op">=</span> <span class="fl">28</span><span class="op">)</span><span class="op">)</span>
 <span class="op">)</span></code></pre></div>
 <pre><code>Usage: Rscript foo.R [options]
 
@@ -1180,12 +1215,12 @@ Usage: Rscript foo.R [options]
   --number, -n numeric         This is a number. This is a number. This is a number.
                                This is a number. This is a number. </code></pre>
 </div>
-<div id="version-option" class="section level2">
-<h2 class="hasAnchor">
-<a href="#version-option" class="anchor"></a>Version option</h2>
+<div class="section level2">
+<h2 id="version-option">Version option<a class="anchor" aria-label="anchor" href="#version-option"></a>
+</h2>
 <p><code>version</code> is also a reserved option.</p>
 <p>Version should be stored in a variable <code>VERSION</code> before the call of <code><a href="../reference/GetoptLong.html">GetoptLong()</a></code>, then <code>--version</code> prints the corresponding version value.</p>
-<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">VERSION</span> <span class="op">=</span> <span class="st">"0.0.1"</span>
 <span class="fu"><a href="../reference/GetoptLong.html">GetoptLong</a></span><span class="op">(</span>
     <span class="st">"tag=i"</span>, <span class="st">"..."</span>, 
@@ -1193,43 +1228,43 @@ Usage: Rscript foo.R [options]
 <pre><code>~\&gt; Rscript foo.R --version
 0.0.1</code></pre>
 </div>
-<div id="configuring-getoptlong" class="section level2">
-<h2 class="hasAnchor">
-<a href="#configuring-getoptlong" class="anchor"></a>Configuring Getopt::Long</h2>
-<p>Configuration of <code>Getopt::Long</code> can be set by <code><a href="../reference/GetoptLong.options.html">GetoptLong.options("config")</a></code>:</p>
-<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
+<div class="section level2">
+<h2 id="configuring-getoptlong">Configuring Getopt::Long<a class="anchor" aria-label="anchor" href="#configuring-getoptlong"></a>
+</h2>
+<p>Configuration of <code>Getopt::Long</code> can be set by <code>GetoptLong.options("config")</code>:</p>
+<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/GetoptLong.options.html">GetoptLong.options</a></span><span class="op">(</span><span class="st">"config"</span> <span class="op">=</span> <span class="st">"bundling"</span><span class="op">)</span>
-<span class="fu"><a href="../reference/GetoptLong.options.html">GetoptLong.options</a></span><span class="op">(</span><span class="st">"config"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"no_ignore_case"</span>, <span class="st">"bundling"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="../reference/GetoptLong.options.html">GetoptLong.options</a></span><span class="op">(</span><span class="st">"config"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"no_ignore_case"</span>, <span class="st">"bundling"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>With different configurations, it can support more types of option specifications:</p>
 <pre><code>-a -b -c  -abc
 -s 24 -s24 -s=24</code></pre>
-<p>Please refer to website of <a href="http://search.cpan.org/perldoc?Getopt%3A%3ALong#Configuring_Getopt%3A%3ALong"><code>Getopt::Long</code></a> for more information.</p>
+<p>Please refer to website of <a href="http://search.cpan.org/perldoc?Getopt%3A%3ALong#Configuring_Getopt%3A%3ALong" class="external-link"><code>Getopt::Long</code></a> for more information.</p>
 </div>
-<div id="specify-path-of-perl-in-command-line" class="section level2">
-<h2 class="hasAnchor">
-<a href="#specify-path-of-perl-in-command-line" class="anchor"></a>Specify path of Perl in command line</h2>
+<div class="section level2">
+<h2 id="specify-path-of-perl-in-command-line">Specify path of Perl in command line<a class="anchor" aria-label="anchor" href="#specify-path-of-perl-in-command-line"></a>
+</h2>
 <p>In some conditions that path of binary <strong>Perl</strong> is not in the <code>PATH</code> environment variable and you do not have permission to modify <code>PATH</code>. You can specify your <strong>Perl</strong> path from command line like:</p>
 <pre><code>~\&gt; Rscript foo.R -a -b -c -- /your/perl/bin/perl</code></pre>
 <p>Since arguments following after <code>--</code> will be ignored by <code>Getopt::Long</code>, we take the first argument next to <code>--</code> as the path of user-specified <strong>Perl</strong> path.</p>
 </div>
-<div id="specify-command-line-options-within-r-session" class="section level2">
-<h2 class="hasAnchor">
-<a href="#specify-command-line-options-within-r-session" class="anchor"></a>Specify command-line options within R session</h2>
+<div class="section level2">
+<h2 id="specify-command-line-options-within-r-session">Specify command-line options within R session<a class="anchor" aria-label="anchor" href="#specify-command-line-options-within-r-session"></a>
+</h2>
 <p>When in an interactive R session, arguments can be set when calling <code><a href="../reference/source_script.html">source_script()</a></code>, so it would be convinient to load external R scripts with different comand-line arguments. <em>E.g.</em>:</p>
-<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/source_script.html">source_script</a></span><span class="op">(</span><span class="st">"foo.R"</span>, argv_str <span class="op">=</span> <span class="st">"--cutoff 0.01 --input file=foo.txt --verbose"</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="session-info" class="section level2">
-<h2 class="hasAnchor">
-<a href="#session-info" class="anchor"></a>Session info</h2>
-<div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<pre><code>R version 4.1.0 (2021-05-18)
+<div class="section level2">
+<h2 id="session-info">Session info<a class="anchor" aria-label="anchor" href="#session-info"></a>
+</h2>
+<div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<pre><code>R version 4.1.2 (2021-11-01)
 Platform: x86_64-apple-darwin17.0 (64-bit)
 Running under: macOS Big Sur 10.16
 
 Matrix products: default
-BLAS:   /Library/Frameworks/R.framework/Versions/4.1/Resources/lib/libRblas.dylib
+BLAS:   /Library/Frameworks/R.framework/Versions/4.1/Resources/lib/libRblas.0.dylib
 LAPACK: /Library/Frameworks/R.framework/Versions/4.1/Resources/lib/libRlapack.dylib
 
 locale:
@@ -1239,20 +1274,20 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
-[1] GetoptLong_1.0.3 knitr_1.33      
+[1] GetoptLong_1.1.0 knitr_1.37      
 
 loaded via a namespace (and not attached):
- [1] magrittr_2.0.1      rjson_0.2.20        R6_2.5.0           
- [4] ragg_1.1.3          rlang_0.4.11        fastmap_1.1.0      
- [7] highr_0.9           stringr_1.4.0       tools_4.1.0        
-[10] xfun_0.24           jquerylib_0.1.4     htmltools_0.5.1.1  
-[13] systemfonts_1.0.2   yaml_2.2.1          digest_0.6.27      
-[16] rprojroot_2.0.2     pkgdown_1.6.1       crayon_1.4.1       
-[19] textshaping_0.3.5   sass_0.4.0          fs_1.5.0           
-[22] GlobalOptions_0.1.2 memoise_2.0.0       cachem_1.0.5       
-[25] evaluate_0.14       rmarkdown_2.9       stringi_1.6.2      
-[28] compiler_4.1.0      bslib_0.2.5.1       desc_1.3.0         
-[31] jsonlite_1.7.2     </code></pre>
+ [1] magrittr_2.0.1      rjson_0.2.21        R6_2.5.1           
+ [4] ragg_1.2.1          rlang_0.4.12        fastmap_1.1.0      
+ [7] highr_0.9           stringr_1.4.0       tools_4.1.2        
+[10] xfun_0.29           jquerylib_0.1.4     htmltools_0.5.2    
+[13] systemfonts_1.0.3   yaml_2.2.1          digest_0.6.29      
+[16] rprojroot_2.0.2     pkgdown_2.0.2       crayon_1.4.2       
+[19] textshaping_0.3.6   purrr_0.3.4         GlobalOptions_0.1.2
+[22] sass_0.4.0          fs_1.5.2            memoise_2.0.1      
+[25] cachem_1.0.6        evaluate_0.14       rmarkdown_2.11     
+[28] stringi_1.7.6       compiler_4.1.2      bslib_0.3.1        
+[31] desc_1.4.0          jsonlite_1.7.2     </code></pre>
 <script>
 var elements = document.getElementsByTagName("pre");
 for(var i = 0; i < elements.length; i ++ ) {
@@ -1277,11 +1312,13 @@ for(var i = 0; i < elements.length; i ++ ) {
 
 
       <footer><div class="copyright">
-  <p>Developed by Zuguang Gu.</p>
+  <p></p>
+<p>Developed by Zuguang Gu.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>
@@ -1289,6 +1326,8 @@ for(var i = 0; i < elements.length; i ++ ) {
 
   
 
+
+  
 
   </body>
 </html>
