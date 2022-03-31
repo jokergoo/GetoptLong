@@ -120,7 +120,7 @@
 <span class="fu"><a href="../reference/GetoptLong.html">GetoptLong</a></span><span class="op">(</span><span class="st">"foo=i"</span>, <span class="st">"Set value for foo."</span><span class="op">)</span>
 
 <span class="fu"><a href="../reference/qqcat.html">qqcat</a></span><span class="op">(</span><span class="st">"foo = @{foo}\n"</span><span class="op">)</span></code></pre></div>
-<p>And code in <code>sub2.R</code>.</p>
+<p>And code in <code>sub2.R</code>:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/jokergoo/GetoptLong" class="external-link">GetoptLong</a></span><span class="op">)</span>
 
@@ -177,7 +177,7 @@ Options:
 <div class="section level2">
 <h2 id="commands-in-sections">Commands in sections<a class="anchor" aria-label="anchor" href="#commands-in-sections"></a>
 </h2>
-<p>Sometimes are want to group commands and put then into sections. This can be done by adding a section tag <code>"-----"</code> as shown in the following example.</p>
+<p>Sometimes we want to group commands and put them into sections. This can be done by adding a section tag <code>"-----"</code> as shown in the following example.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/subCommands.html">subCommands</a></span><span class="op">(</span>
     <span class="st">"----"</span>, <span class="st">"----"</span>, <span class="st">"This is section1"</span>,
@@ -229,6 +229,7 @@ for(var i = 0; i < elements.length; i ++ ) {
     if(!elements[i].hasAttribute("class")) {
         code = elements[i].children[0];
         code.style.color = "white";
+        code.style.background = "rgb(38,38,38)";
         elements[i].style.background = "hsl(70, 0%, 15%)";
     }
 }

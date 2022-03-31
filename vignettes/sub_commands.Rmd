@@ -58,7 +58,7 @@ GetoptLong("foo=i", "Set value for foo.")
 qqcat("foo = @{foo}\n")
 ```
 
-And code in `sub2.R`.
+And code in `sub2.R`:
 
 ```{r sub2, eval = FALSE}
 library(GetoptLong)
@@ -142,7 +142,7 @@ Whether the arguments are grouped by every 2 elements or 3 elements is automatic
 
 ## Commands in sections
 
-Sometimes are want to group commands and put then into sections. This can be done by adding a section tag `"-----"` as shown in the following example.
+Sometimes we want to group commands and put them into sections. This can be done by adding a section tag `"-----"` as shown in the following example.
 
 ```{r section, eval = FALSE}
 subCommands(
@@ -205,6 +205,7 @@ for(var i = 0; i < elements.length; i ++ ) {
     if(!elements[i].hasAttribute("class")) {
         code = elements[i].children[0];
         code.style.color = "white";
+        code.style.background = "rgb(38,38,38)";
         elements[i].style.background = "hsl(70, 0%, 15%)";
     }
 }

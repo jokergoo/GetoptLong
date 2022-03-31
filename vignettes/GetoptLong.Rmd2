@@ -907,6 +907,7 @@ for(var i = 0; i < elements.length; i ++ ) {
     if(!elements[i].hasAttribute("class")) {
         code = elements[i].children[0];
         code.style.color = "white";
+        code.style.background = "rgb(38,38,38)";
         elements[i].style.background = "hsl(70, 0%, 15%)";
     }
 }
