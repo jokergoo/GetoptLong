@@ -135,7 +135,7 @@ print_help_msg = function(opt_lt, file = stderr(), script_name = NULL, head = NU
 
 print_version_msg = function(envir, file = stderr()) {
 	if(exists("VERSION", envir = envir)) {
-		cat(get("VERSION", envir = envir, inherits = FALSE), file = file)
+		cat(as.character(get("VERSION", envir = envir, inherits = FALSE)), file = file)
 	} else {
 		cat("No version information is found in the script.", file = file)
 	}

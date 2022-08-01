@@ -854,6 +854,22 @@ GetoptLong(
 0.0.1
 ```
 
+You can also use `numeric_version()` to set the version:
+
+```{r version2, eval = FALSE}
+VERSION = numeric_version("1.1-1")
+GetoptLong(
+    "tag=i", "...", 
+)
+```
+
+
+```
+~\> Rscript foo.R --version
+1.1.1
+```
+
+
 ## Configuring Getopt::Long
 
 Configuration of `Getopt::Long` can be set by `GetoptLong.options("config")`:

@@ -193,11 +193,45 @@ cat(system("Rscript main.R", intern = TRUE), sep = "\n")
 cat("```\n")
 ```
 
+
+## Setting with a template
+
+`subCommands()` can be set as a single long text which is a template of the help message. Commands are wrapped
+in `<>`. The value can be a pair of `<command=script>` or just `<script>`. If it is in a form of `<script>`, the basename
+without the file suffix is used as the command.
+
+```{r template, eval = FALSE}
+subCommands("
+This is the head of the help message.
+
+Usage: Rscript main.R [command] [options]
+
+Commands:
+  <sub1=sub1.R> This is the description of sub command 1, which will be a long long
+          long text.
+  <longlonglong=sub2.R> This is the description of sub command 2, which will be a long long
+          long text.
+
+This is the foot of the help message.
+"
+)
+```
+
+```{r, echo = FALSE, eval = TRUE, results = "asis"}
+chunks <- knitr:::knit_code$get()
+writeLines(c("library(GetoptLong)", chunks[["template"]]), con = "main.R")
+
+cat("```\n")
+cat(system("Rscript main.R", intern = TRUE), sep = "\n")
+cat("```\n")
+```
+
 ```{r, echo = FALSE, results = "hide"}
 file.remove("main.R")
 file.remove("sub1.R")
 file.remove("sub2.R")
 ```
+
 
 <script>
 var elements = document.getElementsByTagName("pre");

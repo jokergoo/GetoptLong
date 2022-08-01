@@ -294,6 +294,9 @@ test_that("test `version` and `help` options", {
 
 	expect_that(GetoptLong(spec, argv_str = "--help", help_head = "test"), prints_text("test"))
 	expect_that(GetoptLong(spec, argv_str = "--help", help_foot = "test"), prints_text("test"))
+
+	VERSION = numeric_version("1.1-1")
+	expect_that(GetoptLong(spec, argv_str = "--version"), prints_text("1.1.1"))
 })
 
 perl_bin = Sys.which("perl")
