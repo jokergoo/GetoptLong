@@ -46,7 +46,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -84,7 +84,7 @@
       <h1 data-toc-skip>Parsing command-line arguments by Getopt::Long</h1>
                         <h4 data-toc-skip class="author">Zuguang Gu (<a href="mailto:z.gu@dkfz.de" class="email">z.gu@dkfz.de</a>)</h4>
             
-            <h4 data-toc-skip class="date">2022-03-31</h4>
+            <h4 data-toc-skip class="date">2022-08-01</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/jokergoo/GetoptLong/blob/HEAD/vignettes/GetoptLong.Rmd" class="external-link"><code>vignettes/GetoptLong.Rmd</code></a></small>
       <div class="hidden name"><code>GetoptLong.Rmd</code></div>
@@ -1227,12 +1227,20 @@ Usage: Rscript foo.R [options]
 <span class="op">)</span></code></pre></div>
 <pre><code>~\&gt; Rscript foo.R --version
 0.0.1</code></pre>
+<p>You can also use <code><a href="https://rdrr.io/r/base/numeric_version.html" class="external-link">numeric_version()</a></code> to set the version:</p>
+<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">VERSION</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric_version.html" class="external-link">numeric_version</a></span><span class="op">(</span><span class="st">"1.1-1"</span><span class="op">)</span>
+<span class="fu"><a href="../reference/GetoptLong.html">GetoptLong</a></span><span class="op">(</span>
+    <span class="st">"tag=i"</span>, <span class="st">"..."</span>, 
+<span class="op">)</span></code></pre></div>
+<pre><code>~\&gt; Rscript foo.R --version
+1.1.1</code></pre>
 </div>
 <div class="section level2">
 <h2 id="configuring-getoptlong">Configuring Getopt::Long<a class="anchor" aria-label="anchor" href="#configuring-getoptlong"></a>
 </h2>
 <p>Configuration of <code>Getopt::Long</code> can be set by <code>GetoptLong.options("config")</code>:</p>
-<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/GetoptLong.options.html">GetoptLong.options</a></span><span class="op">(</span><span class="st">"config"</span> <span class="op">=</span> <span class="st">"bundling"</span><span class="op">)</span>
 <span class="fu"><a href="../reference/GetoptLong.options.html">GetoptLong.options</a></span><span class="op">(</span><span class="st">"config"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"no_ignore_case"</span>, <span class="st">"bundling"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>With different configurations, it can support more types of option specifications:</p>
@@ -1251,21 +1259,21 @@ Usage: Rscript foo.R [options]
 <h2 id="specify-command-line-options-within-r-session">Specify command-line options within R session<a class="anchor" aria-label="anchor" href="#specify-command-line-options-within-r-session"></a>
 </h2>
 <p>When in an interactive R session, arguments can be set when calling <code><a href="../reference/source_script.html">source_script()</a></code>, so it would be convinient to load external R scripts with different comand-line arguments. <em>E.g.</em>:</p>
-<div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb63"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/source_script.html">source_script</a></span><span class="op">(</span><span class="st">"foo.R"</span>, argv_str <span class="op">=</span> <span class="st">"--cutoff 0.01 --input file=foo.txt --verbose"</span><span class="op">)</span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="session-info">Session info<a class="anchor" aria-label="anchor" href="#session-info"></a>
 </h2>
-<div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb64"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<pre><code>R version 4.1.2 (2021-11-01)
+<pre><code>R version 4.2.0 (2022-04-22)
 Platform: x86_64-apple-darwin17.0 (64-bit)
-Running under: macOS Big Sur 10.16
+Running under: macOS Big Sur/Monterey 10.16
 
 Matrix products: default
-BLAS:   /Library/Frameworks/R.framework/Versions/4.1/Resources/lib/libRblas.0.dylib
-LAPACK: /Library/Frameworks/R.framework/Versions/4.1/Resources/lib/libRlapack.dylib
+BLAS:   /Library/Frameworks/R.framework/Versions/4.2/Resources/lib/libRblas.0.dylib
+LAPACK: /Library/Frameworks/R.framework/Versions/4.2/Resources/lib/libRlapack.dylib
 
 locale:
 [1] C/UTF-8/C/C/C/C
@@ -1274,20 +1282,20 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
-[1] GetoptLong_1.1.0 knitr_1.37      
+[1] GetoptLong_1.1.0 knitr_1.39      
 
 loaded via a namespace (and not attached):
- [1] magrittr_2.0.1      rjson_0.2.21        R6_2.5.1           
- [4] ragg_1.2.1          rlang_0.4.12        fastmap_1.1.0      
- [7] highr_0.9           stringr_1.4.0       tools_4.1.2        
-[10] xfun_0.29           jquerylib_0.1.4     htmltools_0.5.2    
-[13] systemfonts_1.0.3   yaml_2.2.1          digest_0.6.29      
-[16] rprojroot_2.0.2     pkgdown_2.0.2       crayon_1.4.2       
-[19] textshaping_0.3.6   purrr_0.3.4         GlobalOptions_0.1.2
-[22] sass_0.4.0          fs_1.5.2            memoise_2.0.1      
-[25] cachem_1.0.6        evaluate_0.14       rmarkdown_2.11     
-[28] stringi_1.7.6       compiler_4.1.2      bslib_0.3.1        
-[31] desc_1.4.0          jsonlite_1.7.2     </code></pre>
+ [1] magrittr_2.0.3      rjson_0.2.21        R6_2.5.1           
+ [4] ragg_1.2.2          rlang_1.0.2         fastmap_1.1.0      
+ [7] highr_0.9           stringr_1.4.0       tools_4.2.0        
+[10] xfun_0.31           cli_3.3.0           jquerylib_0.1.4    
+[13] htmltools_0.5.2     systemfonts_1.0.4   yaml_2.3.5         
+[16] digest_0.6.29       rprojroot_2.0.3     crayon_1.5.1       
+[19] pkgdown_2.0.4       textshaping_0.3.6   purrr_0.3.4        
+[22] GlobalOptions_0.1.2 sass_0.4.1          fs_1.5.2           
+[25] memoise_2.0.1       cachem_1.0.6        evaluate_0.15      
+[28] rmarkdown_2.14      stringi_1.7.6       compiler_4.2.0     
+[31] bslib_0.3.1         desc_1.4.1          jsonlite_1.8.0     </code></pre>
 <script>
 var elements = document.getElementsByTagName("pre");
 for(var i = 0; i < elements.length; i ++ ) {
@@ -1319,7 +1327,7 @@ for(var i = 0; i < elements.length; i ++ ) {
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer>

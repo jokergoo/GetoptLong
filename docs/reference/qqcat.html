@@ -29,7 +29,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -75,28 +75,41 @@
     <h2>Arguments</h2>
     <dl><dt>...</dt>
 <dd><p>text string in which variables are marked with certain rules</p></dd>
-<dt>envir</dt>
+
+  <dt>envir</dt>
 <dd><p>environment where to look for those variables</p></dd>
-<dt>code.pattern</dt>
+
+  <dt>code.pattern</dt>
 <dd><p>pattern of marks for the variables</p></dd>
-<dt>file</dt>
+
+  <dt>file</dt>
 <dd><p>pass to <code><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></code></p></dd>
-<dt>sep</dt>
+
+  <dt>sep</dt>
 <dd><p>pass to <code><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></code></p></dd>
-<dt>fill</dt>
+
+  <dt>fill</dt>
 <dd><p>pass to <code><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></code></p></dd>
-<dt>labels</dt>
+
+  <dt>labels</dt>
 <dd><p>pass to <code><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></code></p></dd>
-<dt>append</dt>
+
+  <dt>append</dt>
 <dd><p>pass to <code><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></code></p></dd>
-<dt>cat_prefix</dt>
+
+  <dt>cat_prefix</dt>
 <dd><p>prefix string. It is prior than <code>qq.options(cat_prefix)</code>.</p></dd>
-<dt>strwrap</dt>
+
+  <dt>strwrap</dt>
 <dd><p>whether call <code><a href="https://rdrr.io/r/base/strwrap.html" class="external-link">strwrap</a></code> to wrap the string</p></dd>
-<dt>strwrap_param</dt>
+
+  <dt>strwrap_param</dt>
 <dd><p>parameters sent to <code><a href="https://rdrr.io/r/base/strwrap.html" class="external-link">strwrap</a></code>, must be a list</p></dd>
-<dt>sep2</dt>
+
+  <dt>sep2</dt>
 <dd><p>Separation character when there are multiple templates.</p></dd>
+
+
 </dl></div>
     <div id="details">
     <h2>Details</h2>
@@ -129,10 +142,10 @@
 <span class="r-in"></span>
 <span class="r-in"><span class="fu"><a href="qq.options.html">qq.options</a></span><span class="op">(</span><span class="st">"cat_prefix"</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"[%Y-%m-%d %H:%M:%S] "</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu">qqcat</span><span class="op">(</span><span class="st">"a = @{a}, b = '@{b}'\n"</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [2022-03-31 22:33:43] a = 1, b = 'text'</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [2022-08-01 13:57:52] a = 1, b = 'text'</span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/Sys.sleep.html" class="external-link">Sys.sleep</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu">qqcat</span><span class="op">(</span><span class="st">"a = @{a}, b = '@{b}'\n"</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [2022-03-31 22:33:45] a = 1, b = 'text'</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [2022-08-01 13:57:54] a = 1, b = 'text'</span>
 <span class="r-in"><span class="fu"><a href="qq.options.html">qq.options</a></span><span class="op">(</span>RESET <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 </code></pre></div>
     </div>
@@ -148,7 +161,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

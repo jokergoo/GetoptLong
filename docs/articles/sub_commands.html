@@ -46,7 +46,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -84,7 +84,7 @@
       <h1 data-toc-skip>Sub-commands</h1>
                         <h4 data-toc-skip class="author">Zuguang Gu (<a href="mailto:z.gu@dkfz.de" class="email">z.gu@dkfz.de</a>)</h4>
             
-            <h4 data-toc-skip class="date">2022-03-31</h4>
+            <h4 data-toc-skip class="date">2022-08-01</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/jokergoo/GetoptLong/blob/HEAD/vignettes/sub_commands.Rmd" class="external-link"><code>vignettes/sub_commands.Rmd</code></a></small>
       <div class="hidden name"><code>sub_commands.Rmd</code></div>
@@ -226,6 +226,38 @@ Commands:
           long text.
 
 This is the foot of the help message.</code></pre>
+</div>
+<div class="section level2">
+<h2 id="setting-with-a-template">Setting with a template<a class="anchor" aria-label="anchor" href="#setting-with-a-template"></a>
+</h2>
+<p><code><a href="../reference/subCommands.html">subCommands()</a></code> can be set as a single long text which is a template of the help message. Commands are wrapped in <code>&lt;&gt;</code>. The value can be a pair of <code>&lt;command=script&gt;</code> or just <code>&lt;script&gt;</code>. If it is in a form of <code>&lt;script&gt;</code>, the basename without the file suffix is used as the command.</p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/subCommands.html">subCommands</a></span><span class="op">(</span><span class="st">"
+This is the head of the help message.
+
+Usage: Rscript main.R [command] [options]
+
+Commands:
+  &lt;sub1=sub1.R&gt; This is the description of sub command 1, which will be a long long
+          long text.
+  &lt;longlonglong=sub2.R&gt; This is the description of sub command 2, which will be a long long
+          long text.
+
+This is the foot of the help message.
+"</span>
+<span class="op">)</span></code></pre></div>
+<pre><code> 
+This is the head of the help message. 
+ 
+Usage: Rscript main.R [command] [options] 
+ 
+Commands: 
+  sub1            sub1 This is the description of sub command 1, which will be a
+                  long long long text.
+  longlonglong    longlonglong This is the description of sub command 2, which
+                  will be a long long long text.
+ 
+This is the foot of the help message. </code></pre>
 <script>
 var elements = document.getElementsByTagName("pre");
 for(var i = 0; i < elements.length; i ++ ) {
@@ -257,7 +289,7 @@ for(var i = 0; i < elements.length; i ++ ) {
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer>

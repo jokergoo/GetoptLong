@@ -29,7 +29,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -73,14 +73,20 @@
     <h2>Arguments</h2>
     <dl><dt>...</dt>
 <dd><p>Text string in which variables are marked with certain rules</p></dd>
-<dt>envir</dt>
+
+  <dt>envir</dt>
 <dd><p>Environment where to look for variables. By default it is the environment where <code>qq</code> is envoked. It can also be a list in which element names are the variable names to be interpolated.</p></dd>
-<dt>code.pattern</dt>
+
+  <dt>code.pattern</dt>
 <dd><p>Pattern of marks for the variables. By default it is <code>@\\{CODE\\}</code> which means you can write your variable as <code>@{variable}</code>. This value can be a vector that all  patterns are searched.</p></dd>
-<dt>collapse</dt>
+
+  <dt>collapse</dt>
 <dd><p>If variables return vector of length larger than one, whether collapse into one string or return a vector</p></dd>
-<dt>sep</dt>
+
+  <dt>sep</dt>
 <dd><p>Separator character when there are multiple templates.</p></dd>
+
+
 </dl></div>
     <div id="details">
     <h2>Details</h2>
@@ -129,7 +135,7 @@ environment and replace the variable marks with their real values.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>
