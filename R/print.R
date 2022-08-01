@@ -1,6 +1,6 @@
 
 print_help_msg = function(opt_lt, file = stderr(), script_name = NULL, head = NULL, foot = NULL,
-	template = NULL, template_control = template_control, style = c("one-column", "two-column"),
+	template = NULL, template_control = NULL, style = c("one-column", "two-column"),
 	opt_group = NULL, opt_group_desc = NULL) {
 
 	if(is.null(template)) {
@@ -58,9 +58,27 @@ print_help_msg = function(opt_lt, file = stderr(), script_name = NULL, head = NU
 	} else {
 
 		lines = strsplit(template, "\n")[[1]]
+		lines2 = NULL
+		for(i in seq_along(lines)) {
+			if(i == 1) {
+				lines2[i] = lines[i]
+			} else {
+				if(grepl("^\\s{6,}\\w", lines[i], perl = TRUE)) {
+					lines2[length(lines2)] = paste0(lines2[length(lines2)], " ",
+						gsub("^\\s+", "", lines[i]))
+				} else {
+					lines2 = c(lines2, lines[i])
+				}
+			}
+		}
+		lines = lines2
+
 		for(i in seq_along(lines)) {
 			lt = find_code(GetoptLong.options("template_tag"), lines[i])
-			if(length(lt$template) == 0) next
+			if(length(lt$template) == 0) {
+				cat(lines[i], "\n", file = file)
+				next
+			}
 
 			for(j in seq_along(lt$template)) {
 				for(k in seq_along(opt_lt)) {
@@ -77,8 +95,8 @@ print_help_msg = function(opt_lt, file = stderr(), script_name = NULL, head = NU
 						}
 
 						opt_str = gsub("\n$", "", opt_lt[[k]]$help_message(prefix = "", which = "opt_line", data_type = data_type))
-							
-						opt_width = NULL
+
+						opt_width = nchar(opt_str)
 						if(!is.null(template_control$opt_width)) {
 							if(length(template_control$opt_width) == 1 && is.null(names(template_control$opt_width))) {
 								opt_width = template_control$opt_width
@@ -88,48 +106,25 @@ print_help_msg = function(opt_lt, file = stderr(), script_name = NULL, head = NU
 							}
 						}
 
-						if(is.null(opt_width)) {
-							lines[i] = gsub(lt$template[j], opt_str, lines[i], fixed = TRUE)
-						} else {
-							if(opt_width < nchar(opt_str)) {
-								lines[i] = gsub(lt$template[j], opt_str, lines[i], fixed = TRUE)
-							} else {
-								opt_str = paste0(opt_str, strrep(" ", opt_width - nchar(opt_str)))
-								lines[i] = gsub(lt$template[j], opt_str, lines[i], fixed = TRUE)
-							}
-						}
-					} else if(grepl("^#", lt$code[j])) {
-						if(opt_lt[[k]]$name == gsub("^#", "", lt$code[j])) {
-							opt_str = gsub("\n$", "", opt_lt[[k]]$help_message(prefix = "", which = "opt_line", data_type = data_type))
-							
-							opt_width = NULL
-							if(!is.null(template_control$opt_width)) {
-								if(length(template_control$opt_width) == 1 && is.null(names(template_control$opt_width))) {
-									opt_width = template_control$opt_width
-								} else {
-									opt_width = template_control$opt_width[opt_lt[[k]]$name]
-									if(is.na(opt_width)) opt_width = NULL
-								}
-							}
+						prefix = strrep(" ", opt_width + 6)
+						desc = gsub(lt$template[j], "", lines[[i]], fixed = TRUE)
+						desc = gsub("^\\s+", "", desc)
 
-							opt_str = ""
-							if(is.null(opt_width)) {
-								lines[i] = gsub(lt$template[j], opt_str, lines[i], fixed = TRUE)
-							} else {
-								if(opt_width < nchar(opt_str)) {
-									lines[i] = gsub(lt$template[j], opt_str, lines[i], fixed = TRUE)
-								} else {
-									opt_str = paste0(opt_str, strrep(" ", opt_width - nchar(opt_str)))
-									lines[i] = gsub(lt$template[j], opt_str, lines[i], fixed = TRUE)
-								}
-							}
+						opt_str2 = paste0("  ", opt_str, strrep(" ", opt_width - nchar(opt_str)))
+						cat(opt_str2, "    ", file = file, sep = "")
+						
+						desc = strwrap(desc, width = 0.9*GetoptLong.options$help_width - opt_width - 6)
+						if(length(desc) > 1) {
+							desc[-1] = paste0(prefix, desc[-1])
 						}
+
+						cat(paste(desc, collapse = "\n"), file = file)
+						cat("\n", file = file)
 					}
 				}
 			}
 		}
 
-		cat(paste(lines, collapse  = "\n"), "\n", file = file)
 	}
 }
 

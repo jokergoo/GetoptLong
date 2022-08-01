@@ -810,8 +810,7 @@ GetoptLong.options("__argv_str__" = NULL)
 ```
 
 If the option explanation lies in more than one lines, in front from the
-second line, you should add a tag in form of `<#tag>` where `tag` is the
-option name of the current option block, so that proper spaces in front of the
+second line, you should add enough spaces, so that proper spaces in front of the
 text can be calculated and the text will be properly aligned. See the
 following example:
 
@@ -820,11 +819,10 @@ GetoptLong("
 Usage: Rscript foo.R [options]
 
   <count=i{2,}> This is a count. This is a count. This is a count.
-  <#count> This is a count. This is a count.
+                This is a count. This is a count.
   <number=f> This is a number. This is a number. This is a number.
-  <#number> This is a number. This is a number.
-", template_control = list(opt_width = c(count = 28, number = 28))
-)
+             This is a number. This is a number.
+")
 ```
 
 ```{r, echo = FALSE}

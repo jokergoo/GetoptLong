@@ -201,8 +201,8 @@ in `<>`. The value can be a pair of `<command=script>` or just `<script>`. If it
 without the file suffix is used as the command.
 
 ```{r template, eval = FALSE}
-subCommands("
-This is the head of the help message.
+subCommands(
+"This is the head of the help message.
 
 Usage: Rscript main.R [command] [options]
 

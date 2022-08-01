@@ -187,7 +187,7 @@ GetoptLong = function(..., help_head = NULL, help_foot = NULL, envir = parent.fr
 		ind = which(sapply(first_letter, function(x) any(x == le)))
 		opt_lt[[ind]]$full_opt = unique(c(opt_lt[[ind]]$full_opt, le))
 	}
-
+	
 	# get the path of binary perl
 	# it will look in PATH and also user's command-line argument
 	perl_bin = find_perl_bin(con = OUT, from_command_line = IS_UNDER_COMMAND_LINE)
