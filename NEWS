@@ -2,6 +2,7 @@ Changes in version 1.1.0
 
 * support multiple-word option
 * subpport sub-commands
+* fixed a bug when `argv_str` is NULL
 
 ----------------------------------------------------------------------
 

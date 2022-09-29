@@ -350,6 +350,9 @@ GetoptLong = function(..., help_head = NULL, help_foot = NULL, envir = parent.fr
 # negatable_logical_is_called("verbose", "-v")
 # negatable_logical_is_called("verbose", "--no-verbose")
 negatable_logical_is_called = function(long_name, argv_str) {
+	if(is.null(argv_str)) {
+		argv_str = ""
+	}
 	argv = strsplit(argv_str, " ")[[1]]
 	argv = argv[grepl("^-", argv)]
 	if(length(argv)) {
