@@ -884,7 +884,7 @@ With different configurations, it can support more types of option specification
 -s 24 -s24 -s=24
 ```
 
-Please refer to website of [`Getopt::Long`](http://search.cpan.org/perldoc?Getopt%3A%3ALong#Configuring_Getopt%3A%3ALong)
+Please refer to website of [`Getopt::Long`](https://metacpan.org/pod/Getopt::Long#Configuring_Getopt%3A%3ALong)
 for more information.
 
 ## Specify path of Perl in command line
